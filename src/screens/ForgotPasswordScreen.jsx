@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState } from "react";
 import axios from "axios";
-import GoBackButton from "../components/GoBackButton";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input } from "@rneui/themed";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorComponent from "../components/ErrorComponent";
@@ -39,7 +39,7 @@ export default function ForgotPasswordScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <GoBackButton />
+        <GoBackButtonComponent />
         <Text style={styles.title}>Forgot password?</Text>
         <Text style={styles.subtitle}>
           Enter your email for the verification process. It will be send a 6

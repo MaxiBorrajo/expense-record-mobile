@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
-export default function ButtonComponent({ action, label, loading }) {
+export default function ButtonComponent({ action, label, loading, disabled }) {
   return (
     <Button
       title={label}
@@ -12,6 +12,11 @@ export default function ButtonComponent({ action, label, loading }) {
         size: "large",
         color: "black",
       }}
+      disabled={disabled}
+      disabledStyle={{
+        backgroundColor: "#d4d4d4",
+        color:'#262626'
+      }}
     />
   );
 }
@@ -19,14 +24,15 @@ export default function ButtonComponent({ action, label, loading }) {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 50,
+    paddingVertical: 10,
+    paddingHorizontal:30,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
   },
   label: {
     color: "#000",
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: "Poppins_500Medium",
   },
 });

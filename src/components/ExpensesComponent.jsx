@@ -4,52 +4,42 @@ import { ExpenseContext } from "../context/ExpenseContext";
 import { Card, Icon, Divider } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
-export default function ExpensesComponent({
-  sort,
-  order,
-  year,
-  month,
-  keyword,
-  openParameteres,
-}) {
+
+export default function ExpensesComponent() {
   const { errorMessage, getExpenses } = useContext(ExpenseContext);
   const [expenses, setExpenses] = useState(null);
   useEffect(() => {
     const filters = [
-      { filter: "keyword", value: keyword },
       {
         filter: "year",
-        value: year,
+        value: new Date().getFullYear(),
       },
       {
         filter: "month",
-        value: month,
-      },
+        value: new Date().getMonth(),
+      }
     ];
 
-    getExpenses(sort, order, filters).then((expenses) => {
-      setExpenses(expenses);
+    getExpenses(null, null, filters).then((expenses) => {
+      setExpenses(expenses.splice(0, 4));
     });
-  }, [sort, order, keyword, year, month]);
+  }, []);
 
   return (
     <Card
       containerStyle={{
-        borderRadius: 30,
-        backgroundColor: "#27272a",
-        borderColor: "#27272a",
-        padding: 20,
         width: "100%",
-        height: "65%",
+        height: "50%",
+        backgroundColor: "transparent",
+        elevation: 0,
+        borderWidth: 0,
       }}
     >
+      <ExpensesHeaderComponent />
       <FlatList
-        removeClippedSubviews={true}
+        style={{ height: "100%" }}
         data={expenses}
         keyExtractor={(item) => item._id}
-        ListHeaderComponent={() => (
-          <ExpensesHeaderComponent openParameteres={openParameteres} />
-        )}
         renderItem={({ item }) => <ExpenseComponent item={item} />}
         ListEmptyComponent={() => (
           <Text
@@ -63,6 +53,9 @@ export default function ExpensesComponent({
           >
             Nothing added yet
           </Text>
+        )}
+        ItemSeparatorComponent={() => (
+          <View style={{ height: 20, width: "100%" }}></View>
         )}
       />
     </Card>

@@ -1,47 +1,57 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Icon } from "@rneui/themed";
 import { useState } from "react";
-export default function ExpensesHeaderComponent({
-  openParameteres
-}) {
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
 
-
-  
+export default function ExpensesHeaderComponent({ openParameteres }) {
+  const navigation = useNavigation();
   return (
     <View
       style={{
         width: "100%",
-        justifyContent: "center",
-        paddingBottom: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom:20
       }}
     >
-      <View
+      <Text
         style={{
-          width: "100%",
+          fontSize: 15,
+          fontFamily: "Poppins_500Medium",
+          color: "white",
+        }}
+      >
+        Recent expenses
+      </Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Expenses")}
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          columnGap: 10,
           flexDirection: "row",
-          justifyContent: "space-between",
         }}
       >
         <Text
           style={{
-            fontSize: 17,
-            fontFamily: "Poppins_500Medium",
+            fontSize: 12,
+            fontFamily: "Poppins_300Light",
             color: "white",
           }}
         >
-          Expenses
+          See all
         </Text>
-        <View
-          style={{ flexDirection: "row", alignItems: "center", columnGap: 30 }}
-        >
-          <Icon
-            name="sliders"
-            type="font-awesome"
-            iconStyle={{ color: "white" }}
-            onPress={() => openParameteres()}
-          ></Icon>
-        </View>
-      </View>
+        <Icon
+          name="arrow-right"
+          type="font-awesome-5"
+          iconStyle={{
+            fontSize: 12,
+            color: "white",
+          }}
+        />
+      </TouchableOpacity>
     </View>
   );
 }

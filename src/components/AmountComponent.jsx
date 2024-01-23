@@ -78,9 +78,9 @@ export default function AmountComponent({ openYearMonth, year, month }) {
       </View>
       <View style={{ flexDirection: "row" }}>
         <Icon
-          name={profitPercentage > 0 ? "caret-up" : "caret-down"}
+          name={change > 0 ? "caret-up" : "caret-down"}
           type="font-awesome"
-          iconStyle={profitPercentage > 0 ? styles.profit : styles.loss}
+          iconStyle={change > 0 ? styles.profit : styles.loss}
         ></Icon>
         <Text
           style={[
@@ -89,10 +89,10 @@ export default function AmountComponent({ openYearMonth, year, month }) {
               fontSize: 13,
               marginHorizontal: 5,
             },
-            profitPercentage > 0 ? styles.profit : styles.loss,
+            change > 0 ? styles.profit : styles.loss,
           ]}
         >
-          {profitPercentage ? profitPercentage.toFixed(2) : 0} %
+          {change ? change.toFixed(2) : 0} %
         </Text>
         <Text
           style={{

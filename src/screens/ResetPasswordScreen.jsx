@@ -3,7 +3,7 @@ import ButtonComponent from "../components/ButtonComponent";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import GoBackButton from "../components/GoBackButton";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 export default function ResetPasswordScreen({ navigation }) {
@@ -53,7 +53,7 @@ export default function ResetPasswordScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <GoBackButton />
+        <GoBackButtonComponent />
         <Text style={styles.title}>Reset password</Text>
         <Text style={styles.subtitle}>
           Set your new password so you can login and access to your account

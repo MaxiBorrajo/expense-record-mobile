@@ -53,17 +53,63 @@ export function ExpenseContextProvider(props) {
     }
   }
 
-  async function getAmount(year, month) {
+  async function getAmount(month, type) {
     try {
-      let url = "http://192.168.0.159:3000/api/expenses/amount";
+      let url = "http://192.168.0.159:3000/api/expenses/amount?";
 
-      if (
-        year !== undefined &&
-        month !== undefined &&
-        year !== null &&
-        month !== null
-      ) {
-        url = url + `?year=${year}&month=${month}`;
+      if (month !== undefined && month !== null) {
+        url = url + `month=${month}&`;
+      }
+
+      if (type !== undefined && type !== null) {
+        url = url + `type=${type}&`;
+      }
+
+      url = url.slice(0, -1);
+
+      const result = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      });
+
+      return result.data.resource;
+    } catch (error) {
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
+  }
+
+  async function getBalance() {
+    try {
+      const result = await axios.get(
+        "http://192.168.0.159:3000/api/expenses/balance",
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      return result.data.resource;
+    } catch (error) {
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
+  }
+
+  async function getStatistics(year = new Date().getFullYear()) {
+    try {
+      let url = `http://192.168.0.159:3000/api/expenses/statistics?`;
+
+      if (year) {
+        url = url + `year=${year}`;
       }
 
       const result = await axios.get(url, {
@@ -82,16 +128,33 @@ export function ExpenseContextProvider(props) {
     }
   }
 
-  async function getCurrentAmount() {
+  async function getStatisticsByCategory(
+    year = new Date().getFullYear(),
+    month = new Date().getMonth(),
+    type = 1
+  ) {
     try {
-      const result = await axios.get(
-        "http://192.168.0.159:3000/api/expenses/current",
-        {
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          },
-        }
-      );
+      let url = `http://192.168.0.159:3000/api/expenses/statisticsByCategory?`;
+
+      if (year) {
+        url = url + `year=${year}&`;
+      }
+
+      if (month) {
+        url = url + `month=${month}&`;
+      }
+
+      if (type) {
+        url = url + `type=${type}&`;
+      }
+
+      url = url.slice(0, -1);
+
+      const result = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      });
 
       return result.data.resource;
     } catch (error) {
@@ -103,37 +166,10 @@ export function ExpenseContextProvider(props) {
     }
   }
 
-  async function getStatistics(
-    year = new Date().getFullYear(),
-    month = new Date().getMonth()
-  ) {
+  async function getChange() {
     try {
       const result = await axios.get(
-        `http://192.168.0.159:3000/api/expenses/statistics?year=${year}&month=${month}`,
-        {
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      return result.data.resource;
-    } catch (error) {
-      if (error.response.data) {
-        setErrorMessage(error.response.data.Error);
-      } else {
-        setErrorMessage(error.message);
-      }
-    }
-  }
-
-  async function getProfitPercentage(
-    year = new Date().getFullYear(),
-    month = new Date().getMonth()
-  ) {
-    try {
-      const result = await axios.get(
-        `http://192.168.0.159:3000/api/expenses/profitPercentage?year=${year}&month=${month}`,
+        `http://192.168.0.159:3000/api/expenses/change`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -161,26 +197,6 @@ export function ExpenseContextProvider(props) {
           },
         }
       );
-
-      return result.data.resource;
-    } catch (error) {
-      if (error.response.data) {
-        setErrorMessage(error.response.data.Error);
-      } else {
-        setErrorMessage(error.message);
-      }
-    }
-  }
-
-  async function getIcons(keyword) {
-    try {
-      let url = "http://192.168.0.159:3000/api/icons";
-
-      if(keyword){
-        url = url + `?keyword=${keyword}`;
-      }
-
-      const result = await axios.get(url);
 
       return result.data.resource;
     } catch (error) {
@@ -282,19 +298,19 @@ export function ExpenseContextProvider(props) {
   return (
     <ExpenseContext.Provider
       value={{
-        getIcons,
         applyConversion,
         createExpense,
         deleteExpenseById,
         getExpenseById,
         getExpenses,
         getAmount,
-        getProfitPercentage,
+        getChange,
         getStatistics,
+        getStatisticsByCategory,
         updateExpenseById,
         errorMessage,
         setErrorMessage,
-        getCurrentAmount
+        getBalance,
       }}
     >
       {props.children}

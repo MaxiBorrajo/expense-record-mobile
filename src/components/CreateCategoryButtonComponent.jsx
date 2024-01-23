@@ -3,33 +3,33 @@ import React from "react";
 import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 
-const CreateExpenseButtonComponent = () => {
+const CreateCategoryButtonComponent = ({action}) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       style={{
         borderRadius: 50,
         backgroundColor: "white",
-        width: 70,
-        height: 70,
+        width: 55,
+        height: 55,
         position: "absolute",
-        bottom: 30,
+        bottom: 80,
         right: 15,
-        zIndex:10000,
+        zIndex:1,
         alignContent: "center",
         justifyContent: "center",
       }}
-      onPress={() => navigation.navigate("CreateExpense")}
+      onPress={action}
     >
       <Icon
         name="plus"
         type="font-awesome-5"
-        iconStyle={{ fontSize: 35, color: "black" }}
+        iconStyle={{ fontSize: 25, color: "black" }}
       ></Icon>
     </TouchableOpacity>
   );
 };
 
-export default CreateExpenseButtonComponent;
+export default CreateCategoryButtonComponent;
 
 const styles = StyleSheet.create({});

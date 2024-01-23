@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-export default function GoBackButton() {
+export default function GoBackButtonComponent() {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   label: {
-    fontSize: 15,
+    fontSize: 12,
     color: "#fff",
     fontFamily: "Poppins_300Light",
   },

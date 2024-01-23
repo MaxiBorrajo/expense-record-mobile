@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import GoBackButton from "../components/GoBackButton";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OTPTextInput from "react-native-otp-textinput";
 import ErrorComponent from "../components/ErrorComponent";
@@ -46,7 +46,7 @@ export default function VerifyCodeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <GoBackButton />
+        <GoBackButtonComponent />
         <Text style={styles.title}>Verify code</Text>
         <Text style={styles.subtitle}>
           Enter the 6 digits of the code receive on your email.

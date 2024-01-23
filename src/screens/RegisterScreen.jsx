@@ -3,7 +3,7 @@ import ButtonComponent from "../components/ButtonComponent";
 import { useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import GoBackButton from "../components/GoBackButton";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 export default function RegisterScreen({ navigation }) {
@@ -44,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <GoBackButton />
+        <GoBackButtonComponent />
         <Text style={styles.title}>Sign up</Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Input

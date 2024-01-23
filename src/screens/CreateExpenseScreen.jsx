@@ -1,67 +1,303 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState, useContext, useEffect } from "react";
-import GoBackButton from "../components/GoBackButton";
+import { useState, useContext, useEffect, useRef } from "react";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
-import { ExpenseContext } from "../context/ExpenseContext";
-export default function CreateExpenseScreen({ navigation }) {
-  const { errorMessage, createExpense, getIcons } = useContext(ExpenseContext);
+import { CategoryContext } from "../context/CategoryContext";
+import SelectDropdown from "react-native-select-dropdown";
+import { useNavigation } from "@react-navigation/native";
+
+export default function CreateExpenseScreen() {
+  const { getCategories } = useContext(CategoryContext);
+  const firstCharge = useRef(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    getIcons(keyword).then((icons) => {
-      setIcons(icons);
+    getCategories().then((categories) => {
+      setCategories(categories);
     });
   }, []);
 
   const [expenseForm, setExpenseForm] = useState({
-    title: "",
-    description: "",
+    isIncome: true,
+    amount: "0.00",
   });
 
-  const [selectedIcon, setSelectedIcon] = useState("money-bill-wave");
+  const [icon, setIcon] = useState(null);
 
-  const [loading, setLoading] = useState(false);
-  const [icons, setIcons] = useState(null);
-  const [keyword, setKeyword] = useState(null);
+  useEffect(() => {
+    if (firstCharge.current) {
+      firstCharge.current = false;
+    } else {
+      setDisabled(validateAmount(expenseForm.amount));
+    }
+  }, [expenseForm.amount]);
+
+  const [categories, setCategories] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [disabled, setDisabled] = useState(true);
+
+  const validateAmount = (amount) => {
+    if (!amount) {
+      setErrorMessage("An amount must be provided");
+      return true;
+    }
+
+    if (+amount === 0) {
+      setErrorMessage("The amount must be different than zero");
+      return true;
+    }
+    setErrorMessage(null);
+    return false;
+  };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <GoBackButton />
+    <View style={styles.container}>
+      <GoBackButtonComponent />
+      <View
+        style={{
+          width: "100%",
+          height: "100%",
+          rowGap:50,
+          justifyContent:'center',
+        }}
+      >
         <Text style={styles.title}>Create new expense</Text>
-        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <View
           style={{
-            backgroundColor: "white",
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            alignContent: "center",
-            justifyContent: "center",
-            alignSelf:'center'
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-around",
+            columnGap: 10,
           }}
         >
-          <Icon
-            name={selectedIcon}
-            type="font-awesome-5"
-            iconStyle={{ color: "black", fontSize:50 }}
-          ></Icon>
+          <TouchableOpacity
+            onPress={() => setExpenseForm({ ...expenseForm, isIncome: true })}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              columnGap: 10,
+            }}
+          >
+            {expenseForm.isIncome ? (
+              <Icon
+                name="arrow-up"
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "#22c55e" }}
+              />
+            ) : null}
+            <Text
+              style={[
+                {
+                  color: "white",
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 20,
+                },
+                expenseForm.isIncome
+                  ? {
+                      color: "#22c55e",
+                    }
+                  : null,
+              ]}
+            >
+              Income
+            </Text>
+            {expenseForm.isIncome ? (
+              <Icon
+                name="arrow-up"
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "#22c55e" }}
+              />
+            ) : null}
+          </TouchableOpacity>
+          <Text
+            style={{
+              color: "white",
+              fontFamily: "Poppins_500Medium",
+              fontSize: 20,
+            }}
+          >
+            |
+          </Text>
+          <TouchableOpacity
+            onPress={() => setExpenseForm({ ...expenseForm, isIncome: false })}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              columnGap: 10,
+            }}
+          >
+            {!expenseForm.isIncome ? (
+              <Icon
+                name="arrow-down"
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "#dc2626" }}
+              />
+            ) : null}
+            <Text
+              style={[
+                {
+                  color: "white",
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 20,
+                },
+                !expenseForm.isIncome
+                  ? {
+                      color: "#dc2626",
+                    }
+                  : null,
+              ]}
+            >
+              Loss
+            </Text>
+            {!expenseForm.isIncome ? (
+              <Icon
+                name="arrow-down"
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "#dc2626" }}
+              />
+            ) : null}
+          </TouchableOpacity>
         </View>
-        <Input
-          placeholder="Title"
-          inputStyle={{ color: "white", fontFamily: "Poppins_300Light" }}
-          onChangeText={(newText) =>
-            setExpenseForm({ ...expenseForm, title: newText })
-          }
-        />
-        <ButtonComponent
-          label={"Create"}
-          action={createExpense}
-          loading={loading}
-        />
+        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "space-between",
+            columnGap: 10,
+          }}
+        >
+          {expenseForm.category_id ? (
+            <View
+              style={{
+                borderRadius: 5,
+                backgroundColor: "#1c1917",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                width: 67,
+                height: 67,
+                elevation: 5,
+                borderColor: "white",
+                borderWidth: 1,
+                borderStyle: "solid",
+              }}
+            >
+              <Icon
+                name={icon}
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "white" }}
+              ></Icon>
+            </View>
+          ) : null}
+          <View
+            style={{
+              flexDirection: "row",
+              width: expenseForm.category_id ? "80%" : "100%",
+              alignItems: "center",
+              columnGap: expenseForm.isIncome ? 10 : 3,
+              backgroundColor: "#1c1917",
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              borderRadius: 5,
+              elevation: 5,
+              borderColor: "white",
+              borderWidth: 1,
+              borderStyle: "solid",
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontFamily: "Poppins_500Medium",
+                fontSize: 20,
+              }}
+            >
+              {expenseForm.isIncome ? "$" : "$ -"}
+            </Text>
+            <TextInput
+              style={{
+                color: "white",
+                fontFamily: "Poppins_500Medium",
+                fontSize: 18,
+                width: "100%",
+                paddingRight: 15,
+              }}
+              onChangeText={(text) => {
+                setExpenseForm({ ...expenseForm, amount: text });
+              }}
+              value={expenseForm.amount.toString()}
+              keyboardType="numeric"
+            />
+          </View>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-between",
+            columnGap: 10,
+          }}
+        >
+          <SelectDropdown
+            data={categories}
+            onSelect={(selectedItem) => {
+              setIcon(selectedItem.icon_id.icon);
+              setExpenseForm({ ...expenseForm, category_id: selectedItem._id });
+            }}
+            buttonTextAfterSelection={(selectedItem) => {
+              return selectedItem.category_name;
+            }}
+            rowTextForSelection={(item) => {
+              return item.category_name;
+            }}
+            defaultButtonText="Select a category"
+            defaultValue={
+              expenseForm.category_id ? expenseForm.category_id : null
+            }
+            buttonStyle={{
+              borderRadius: 5,
+              alignSelf: "center",
+              height: "100%",
+              backgroundColor: "#1c1917",
+              color: "white",
+              borderColor: "white",
+              borderWidth: 1,
+              borderStyle: "solid",
+              flexGrow: 1,
+            }}
+            buttonTextStyle={{ fontFamily: "Poppins_300Light", color: "white" }}
+            rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+          />
+
+          <ButtonComponent
+            label="Next"
+            disabled={disabled}
+            action={() => {
+              setExpenseForm({ ...expenseForm, amount: +expenseForm.amount });
+              navigation.navigate({
+                name: "FinishCreateExpense",
+                params: { expenseForm: expenseForm },
+              });
+            }}
+          />
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -71,21 +307,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "fff",
     paddingHorizontal: 30,
-    justifyContent: "center",
+    paddingVertical: 100,
     position: "relative",
-    rowGap: 50,
-  },
-  safeArea: {
-    flex: 1,
   },
   title: {
+    fontSize: 20,
     fontFamily: "Poppins_500Medium",
-    fontSize: 30,
-    color: "#fff",
-  },
-  link: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 15,
     color: "#fff",
   },
 });
