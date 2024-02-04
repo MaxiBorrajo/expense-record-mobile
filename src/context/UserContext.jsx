@@ -9,7 +9,7 @@ export function UserContextProvider(props) {
 
   async function getCurrentUser() {
     try {
-      const result = await axios.get("http://192.168.0.159:3000/api/users", {
+      const result = await axios.get("https://expense-record-production.up.railway.app/api/users", {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
         },
@@ -30,7 +30,7 @@ export function UserContextProvider(props) {
   async function updateCurrentUser(info) {
     try {
       const result = await axios.put(
-        `http://192.168.0.159:3000/api/users`,
+        `https://expense-record-production.up.railway.app/api/users`,
         info,
         {
           headers: {
@@ -51,7 +51,7 @@ export function UserContextProvider(props) {
 
   async function deleteCurrentUser() {
     try {
-      const result = await axios.delete(`http://192.168.0.159:3000/api/users`, {
+      const result = await axios.delete(`https://expense-record-production.up.railway.app/api/users`, {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
         },

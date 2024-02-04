@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
       if (loginForm.email !== "" && loginForm.password !== "") {
         setLoading(true);
         const response = await axios.post(
-          "http://192.168.0.159:3000/api/auth/login",
+          "https://expense-record-production.up.railway.app/api/auth/login",
           loginForm
         );
         await AsyncStorage.setItem("token", response.data.resource.token);

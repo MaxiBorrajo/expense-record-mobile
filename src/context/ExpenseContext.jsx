@@ -29,7 +29,7 @@ export function ExpenseContextProvider(props) {
 
   async function getExpenses(sort, order, filters) {
     try {
-      let url = "http://192.168.0.159:3000/api/expenses?";
+      let url = "https://expense-record-production.up.railway.app/api/expenses?";
 
       url = applySorting(sort, order, url);
 
@@ -55,7 +55,7 @@ export function ExpenseContextProvider(props) {
 
   async function getAmount(month, type) {
     try {
-      let url = "http://192.168.0.159:3000/api/expenses/amount?";
+      let url = "https://expense-record-production.up.railway.app/api/expenses/amount?";
 
       if (month !== undefined && month !== null) {
         url = url + `month=${month}&`;
@@ -86,7 +86,7 @@ export function ExpenseContextProvider(props) {
   async function getBalance() {
     try {
       const result = await axios.get(
-        "http://192.168.0.159:3000/api/expenses/balance",
+        "https://expense-record-production.up.railway.app/api/expenses/balance",
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -106,7 +106,7 @@ export function ExpenseContextProvider(props) {
 
   async function getStatistics(year = new Date().getFullYear()) {
     try {
-      let url = `http://192.168.0.159:3000/api/expenses/statistics?`;
+      let url = `https://expense-record-production.up.railway.app/api/expenses/statistics?`;
 
       if (year) {
         url = url + `year=${year}`;
@@ -134,7 +134,7 @@ export function ExpenseContextProvider(props) {
     type = 1
   ) {
     try {
-      let url = `http://192.168.0.159:3000/api/expenses/statisticsByCategory?`;
+      let url = `https://expense-record-production.up.railway.app/api/expenses/statisticsByCategory?`;
 
       if (year) {
         url = url + `year=${year}&`;
@@ -169,7 +169,7 @@ export function ExpenseContextProvider(props) {
   async function getChange() {
     try {
       const result = await axios.get(
-        `http://192.168.0.159:3000/api/expenses/change`,
+        `https://expense-record-production.up.railway.app/api/expenses/change`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -190,7 +190,7 @@ export function ExpenseContextProvider(props) {
   async function getExpenseById(id) {
     try {
       const result = await axios.get(
-        `http://192.168.0.159:3000/api/expenses/${id}`,
+        `https://expense-record-production.up.railway.app/api/expenses/${id}`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -211,7 +211,7 @@ export function ExpenseContextProvider(props) {
   async function createExpense(expense) {
     try {
       const result = await axios.post(
-        `http://192.168.0.159:3000/api/expenses`,
+        `https://expense-record-production.up.railway.app/api/expenses`,
         expense,
         {
           headers: {
@@ -233,7 +233,7 @@ export function ExpenseContextProvider(props) {
   async function updateExpenseById(id, expense) {
     try {
       const result = await axios.put(
-        `http://192.168.0.159:3000/api/expenses/${id}`,
+        `https://expense-record-production.up.railway.app/api/expenses/${id}`,
         expense,
         {
           headers: {
@@ -255,7 +255,7 @@ export function ExpenseContextProvider(props) {
   async function deleteExpenseById(id) {
     try {
       const result = await axios.delete(
-        `http://192.168.0.159:3000/api/expenses/${id}`,
+        `https://expense-record-production.up.railway.app/api/expenses/${id}`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -276,7 +276,7 @@ export function ExpenseContextProvider(props) {
   async function applyConversion(conversion) {
     try {
       const result = await axios.put(
-        `http://192.168.0.159:3000/api/expenses/conversion`,
+        `https://expense-record-production.up.railway.app/api/expenses/conversion`,
         conversion,
         {
           headers: {

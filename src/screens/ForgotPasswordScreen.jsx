@@ -20,7 +20,7 @@ export default function ForgotPasswordScreen({ navigation }) {
       setLoading(true);
       if (forgotPasswordForm.email !== "") {
         const response = await axios.post(
-          "http://192.168.0.159:3000/api/auth/forgotPassword",
+          "https://expense-record-production.up.railway.app/api/auth/forgotPassword",
           forgotPasswordForm
         );
         await AsyncStorage.setItem("email", forgotPasswordForm.email);

@@ -34,7 +34,7 @@ export default function ResetPasswordScreen({ navigation }) {
         resetPasswordForm.password === resetPasswordForm.confirm_password
       ) {
         await axios.post(
-          "http://192.168.0.159:3000/api/auth/resetPassword",
+          "https://expense-record-production.up.railway.app/api/auth/resetPassword",
           resetPasswordForm
         );
         await AsyncStorage.removeItem("email");

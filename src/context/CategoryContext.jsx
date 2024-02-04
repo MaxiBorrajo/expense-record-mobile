@@ -9,7 +9,7 @@ export function CategoryContextProvider(props) {
 
   async function getCategories(keyword) {
     try {
-      let url = "http://192.168.0.159:3000/api/categories?";
+      let url = "https://expense-record-production.up.railway.app/api/categories?";
 
       url = keyword ? url + `&keyword=${keyword}` : url;
 
@@ -31,7 +31,7 @@ export function CategoryContextProvider(props) {
 
   async function getIcons() {
     try {
-      let url = "http://192.168.0.159:3000/api/icons?";
+      let url = "https://expense-record-production.up.railway.app/api/icons?";
 
       const result = await axios.get(url, {
         headers: {
@@ -52,7 +52,7 @@ export function CategoryContextProvider(props) {
   async function getCategoryById(id) {
     try {
       const result = await axios.get(
-        `http://192.168.0.159:3000/api/categories/${id}`,
+        `https://expense-record-production.up.railway.app/api/categories/${id}`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -73,7 +73,7 @@ export function CategoryContextProvider(props) {
   async function createCategory(category) {
     try {
       const result = await axios.post(
-        `http://192.168.0.159:3000/api/categories`,
+        `https://expense-record-production.up.railway.app/api/categories`,
         category,
         {
           headers: {
@@ -95,7 +95,7 @@ export function CategoryContextProvider(props) {
   async function updateCategoryById(id, category) {
     try {
       const result = await axios.put(
-        `http://192.168.0.159:3000/api/categories/${id}`,
+        `https://expense-record-production.up.railway.app/api/categories/${id}`,
         category,
         {
           headers: {
@@ -117,7 +117,7 @@ export function CategoryContextProvider(props) {
   async function deleteCategoryById(id) {
     try {
       const result = await axios.delete(
-        `http://192.168.0.159:3000/api/categories/${id}`,
+        `https://expense-record-production.up.railway.app/api/categories/${id}`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
