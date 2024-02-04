@@ -43,63 +43,65 @@ export default function CreateExpenseScreen({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   return (
-    <View style={styles.container}>
-      <GoBackButtonComponent />
-      <Text style={styles.title}>Finish new expense</Text>
-      {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-      <TextInput
-        style={{
-          width: "100%",
-          color: "white",
-          fontFamily: "Poppins_300Light",
-          fontSize: 12,
-          padding: 10,
-          backgroundColor: "#1c1917",
-          borderRadius: 5,
-          elevation: 5,
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-        onChangeText={(text) =>
-          setFinishExpenseForm({ ...finishExpenseForm, title: text })
-        }
-        value={finishExpenseForm.title ? finishExpenseForm.title : ""}
-        placeholder="Write a title"
-        placeholderTextColor="white"
-      />
-      <TextInput
-        multiline
-        numberOfLines={5}
-        placeholderTextColor="white"
-        style={{
-          width: "100%",
-          color: "white",
-          fontFamily: "Poppins_300Light",
-          fontSize: 12,
-          padding: 10,
-          backgroundColor: "#1c1917",
-          borderRadius: 5,
-          elevation: 5,
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-          textAlignVertical: "top",
-        }}
-        onChangeText={(text) =>
-          setFinishExpenseForm({ ...finishExpenseForm, description: text })
-        }
-        value={
-          finishExpenseForm.description ? finishExpenseForm.description : ""
-        }
-        placeholder="Write a description (optional)"
-      />
-      <ButtonComponent
-        label={"Create"}
-        action={createNewExpense}
-        loading={loading}
-      />
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <GoBackButtonComponent />
+        <Text style={styles.title}>Finish new expense</Text>
+        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+        <TextInput
+          style={{
+            width: "100%",
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            padding: 10,
+            backgroundColor: "#1c1917",
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+          onChangeText={(text) =>
+            setFinishExpenseForm({ ...finishExpenseForm, title: text })
+          }
+          value={finishExpenseForm.title ? finishExpenseForm.title : ""}
+          placeholder="Write a title"
+          placeholderTextColor="white"
+        />
+        <TextInput
+          multiline
+          numberOfLines={5}
+          placeholderTextColor="white"
+          style={{
+            width: "100%",
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            padding: 10,
+            backgroundColor: "#1c1917",
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+            textAlignVertical: "top",
+          }}
+          onChangeText={(text) =>
+            setFinishExpenseForm({ ...finishExpenseForm, description: text })
+          }
+          value={
+            finishExpenseForm.description ? finishExpenseForm.description : ""
+          }
+          placeholder="Write a description (optional)"
+        />
+        <ButtonComponent
+          label={"Create"}
+          action={createNewExpense}
+          loading={loading}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 

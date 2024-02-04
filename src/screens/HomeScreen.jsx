@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from "react-native";
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import TabBarIcon from "../components/TabBarIcon";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -24,7 +30,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen
           name="Main"
@@ -77,6 +83,6 @@ export default function HomeScreen() {
           }}
         />
       </Tab.Navigator>
-    </>
+    </SafeAreaView>
   );
 }

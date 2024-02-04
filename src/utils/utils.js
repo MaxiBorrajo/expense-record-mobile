@@ -2,7 +2,7 @@ import { format } from "date-fns";
 
 export const months = [
   "January",
-  "Febreary",
+  "February",
   "March",
   "April",
   "May",

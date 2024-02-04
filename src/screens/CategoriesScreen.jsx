@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, FlatList, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  SafeAreaView,
+} from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { SearchBar } from "@rneui/themed";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -22,6 +29,7 @@ export default function CategoriesScreen({ route, navigation }) {
     category_name: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorCreateMessage, setErrorCreateMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
 
@@ -67,8 +75,9 @@ export default function CategoriesScreen({ route, navigation }) {
     setNewCategory({
       ...newCategory,
       category_name: null,
-      icon_id: null,
+      icon_id: icons[0]._id,
     });
+
     setOpenedCreate(!openedCreate);
 
     if (openedCreate) {
@@ -86,6 +95,10 @@ export default function CategoriesScreen({ route, navigation }) {
 
     getIcons().then((icons) => {
       setIcons(icons);
+      setNewCategory({
+        ...newCategory,
+        icon_id: icons[0]._id,
+      });
     });
   }, [keyword, reload]);
 
@@ -98,6 +111,10 @@ export default function CategoriesScreen({ route, navigation }) {
 
         getIcons().then((icons) => {
           setIcons(icons);
+          setNewCategory({
+            ...newCategory,
+            icon_id: icons[0]._id,
+          });
         });
       }
     });
@@ -114,15 +131,11 @@ export default function CategoriesScreen({ route, navigation }) {
 
   const createNewCategory = async () => {
     setLoading(true);
-    setErrorMessage(null);
+    setErrorCreateMessage(null);
+
     const validation = validateNewCategory();
 
     if (validation) {
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons ? icons[index]._id : null,
-      });
-
       await createCategory(newCategory);
 
       setNewCategory({
@@ -143,7 +156,7 @@ export default function CategoriesScreen({ route, navigation }) {
 
   const validateNewCategory = () => {
     if (!newCategory.category_name) {
-      setErrorMessage("A category name is required");
+      setErrorCreateMessage("A category name is required");
       return false;
     }
 
@@ -151,127 +164,133 @@ export default function CategoriesScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <CreateCategoryButtonComponent action={openCreateBottomSheet} />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 20,
-            fontFamily: "Poppins_500Medium",
-          }}
-        >
-          All categories
-        </Text>
-      </View>
-      <SearchBar
-        ref={searchBar}
-        placeholder="Search by category name"
-        onChangeText={(newValue) => setKeyword(newValue)}
-        onClear={() => cancelSearch()}
-        value={keyword}
-        containerStyle={{
-          width: "100%",
-          borderRadius: 50,
-          backgroundColor: "transparent",
-        }}
-        inputContainerStyle={{
-          borderRadius: 50,
-          backgroundColor: "white",
-        }}
-        inputStyle={{
-          fontSize: 10,
-          fontFamily: "Poppins_300Light",
-          color: "black",
-        }}
-      />
-      {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-      <FlatList
-        style={{ height: "100%" }}
-        data={categories}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <CategoryComponent
-            item={item}
-            setErrorMessage={setErrorMessage}
-            setReload={setReload}
-          />
-        )}
-        ItemSeparatorComponent={() => (
-          <View style={{ height: 20, width: "100%" }}></View>
-        )}
-      />
-      <BottomSheet
-        ref={createBottomSheet}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose
-        animateOnMount
-        backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
-      >
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <CreateCategoryButtonComponent action={openCreateBottomSheet} />
         <View
           style={{
-            flex: 1,
-            paddingBottom: 30,
-            rowGap: 50,
-            paddingTop: 20,
-            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
           }}
         >
           <Text
             style={{
               color: "white",
-              fontSize: 17,
+              fontSize: 20,
               fontFamily: "Poppins_500Medium",
             }}
           >
-            Create new category
+            All categories
           </Text>
-          <IconCarouselComponent
-            icons={icons}
-            next={next}
-            prev={prev}
-            index={index}
-          />
-          <View style={{ flexDirection: "row", width: "100%", columnGap: 10 }}>
-            <TextInput
+        </View>
+        <SearchBar
+          ref={searchBar}
+          placeholder="Search by category name"
+          onChangeText={(newValue) => setKeyword(newValue)}
+          onClear={() => cancelSearch()}
+          value={keyword}
+          containerStyle={{
+            width: "100%",
+            borderRadius: 50,
+            backgroundColor: "transparent",
+          }}
+          inputContainerStyle={{
+            borderRadius: 50,
+            backgroundColor: "white",
+          }}
+          inputStyle={{
+            fontSize: 10,
+            fontFamily: "Poppins_300Light",
+            color: "black",
+          }}
+        />
+        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+        <FlatList
+          style={{ height: "100%" }}
+          data={categories}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <CategoryComponent
+              item={item}
+              setErrorMessage={setErrorMessage}
+              setReload={setReload}
+            />
+          )}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 20, width: "100%" }}></View>
+          )}
+        />
+        <BottomSheet
+          ref={createBottomSheet}
+          index={-1}
+          snapPoints={snapPoints}
+          enablePanDownToClose
+          animateOnMount
+          backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
+        >
+          <View
+            style={{
+              flex: 1,
+              paddingBottom: 30,
+              rowGap: 50,
+              paddingTop: 20,
+              paddingHorizontal: 20,
+            }}
+          >
+            <Text
               style={{
                 color: "white",
-                fontFamily: "Poppins_300Light",
-                fontSize: 12,
-                padding: 10,
-                backgroundColor: "#1c1917",
-                borderRadius: 5,
-                elevation: 5,
-                borderColor: "white",
-                borderWidth: 1,
-                borderStyle: "solid",
-                flexGrow: 1,
+                fontSize: 17,
+                fontFamily: "Poppins_500Medium",
               }}
-              onChangeText={(text) =>
-                setNewCategory({ ...newCategory, category_name: text })
-              }
-              value={newCategory.category_name}
-              placeholder="Write a category name"
-              placeholderTextColor="white"
+            >
+              Create new category
+            </Text>
+            <IconCarouselComponent
+              icons={icons}
+              next={next}
+              prev={prev}
+              index={index}
+            />
+            <View
+              style={{ flexDirection: "row", width: "100%", columnGap: 10 }}
+            >
+              <TextInput
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins_300Light",
+                  fontSize: 12,
+                  padding: 10,
+                  backgroundColor: "#1c1917",
+                  borderRadius: 5,
+                  elevation: 5,
+                  borderColor: "white",
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  flexGrow: 1,
+                }}
+                onChangeText={(text) =>
+                  setNewCategory({ ...newCategory, category_name: text })
+                }
+                value={newCategory.category_name}
+                placeholder="Write a category name"
+                placeholderTextColor="white"
+              />
+            </View>
+            {errorCreateMessage ? (
+              <ErrorComponent errorMessage={errorCreateMessage} />
+            ) : null}
+            <ButtonComponent
+              label="Create"
+              action={createNewCategory}
+              loading={loading}
             />
           </View>
-          {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-          <ButtonComponent
-            label="Create"
-            action={createNewCategory}
-            loading={loading}
-          />
-        </View>
-      </BottomSheet>
-    </View>
+        </BottomSheet>
+      </View>
+    </SafeAreaView>
   );
 }
 

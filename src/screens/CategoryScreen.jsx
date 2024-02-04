@@ -107,121 +107,127 @@ export default function CategoryScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Dialog
-        isVisible={visible}
-        onBackdropPress={toggleDialog}
-        overlayStyle={{
-          borderRadius: 5,
-          elevation: 5,
-          backgroundColor: "#1c1917",
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "Poppins_500Medium",
-            color: "white",
-            fontSize: 20,
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Dialog
+          isVisible={visible}
+          onBackdropPress={toggleDialog}
+          overlayStyle={{
+            borderRadius: 5,
+            elevation: 5,
+            backgroundColor: "#1c1917",
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
           }}
         >
-          Delete category
-        </Text>
-        <Text
+          <Text
+            style={{
+              fontFamily: "Poppins_500Medium",
+              color: "white",
+              fontSize: 20,
+            }}
+          >
+            Delete category
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Poppins_300Light",
+              color: "white",
+              fontSize: 12,
+            }}
+          >
+            Are you sure you want to delete this category? All information will
+            be deleted and cannot be recovered
+          </Text>
+          <Dialog.Actions>
+            <Button
+              title="Delete"
+              titleStyle={{
+                color: "#fff",
+                fontSize: 12,
+                fontFamily: "Poppins_500Medium",
+              }}
+              buttonStyle={{
+                backgroundColor: "#eb1717",
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => deleteCategory()}
+            />
+            <View style={{ width: 15 }}></View>
+            <Button
+              title="Cancel"
+              titleStyle={{
+                color: "#000",
+                fontSize: 12,
+                fontFamily: "Poppins_500Medium",
+              }}
+              buttonStyle={{
+                backgroundColor: "#fff",
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => setVisible(false)}
+            />
+          </Dialog.Actions>
+        </Dialog>
+        <GoBackButtonComponent />
+        <View
           style={{
+            flexDirection: "row",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text style={styles.title}>Edit category</Text>
+          <Icon
+            name="trash-alt"
+            type="font-awesome-5"
+            iconStyle={{ fontSize: 20, color: "red", paddingBottom: 7 }}
+            onPress={toggleDialog}
+          />
+        </View>
+
+        <IconCarouselComponent
+          icons={icons}
+          index={index}
+          next={next}
+          prev={prev}
+        />
+        <TextInput
+          style={{
+            width: "100%",
+            color: "white",
             fontFamily: "Poppins_300Light",
-            color: "white",
             fontSize: 12,
+            padding: 10,
+            backgroundColor: "#1c1917",
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
           }}
-        >
-          Are you sure you want to delete this category? All information will be
-          deleted and cannot be recovered
-        </Text>
-        <Dialog.Actions>
-          <Button
-            title="Delete"
-            titleStyle={{
-              color: "#fff",
-              fontSize: 12,
-              fontFamily: "Poppins_500Medium",
-            }}
-            buttonStyle={{
-              backgroundColor: "#eb1717",
-              borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => deleteCategory()}
-          />
-          <View style={{ width: 15 }}></View>
-          <Button
-            title="Cancel"
-            titleStyle={{
-              color: "#000",
-              fontSize: 12,
-              fontFamily: "Poppins_500Medium",
-            }}
-            buttonStyle={{
-              backgroundColor: "#fff",
-              borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => setVisible(false)}
-          />
-        </Dialog.Actions>
-      </Dialog>
-      <GoBackButtonComponent />
-      <View
-        style={{
-          flexDirection: "row",
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Text style={styles.title}>Edit category</Text>
-        <Icon
-          name="trash-alt"
-          type="font-awesome-5"
-          iconStyle={{ fontSize: 20, color: "red", paddingBottom: 7 }}
-          onPress={toggleDialog}
+          onChangeText={(text) =>
+            setCategoryForm({ ...categoryForm, category_name: text })
+          }
+          value={categoryForm.category_name ? categoryForm.category_name : ""}
+          placeholder="Write a category name"
+          placeholderTextColor="white"
+        />
+
+        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+        <ButtonComponent
+          label={"Edit"}
+          action={editCategory}
+          loading={loading}
         />
       </View>
-
-      <IconCarouselComponent
-        icons={icons}
-        index={index}
-        next={next}
-        prev={prev}
-      />
-      <TextInput
-        style={{
-          width: "100%",
-          color: "white",
-          fontFamily: "Poppins_300Light",
-          fontSize: 12,
-          padding: 10,
-          backgroundColor: "#1c1917",
-          borderRadius: 5,
-          elevation: 5,
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-        onChangeText={(text) =>
-          setCategoryForm({ ...categoryForm, category_name: text })
-        }
-        value={categoryForm.category_name ? categoryForm.category_name : ""}
-        placeholder="Write a category name"
-        placeholderTextColor="white"
-      />
-
-      {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-      <ButtonComponent label={"Edit"} action={editCategory} loading={loading} />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -8,6 +8,8 @@ import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 export default function RegisterScreen({ navigation }) {
   const [registerForm, setRegisterForm] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -19,7 +21,12 @@ export default function RegisterScreen({ navigation }) {
   async function register() {
     try {
       setLoading(true);
-      if (registerForm.email !== "" && registerForm.password !== "") {
+      if (
+        registerForm.email !== "" &&
+        registerForm.password !== "" &&
+        registerForm.firstName !== "" &&
+        registerForm.lastName !== ""
+      ) {
         const response = await axios.post(
           "https://expense-record-production.up.railway.app/api/auth",
           registerForm
@@ -47,6 +54,54 @@ export default function RegisterScreen({ navigation }) {
         <GoBackButtonComponent />
         <Text style={styles.title}>Sign up</Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+        <Input
+          placeholder="First name"
+          inputStyle={{
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            width: "100%",
+          }}
+          inputContainerStyle={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+          onChangeText={(newText) =>
+            setRegisterForm({ ...registerForm, firstName: newText })
+          }
+        />
+        <Input
+          placeholder="Last name"
+          inputStyle={{
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            width: "100%",
+          }}
+          inputContainerStyle={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+          onChangeText={(newText) =>
+            setRegisterForm({ ...registerForm, lastName: newText })
+          }
+        />
         <Input
           placeholder="Email"
           inputStyle={{

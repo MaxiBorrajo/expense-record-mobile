@@ -58,8 +58,8 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
+    <SafeAreaProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <ExpenseContextProvider>
           <CategoryContextProvider>
             <UserContextProvider>
@@ -98,8 +98,8 @@ export default function App() {
             </UserContextProvider>
           </CategoryContextProvider>
         </ExpenseContextProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
 

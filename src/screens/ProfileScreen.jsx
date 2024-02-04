@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import SelectDropdown from "react-native-select-dropdown";
@@ -93,239 +93,241 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Dialog
-        isVisible={visible}
-        onBackdropPress={toggleDialog}
-        overlayStyle={{
-          borderRadius: 5,
-          elevation: 5,
-          backgroundColor: "#1c1917",
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: "Poppins_500Medium",
-            color: "white",
-            fontSize: 20,
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Dialog
+          isVisible={visible}
+          onBackdropPress={toggleDialog}
+          overlayStyle={{
+            borderRadius: 5,
+            elevation: 5,
+            backgroundColor: "#1c1917",
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
           }}
         >
-          Delete account
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Poppins_300Light",
-            color: "white",
-            fontSize: 12,
-          }}
-        >
-          Are you sure you want to delete your account? All information will be
-          deleted and cannot be recovered
-        </Text>
-        <Dialog.Actions>
-          <Button
-            title="Delete"
-            titleStyle={{
-              color: "#fff",
-              fontSize: 12,
+          <Text
+            style={{
               fontFamily: "Poppins_500Medium",
+              color: "white",
+              fontSize: 20,
             }}
-            buttonStyle={{
-              backgroundColor: "#eb1717",
-              borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
+          >
+            Delete account
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Poppins_300Light",
+              color: "white",
+              fontSize: 12,
             }}
-            onPress={() => deleteAccount()}
+          >
+            Are you sure you want to delete your account? All information will
+            be deleted and cannot be recovered
+          </Text>
+          <Dialog.Actions>
+            <Button
+              title="Delete"
+              titleStyle={{
+                color: "#fff",
+                fontSize: 12,
+                fontFamily: "Poppins_500Medium",
+              }}
+              buttonStyle={{
+                backgroundColor: "#eb1717",
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => deleteAccount()}
+            />
+            <View style={{ width: 15 }}></View>
+            <Button
+              title="Cancel"
+              titleStyle={{
+                color: "#000",
+                fontSize: 12,
+                fontFamily: "Poppins_500Medium",
+              }}
+              buttonStyle={{
+                backgroundColor: "#fff",
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => setVisible(false)}
+            />
+          </Dialog.Actions>
+        </Dialog>
+        <Text style={styles.title}>Profile</Text>
+        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+        >
+          <TextInput
+            style={{
+              color: "white",
+              fontFamily: "Poppins_300Light",
+              fontSize: 12,
+              width: "100%",
+              paddingRight: 15,
+            }}
+            onChangeText={(text) => {
+              setUserForm({ ...userForm, firstName: text });
+            }}
+            value={userForm.firstName}
+            placeholder="First Name"
+            placeholderTextColor="white"
           />
-          <View style={{width:15}}></View>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
+        >
+          <TextInput
+            style={{
+              color: "white",
+              fontFamily: "Poppins_300Light",
+              fontSize: 12,
+              width: "100%",
+              paddingRight: 15,
+            }}
+            onChangeText={(text) => {
+              setUserForm({ ...userForm, lastName: text });
+            }}
+            value={userForm.lastName}
+            placeholder="Last Name"
+            placeholderTextColor="white"
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            columnGap: 10,
+            width: "100%",
+          }}
+        >
+          <SelectDropdown
+            data={currencies}
+            onSelect={(selectedItem) => {
+              setOldCurrency(userForm.currency);
+              setUserForm({ ...userForm, currency: selectedItem });
+            }}
+            buttonTextAfterSelection={(selectedItem) => {
+              return selectedItem;
+            }}
+            rowTextForSelection={(item) => {
+              return item;
+            }}
+            defaultButtonText={userForm.currency ? userForm.currency : "ARS"}
+            defaultValue={userForm.currency}
+            buttonStyle={{
+              borderRadius: 5,
+              alignSelf: "center",
+              height: "100%",
+              backgroundColor: "#1c1917",
+              color: "white",
+              borderColor: "white",
+              borderWidth: 1,
+              borderStyle: "solid",
+              flexGrow: 1,
+            }}
+            buttonTextStyle={{ fontFamily: "Poppins_300Light", color: "white" }}
+            rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+          />
           <Button
-            title="Cancel"
+            loading={loading}
+            loadingProps={{
+              size: "small",
+              color: "black",
+            }}
+            onPress={updateUser}
+            title="Update"
             titleStyle={{
               color: "#000",
-              fontSize: 12,
+              fontSize: 15,
               fontFamily: "Poppins_500Medium",
             }}
             buttonStyle={{
               backgroundColor: "#fff",
+              paddingVertical: 10,
+              paddingHorizontal: 30,
               borderRadius: 5,
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => setVisible(false)}
           />
-        </Dialog.Actions>
-      </Dialog>
-      <Text style={styles.title}>Profile</Text>
-      {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          backgroundColor: "#1c1917",
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-          borderRadius: 5,
-          elevation: 5,
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-      >
-        <TextInput
+        </View>
+        <View
           style={{
-            color: "white",
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            columnGap: 10,
             width: "100%",
-            paddingRight: 15,
           }}
-          onChangeText={(text) => {
-            setUserForm({ ...userForm, firstName: text });
-          }}
-          value={userForm.firstName}
-          placeholder="First Name"
-          placeholderTextColor="white"
-        />
+        >
+          <Button
+            title="Logout"
+            titleStyle={{
+              color: "#000",
+              fontSize: 15,
+              fontFamily: "Poppins_500Medium",
+            }}
+            buttonStyle={{
+              backgroundColor: "#fff",
+              paddingVertical: 10,
+              paddingHorizontal: 30,
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={logout}
+          />
+          <Button
+            title="Delete account"
+            titleStyle={{
+              color: "#fff",
+              fontSize: 15,
+              fontFamily: "Poppins_500Medium",
+            }}
+            buttonStyle={{
+              backgroundColor: "#eb1717",
+              paddingVertical: 10,
+              paddingHorizontal: 30,
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={toggleDialog}
+          />
+        </View>
       </View>
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          backgroundColor: "#1c1917",
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-          borderRadius: 5,
-          elevation: 5,
-          borderColor: "white",
-          borderWidth: 1,
-          borderStyle: "solid",
-        }}
-      >
-        <TextInput
-          style={{
-            color: "white",
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            width: "100%",
-            paddingRight: 15,
-          }}
-          onChangeText={(text) => {
-            setUserForm({ ...userForm, lastName: text });
-          }}
-          value={userForm.lastName}
-          placeholder="Last Name"
-          placeholderTextColor="white"
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          columnGap: 10,
-          width: "100%",
-        }}
-      >
-        <SelectDropdown
-          data={currencies}
-          onSelect={(selectedItem) => {
-            setOldCurrency(userForm.currency);
-            setUserForm({ ...userForm, currency: selectedItem });
-          }}
-          buttonTextAfterSelection={(selectedItem) => {
-            return selectedItem;
-          }}
-          rowTextForSelection={(item) => {
-            return item;
-          }}
-          defaultButtonText={userForm.currency ? userForm.currency : "ARS"}
-          defaultValue={userForm.currency}
-          buttonStyle={{
-            borderRadius: 5,
-            alignSelf: "center",
-            height: "100%",
-            backgroundColor: "#1c1917",
-            color: "white",
-            borderColor: "white",
-            borderWidth: 1,
-            borderStyle: "solid",
-            flexGrow: 1,
-          }}
-          buttonTextStyle={{ fontFamily: "Poppins_300Light", color: "white" }}
-          rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-        />
-        <Button
-          loading={loading}
-          loadingProps={{
-            size: "small",
-            color: "black",
-          }}
-          onPress={updateUser}
-          title="Update"
-          titleStyle={{
-            color: "#000",
-            fontSize: 15,
-            fontFamily: "Poppins_500Medium",
-          }}
-          buttonStyle={{
-            backgroundColor: "#fff",
-            paddingVertical: 10,
-            paddingHorizontal: 30,
-            borderRadius: 5,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          columnGap: 10,
-          width: "100%",
-        }}
-      >
-        <Button
-          title="Logout"
-          titleStyle={{
-            color: "#000",
-            fontSize: 15,
-            fontFamily: "Poppins_500Medium",
-          }}
-          buttonStyle={{
-            backgroundColor: "#fff",
-            paddingVertical: 10,
-            paddingHorizontal: 30,
-            borderRadius: 5,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={logout}
-        />
-        <Button
-          title="Delete account"
-          titleStyle={{
-            color: "#fff",
-            fontSize: 15,
-            fontFamily: "Poppins_500Medium",
-          }}
-          buttonStyle={{
-            backgroundColor: "#eb1717",
-            paddingVertical: 10,
-            paddingHorizontal: 30,
-            borderRadius: 5,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={toggleDialog}
-        />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

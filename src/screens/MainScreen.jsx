@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import InfoComponent from "../components/InfoComponent";
@@ -44,60 +44,62 @@ export default function MainScreen({ route, navigation }) {
   const [change, setChange] = useState(null);
 
   return (
-    <View style={styles.container}>
-      {user ? (
-        <Text style={styles.title}>
-          Welcome, {user.firstName} {user.lastName}{" "}
-        </Text>
-      ) : null}
-      <InfoComponent route={route} navigation={navigation} reload={reload} />
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          width: "100%",
-          paddingLeft: 30,
-        }}
-      >
-        <Icon
-          name={change && change.percentage > 0 ? "caret-up" : "caret-down"}
-          type="font-awesome"
-          iconStyle={
-            change && change.percentage > 0 ? styles.profit : styles.loss
-          }
-        ></Icon>
-        <Text
-          style={[
-            {
-              fontFamily: "Poppins_400Regular",
-              fontSize: 11,
-              marginHorizontal: 5,
-              marginTop: 5,
-            },
-            change && change.percentage > 0 ? styles.profit : styles.loss,
-          ]}
-        >
-          {change && change.percentage ? change.percentage.toFixed(2) : 0} %
-        </Text>
-        <Text
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        {user ? (
+          <Text style={styles.title}>
+            Welcome, {user.firstName} {user.lastName}{" "}
+          </Text>
+        ) : null}
+        <InfoComponent route={route} navigation={navigation} reload={reload} />
+        <View
           style={{
-            fontFamily: "Poppins_400Regular",
-            fontSize: 11,
-            color: "white",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            width: "100%",
+            paddingLeft: 30,
           }}
         >
-          ($ {change && change.nominal ? change.nominal.toFixed(2) : 0})
-          compared to last month
-        </Text>
+          <Icon
+            name={change && change.percentage > 0 ? "caret-up" : "caret-down"}
+            type="font-awesome"
+            iconStyle={
+              change && change.percentage > 0 ? styles.profit : styles.loss
+            }
+          ></Icon>
+          <Text
+            style={[
+              {
+                fontFamily: "Poppins_400Regular",
+                fontSize: 11,
+                marginHorizontal: 5,
+                marginTop: 5,
+              },
+              change && change.percentage > 0 ? styles.profit : styles.loss,
+            ]}
+          >
+            {change && change.percentage ? change.percentage.toFixed(2) : 0} %
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Poppins_400Regular",
+              fontSize: 11,
+              color: "white",
+            }}
+          >
+            ($ {change && change.nominal ? change.nominal.toFixed(2) : 0})
+            compared to last month
+          </Text>
+        </View>
+        <ExpensesComponent
+          route={route}
+          navigation={navigation}
+          setReload={setReload}
+          reload={reload}
+        />
       </View>
-      <ExpensesComponent
-        route={route}
-        navigation={navigation}
-        setReload={setReload}
-        reload={reload}
-      />
-    </View>
+    </SafeAreaView>
   );
 }
 

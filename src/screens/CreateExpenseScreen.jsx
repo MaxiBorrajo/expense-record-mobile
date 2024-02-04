@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect, useRef } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -31,7 +25,7 @@ export default function CreateExpenseScreen() {
   });
 
   const [icon, setIcon] = useState(null);
-
+  const [disabled, setDisabled] = useState(true);
   useEffect(() => {
     if (firstCharge.current) {
       firstCharge.current = false;
@@ -42,7 +36,6 @@ export default function CreateExpenseScreen() {
 
   const [categories, setCategories] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [disabled, setDisabled] = useState(true);
 
   const validateAmount = (amount) => {
     if (!amount) {
@@ -59,155 +52,163 @@ export default function CreateExpenseScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <GoBackButtonComponent />
-      <View
-        style={{
-          width: "100%",
-          height: "100%",
-          rowGap: 50,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={styles.title}>Create new expense</Text>
-        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        {expenseForm.category_id ? (
-          <View
-            style={{
-              borderRadius: 5,
-              backgroundColor: "#1c1917",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              width: 70,
-              height: 70,
-              elevation: 5,
-              borderColor: "white",
-              borderWidth: 1,
-              borderStyle: "solid",
-              alignSelf: "center",
-            }}
-          >
-            <Icon
-              name={icon}
-              type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: "white" }}
-            ></Icon>
-          </View>
-        ) : null}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <GoBackButtonComponent />
         <View
           style={{
-            flexDirection: "row",
             width: "100%",
-            alignItems: "center",
+            height: "100%",
+            rowGap: 50,
             justifyContent: "center",
-            columnGap: 10,
           }}
         >
-          <IncomeOrLossComponent
-            amount={expenseForm ? +expenseForm.amount : 100}
-            action={() => {
-              setExpenseForm({
-                ...expenseForm,
-                amount: expenseForm.amount * -1,
-              });
-            }}
-          />
+          <Text style={styles.title}>Create new expense</Text>
+          {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
+          {expenseForm.category_id ? (
+            <View
+              style={{
+                borderRadius: 5,
+                backgroundColor: "#1c1917",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                width: 70,
+                height: 70,
+                elevation: 5,
+                borderColor: "white",
+                borderWidth: 1,
+                borderStyle: "solid",
+                alignSelf: "center",
+              }}
+            >
+              <Icon
+                name={icon}
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "white" }}
+              ></Icon>
+            </View>
+          ) : null}
           <View
             style={{
               flexDirection: "row",
-              width: "65%",
+              width: "100%",
               alignItems: "center",
-              columnGap: expenseForm.isIncome ? 10 : 3,
-              backgroundColor: "#1c1917",
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-              borderRadius: 5,
-              elevation: 5,
-              borderColor: "white",
-              borderWidth: 1,
-              borderStyle: "solid",
+              justifyContent: "center",
+              columnGap: 10,
             }}
           >
-            <Text
+            <IncomeOrLossComponent
+              amount={expenseForm ? +expenseForm.amount : 100}
+              action={() => {
+                setExpenseForm({
+                  ...expenseForm,
+                  amount: expenseForm.amount * -1,
+                });
+              }}
+            />
+            <View
               style={{
-                color: "white",
-                fontFamily: "Poppins_500Medium",
-                fontSize: 15,
+                flexDirection: "row",
+                width: "65%",
+                alignItems: "center",
+                columnGap: expenseForm.isIncome ? 10 : 3,
+                backgroundColor: "#1c1917",
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                borderRadius: 5,
+                elevation: 5,
+                borderColor: "white",
+                borderWidth: 1,
+                borderStyle: "solid",
               }}
             >
-              $
-            </Text>
-            <TextInput
-              style={{
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 15,
+                }}
+              >
+                $
+              </Text>
+              <TextInput
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 15,
+                  width: "100%",
+                  paddingRight: 15,
+                }}
+                onChangeText={(text) => {
+                  setExpenseForm({ ...expenseForm, amount: text });
+                }}
+                value={expenseForm.amount.toString()}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+              columnGap: 10,
+            }}
+          >
+            <SelectDropdown
+              data={categories}
+              onSelect={(selectedItem) => {
+                setIcon(selectedItem.icon_id.icon);
+                setExpenseForm({
+                  ...expenseForm,
+                  category_id: selectedItem._id,
+                });
+              }}
+              buttonTextAfterSelection={(selectedItem) => {
+                return selectedItem.category_name;
+              }}
+              rowTextForSelection={(item) => {
+                return item.category_name;
+              }}
+              defaultButtonText="Select a category"
+              defaultValue={
+                expenseForm.category_id ? expenseForm.category_id : null
+              }
+              buttonStyle={{
+                borderRadius: 5,
+                alignSelf: "center",
+                height: "100%",
+                backgroundColor: "#1c1917",
                 color: "white",
-                fontFamily: "Poppins_500Medium",
-                fontSize: 15,
-                width: "100%",
-                paddingRight: 15,
+                borderColor: "white",
+                borderWidth: 1,
+                borderStyle: "solid",
+                flexGrow: 1,
               }}
-              onChangeText={(text) => {
-                setExpenseForm({ ...expenseForm, amount: text });
+              buttonTextStyle={{
+                fontFamily: "Poppins_300Light",
+                color: "white",
               }}
-              value={expenseForm.amount.toString()}
-              keyboardType="numeric"
+              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+            />
+
+            <ButtonComponent
+              label="Next"
+              disabled={disabled}
+              action={() => {
+                navigation.navigate({
+                  name: "FinishCreateExpense",
+                  params: { expenseForm: expenseForm },
+                });
+              }}
             />
           </View>
         </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "space-between",
-            columnGap: 10,
-          }}
-        >
-          <SelectDropdown
-            data={categories}
-            onSelect={(selectedItem) => {
-              setIcon(selectedItem.icon_id.icon);
-              setExpenseForm({ ...expenseForm, category_id: selectedItem._id });
-            }}
-            buttonTextAfterSelection={(selectedItem) => {
-              return selectedItem.category_name;
-            }}
-            rowTextForSelection={(item) => {
-              return item.category_name;
-            }}
-            defaultButtonText="Select a category"
-            defaultValue={
-              expenseForm.category_id ? expenseForm.category_id : null
-            }
-            buttonStyle={{
-              borderRadius: 5,
-              alignSelf: "center",
-              height: "100%",
-              backgroundColor: "#1c1917",
-              color: "white",
-              borderColor: "white",
-              borderWidth: 1,
-              borderStyle: "solid",
-              flexGrow: 1,
-            }}
-            buttonTextStyle={{ fontFamily: "Poppins_300Light", color: "white" }}
-            rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-          />
-
-          <ButtonComponent
-            label="Next"
-            disabled={disabled}
-            action={() => {
-              navigation.navigate({
-                name: "FinishCreateExpense",
-                params: { expenseForm: expenseForm },
-              });
-            }}
-          />
-        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

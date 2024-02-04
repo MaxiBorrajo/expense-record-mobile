@@ -3,7 +3,7 @@ import {
   Text,
   View,
   Dimensions,
-  ScrollView,
+  SafeAreaView,
   FlatList,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
@@ -68,145 +68,108 @@ export default function StatisticsScreen() {
   };
 
   return (
-    <FlatList
-      contentContainerStyle={[
-        { backgroundColor: "black" },
-        !statistics ? { flex: 1 } : null,
-      ]}
-      ListHeaderComponent={
-        <View style={styles.container}>
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              fontFamily: "Poppins_500Medium",
-              alignSelf: "flex-start",
-            }}
-          >
-            Your statistics
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-              paddingTop: 10,
-            }}
-          >
+    <SafeAreaView style={{ flex: 1 }}>
+      <FlatList
+        contentContainerStyle={[
+          { backgroundColor: "black" },
+          !statistics ? { flex: 1 } : null,
+        ]}
+        ListHeaderComponent={
+          <View style={styles.container}>
             <Text
               style={{
                 color: "white",
-                fontSize: 16,
-                fontFamily: "Poppins_300Light",
+                fontSize: 20,
+                fontFamily: "Poppins_500Medium",
+                alignSelf: "flex-start",
               }}
             >
-              Annual statistics
+              Your statistics
             </Text>
-            {firstYear && year ? (
-              <SelectDropdown
-                data={generateYearList(firstYear)}
-                onSelect={(selectedItem) => {
-                  setYear(selectedItem);
-                }}
-                buttonTextAfterSelection={(selectedItem) => {
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item) => {
-                  return item;
-                }}
-                defaultButtonText="Year"
-                defaultValue={year}
-                buttonStyle={{
-                  borderRadius: 5,
-                  width: 80,
-                  height: 40,
-                  alignSelf: "flex-start",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-              />
-            ) : null}
-          </View>
-          {statistics ? (
             <View
               style={{
-                rowGap: 30,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
                 width: "100%",
+                paddingTop: 10,
               }}
             >
-              {statistics.length > 0 ? (
-                <View
-                  style={{
-                    flexDirection: "row",
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 16,
+                  fontFamily: "Poppins_300Light",
+                }}
+              >
+                Annual statistics
+              </Text>
+              {firstYear && year ? (
+                <SelectDropdown
+                  data={generateYearList(firstYear)}
+                  onSelect={(selectedItem) => {
+                    setYear(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item;
+                  }}
+                  defaultButtonText="Year"
+                  defaultValue={year}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    width: 80,
+                    height: 40,
+                    alignSelf: "flex-start",
                     alignItems: "center",
-                    justifyContent: "space-between",
-                    width: "100%",
+                    justifyContent: "center",
                   }}
-                >
-                  <InfoCardComponent
-                    title={"Total annual balance"}
-                    content={statistics[0].total.toFixed(2)}
-                    width={"32%"}
-                    height={150}
-                  />
-                  <InfoCardComponent
-                    title={"Total annual income"}
-                    content={statistics[0].totalIncome.toFixed(2)}
-                    width={"32%"}
-                    icon="arrow-up"
-                    iconColor="#58eb34"
-                    height={150}
-                  />
-                  <InfoCardComponent
-                    title={"Total annual loss"}
-                    content={statistics[0].totalLoss.toFixed(2)}
-                    width={"32%"}
-                    icon="arrow-down"
-                    iconColor="red"
-                    height={150}
-                  />
-                </View>
-              ) : (
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 25,
-                    fontFamily: "Poppins_700Bold",
-                    textAlign: "center",
-                    padding: 20,
-                    width: "100%",
-                  }}
-                >
-                  No data found
-                </Text>
-              )}
+                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
+                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+                />
+              ) : null}
+            </View>
+            {statistics ? (
               <View
                 style={{
-                  rowGap: 20,
+                  rowGap: 30,
                   width: "100%",
                 }}
               >
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 16,
-                    fontFamily: "Poppins_300Light",
-                  }}
-                >
-                  Months statistics
-                </Text>
                 {statistics.length > 0 ? (
-                  <MonthsCarouselComponent
-                    months={months}
-                    monthsInfo={
-                      statistics.length > 0
-                        ? statistics[0].months.sort((a, b) => a.month - b.month)
-                        : []
-                    }
-                  />
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                    }}
+                  >
+                    <InfoCardComponent
+                      title={"Total annual balance"}
+                      content={statistics[0].total.toFixed(2)}
+                      width={"32%"}
+                      height={150}
+                    />
+                    <InfoCardComponent
+                      title={"Total annual income"}
+                      content={statistics[0].totalIncome.toFixed(2)}
+                      width={"32%"}
+                      icon="arrow-up"
+                      iconColor="#58eb34"
+                      height={150}
+                    />
+                    <InfoCardComponent
+                      title={"Total annual loss"}
+                      content={statistics[0].totalLoss.toFixed(2)}
+                      width={"32%"}
+                      icon="arrow-down"
+                      iconColor="red"
+                      height={150}
+                    />
+                  </View>
                 ) : (
                   <Text
                     style={{
@@ -221,152 +184,202 @@ export default function StatisticsScreen() {
                     No data found
                   </Text>
                 )}
-              </View>
-              <View
-                style={{
-                  width: "100%",
-                  rowGap: 30,
-                }}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 16,
-                    fontFamily: "Poppins_300Light",
-                  }}
-                >
-                  Category statistics
-                </Text>
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    rowGap: 20,
                     width: "100%",
-                    paddingHorizontal: 20,
                   }}
                 >
-                  <SelectDropdown
-                    data={["None", ...months]}
-                    onSelect={(selectedItem, index) => {
-                      if (index === 0) {
-                        setMonth(null);
-                      } else {
-                        setMonth(index - 1);
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                      fontFamily: "Poppins_300Light",
+                    }}
+                  >
+                    Months statistics
+                  </Text>
+                  {statistics.length > 0 ? (
+                    <MonthsCarouselComponent
+                      months={months}
+                      monthsInfo={
+                        statistics.length > 0
+                          ? statistics[0].months.sort(
+                              (a, b) => a.month - b.month
+                            )
+                          : []
                       }
+                    />
+                  ) : (
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 25,
+                        fontFamily: "Poppins_700Bold",
+                        textAlign: "center",
+                        padding: 20,
+                        width: "100%",
+                      }}
+                    >
+                      No data found
+                    </Text>
+                  )}
+                </View>
+                <View
+                  style={{
+                    width: "100%",
+                    rowGap: 30,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                      fontFamily: "Poppins_300Light",
                     }}
-                    buttonTextAfterSelection={(selectedItem) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item) => {
-                      return item;
-                    }}
-                    defaultButtonText="Month"
-                    defaultValue={
-                      month != null && month != undefined
-                        ? months[month]
-                        : "None"
-                    }
-                    buttonStyle={{
-                      borderRadius: 5,
-                      width: 120,
-                      height: 40,
-                      alignSelf: "flex-start",
+                  >
+                    Category statistics
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      paddingHorizontal: 20,
                     }}
-                    buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                    rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  />
-                  <SelectDropdown
-                    data={["Loss", "Income"]}
-                    onSelect={(selectedItem, index) => {
-                      setType(index);
-                    }}
-                    buttonTextAfterSelection={(selectedItem) => {
-                      return selectedItem;
-                    }}
-                    rowTextForSelection={(item) => {
-                      return item;
-                    }}
-                    defaultButtonText="Type"
-                    defaultValue={"Income"}
-                    buttonStyle={{
-                      borderRadius: 5,
-                      width: 120,
-                      height: 40,
-                      alignSelf: "flex-start",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                    buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                    rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  />
+                  >
+                    <SelectDropdown
+                      data={["None", ...months]}
+                      onSelect={(selectedItem, index) => {
+                        if (index === 0) {
+                          setMonth(null);
+                        } else {
+                          setMonth(index - 1);
+                        }
+                      }}
+                      buttonTextAfterSelection={(selectedItem) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item) => {
+                        return item;
+                      }}
+                      defaultButtonText="Month"
+                      defaultValue={
+                        month != null && month != undefined
+                          ? months[month]
+                          : "None"
+                      }
+                      buttonStyle={{
+                        borderRadius: 5,
+                        width: 120,
+                        height: 40,
+                        alignSelf: "flex-start",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
+                      rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+                    />
+                    <SelectDropdown
+                      data={["Loss", "Income"]}
+                      onSelect={(selectedItem, index) => {
+                        setType(index);
+                      }}
+                      buttonTextAfterSelection={(selectedItem) => {
+                        return selectedItem;
+                      }}
+                      rowTextForSelection={(item) => {
+                        return item;
+                      }}
+                      defaultButtonText="Type"
+                      defaultValue={"Income"}
+                      buttonStyle={{
+                        borderRadius: 5,
+                        width: 120,
+                        height: 40,
+                        alignSelf: "flex-start",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
+                      rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+                    />
+                  </View>
                 </View>
               </View>
-            </View>
-          ) : null}
-          {categoryStatistics && categoryStatistics.length > 0 ? (
-            <View
-              style={{
-                width: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-                rowGap: 10,
-                paddingTop: 10,
-              }}
-            >
-              <PieChart
-                data={categoryStatistics}
-                width={Dimensions.get("screen").width}
-                height={220}
-                accessor={"total"}
-                backgroundColor={"transparent"}
-                chartConfig={chartConfig}
-                hasLegend={false}
-                center={[Dimensions.get("screen").width / 4, 0]}
-              />
-              <FlatList
+            ) : null}
+            {categoryStatistics && categoryStatistics.length > 0 ? (
+              <View
                 style={{
                   width: "100%",
                   alignItems: "center",
                   justifyContent: "center",
+                  rowGap: 10,
+                  paddingTop: 10,
                 }}
-                data={categoryStatistics}
-                keyExtractor={(item) => item.name}
-                renderItem={({ item }) => (
-                  <View
-                    style={{
-                      alignItems: "center",
-                      flexDirection: "row",
-                      justifyContent: "center",
-                    }}
-                  >
+              >
+                <PieChart
+                  data={categoryStatistics}
+                  width={Dimensions.get("screen").width}
+                  height={220}
+                  accessor={"total"}
+                  backgroundColor={"transparent"}
+                  chartConfig={chartConfig}
+                  hasLegend={false}
+                  center={[Dimensions.get("screen").width / 4, 0]}
+                />
+                <FlatList
+                  style={{
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                  data={categoryStatistics}
+                  keyExtractor={(item) => item.name}
+                  renderItem={({ item }) => (
                     <View
                       style={{
-                        width: "100%",
                         alignItems: "center",
                         flexDirection: "row",
-                        justifyContent: "space-between",
-                        paddingHorizontal: 20,
+                        justifyContent: "center",
                       }}
                     >
                       <View
                         style={{
+                          width: "100%",
                           alignItems: "center",
                           flexDirection: "row",
-                          justifyContent: "center",
-                          columnGap: 10,
+                          justifyContent: "space-between",
+                          paddingHorizontal: 20,
                         }}
                       >
                         <View
                           style={{
-                            width: 20,
-                            height: 20,
-                            backgroundColor: item.color,
-                            borderRadius: 5,
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            columnGap: 10,
                           }}
-                        ></View>
+                        >
+                          <View
+                            style={{
+                              width: 20,
+                              height: 20,
+                              backgroundColor: item.color,
+                              borderRadius: 5,
+                            }}
+                          ></View>
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: 12,
+                              fontFamily: "Poppins_300Light",
+                            }}
+                          >
+                            {item.name} (${item.total.toFixed(2)})
+                          </Text>
+                        </View>
                         <Text
                           style={{
                             color: "white",
@@ -374,52 +387,43 @@ export default function StatisticsScreen() {
                             fontFamily: "Poppins_300Light",
                           }}
                         >
-                          {item.name} (${item.total.toFixed(2)})
+                          {(
+                            (item.total /
+                              getTotal(
+                                categoryStatistics.map(
+                                  (category) => category.total
+                                )
+                              )) *
+                            100
+                          ).toFixed(2)}
+                          %
                         </Text>
                       </View>
-                      <Text
-                        style={{
-                          color: "white",
-                          fontSize: 12,
-                          fontFamily: "Poppins_300Light",
-                        }}
-                      >
-                        {(
-                          (item.total /
-                            getTotal(
-                              categoryStatistics.map(
-                                (category) => category.total
-                              )
-                            )) *
-                          100
-                        ).toFixed(2)}
-                        %
-                      </Text>
                     </View>
-                  </View>
-                )}
-                ItemSeparatorComponent={() => (
-                  <View style={{ height: 10, width: "100%" }}></View>
-                )}
-              />
-            </View>
-          ) : (
-            <Text
-              style={{
-                color: "white",
-                fontSize: 25,
-                fontFamily: "Poppins_700Bold",
-                textAlign: "center",
-                width: "100%",
-                paddingTop: 40,
-              }}
-            >
-              No data found
-            </Text>
-          )}
-        </View>
-      }
-    />
+                  )}
+                  ItemSeparatorComponent={() => (
+                    <View style={{ height: 10, width: "100%" }}></View>
+                  )}
+                />
+              </View>
+            ) : (
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 25,
+                  fontFamily: "Poppins_700Bold",
+                  textAlign: "center",
+                  width: "100%",
+                  paddingTop: 40,
+                }}
+              >
+                No data found
+              </Text>
+            )}
+          </View>
+        }
+      />
+    </SafeAreaView>
   );
 }
 
