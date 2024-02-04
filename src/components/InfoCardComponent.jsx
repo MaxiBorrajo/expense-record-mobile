@@ -2,12 +2,12 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Icon } from "@rneui/themed";
 
-export default function InfoCardComponent({ title, content, icon, iconColor, width }) {
+export default function InfoCardComponent({ title, content, icon, iconColor, width, height }) {
   return (
     <View
       style={{
         width: width,
-        height: "100%",
+        height: height ? height : "100%",
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#1c1917",

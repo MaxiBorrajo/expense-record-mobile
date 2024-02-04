@@ -13,6 +13,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
+import IncomeOrLossComponent from "../components/IncomeOrLossComponent";
 
 export default function CreateExpenseScreen() {
   const { getCategories } = useContext(CategoryContext);
@@ -26,8 +27,7 @@ export default function CreateExpenseScreen() {
   }, []);
 
   const [expenseForm, setExpenseForm] = useState({
-    isIncome: true,
-    amount: "0.00",
+    amount: "100.00",
   });
 
   const [icon, setIcon] = useState(null);
@@ -65,147 +65,58 @@ export default function CreateExpenseScreen() {
         style={{
           width: "100%",
           height: "100%",
-          rowGap:50,
-          justifyContent:'center',
+          rowGap: 50,
+          justifyContent: "center",
         }}
       >
         <Text style={styles.title}>Create new expense</Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-around",
-            columnGap: 10,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => setExpenseForm({ ...expenseForm, isIncome: true })}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              columnGap: 10,
-            }}
-          >
-            {expenseForm.isIncome ? (
-              <Icon
-                name="arrow-up"
-                type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "#22c55e" }}
-              />
-            ) : null}
-            <Text
-              style={[
-                {
-                  color: "white",
-                  fontFamily: "Poppins_500Medium",
-                  fontSize: 20,
-                },
-                expenseForm.isIncome
-                  ? {
-                      color: "#22c55e",
-                    }
-                  : null,
-              ]}
-            >
-              Income
-            </Text>
-            {expenseForm.isIncome ? (
-              <Icon
-                name="arrow-up"
-                type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "#22c55e" }}
-              />
-            ) : null}
-          </TouchableOpacity>
-          <Text
-            style={{
-              color: "white",
-              fontFamily: "Poppins_500Medium",
-              fontSize: 20,
-            }}
-          >
-            |
-          </Text>
-          <TouchableOpacity
-            onPress={() => setExpenseForm({ ...expenseForm, isIncome: false })}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              columnGap: 10,
-            }}
-          >
-            {!expenseForm.isIncome ? (
-              <Icon
-                name="arrow-down"
-                type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "#dc2626" }}
-              />
-            ) : null}
-            <Text
-              style={[
-                {
-                  color: "white",
-                  fontFamily: "Poppins_500Medium",
-                  fontSize: 20,
-                },
-                !expenseForm.isIncome
-                  ? {
-                      color: "#dc2626",
-                    }
-                  : null,
-              ]}
-            >
-              Loss
-            </Text>
-            {!expenseForm.isIncome ? (
-              <Icon
-                name="arrow-down"
-                type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "#dc2626" }}
-              />
-            ) : null}
-          </TouchableOpacity>
-        </View>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-
+        {expenseForm.category_id ? (
+          <View
+            style={{
+              borderRadius: 5,
+              backgroundColor: "#1c1917",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              width: 70,
+              height: 70,
+              elevation: 5,
+              borderColor: "white",
+              borderWidth: 1,
+              borderStyle: "solid",
+              alignSelf: "center",
+            }}
+          >
+            <Icon
+              name={icon}
+              type="font-awesome-5"
+              iconStyle={{ fontSize: 20, color: "white" }}
+            ></Icon>
+          </View>
+        ) : null}
         <View
           style={{
             flexDirection: "row",
             width: "100%",
             alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
+            justifyContent: "center",
             columnGap: 10,
           }}
         >
-          {expenseForm.category_id ? (
-            <View
-              style={{
-                borderRadius: 5,
-                backgroundColor: "#1c1917",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                width: 67,
-                height: 67,
-                elevation: 5,
-                borderColor: "white",
-                borderWidth: 1,
-                borderStyle: "solid",
-              }}
-            >
-              <Icon
-                name={icon}
-                type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "white" }}
-              ></Icon>
-            </View>
-          ) : null}
+          <IncomeOrLossComponent
+            amount={expenseForm ? +expenseForm.amount : 100}
+            action={() => {
+              setExpenseForm({
+                ...expenseForm,
+                amount: expenseForm.amount * -1,
+              });
+            }}
+          />
           <View
             style={{
               flexDirection: "row",
-              width: expenseForm.category_id ? "80%" : "100%",
+              width: "65%",
               alignItems: "center",
               columnGap: expenseForm.isIncome ? 10 : 3,
               backgroundColor: "#1c1917",
@@ -222,16 +133,16 @@ export default function CreateExpenseScreen() {
               style={{
                 color: "white",
                 fontFamily: "Poppins_500Medium",
-                fontSize: 20,
+                fontSize: 15,
               }}
             >
-              {expenseForm.isIncome ? "$" : "$ -"}
+              $
             </Text>
             <TextInput
               style={{
                 color: "white",
                 fontFamily: "Poppins_500Medium",
-                fontSize: 18,
+                fontSize: 15,
                 width: "100%",
                 paddingRight: 15,
               }}
@@ -288,7 +199,6 @@ export default function CreateExpenseScreen() {
             label="Next"
             disabled={disabled}
             action={() => {
-              setExpenseForm({ ...expenseForm, amount: +expenseForm.amount });
               navigation.navigate({
                 name: "FinishCreateExpense",
                 params: { expenseForm: expenseForm },
@@ -307,7 +217,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "fff",
     paddingHorizontal: 30,
-    paddingVertical: 100,
     position: "relative",
   },
   title: {

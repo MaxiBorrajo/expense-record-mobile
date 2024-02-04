@@ -59,7 +59,19 @@ export default function VerifyCodeScreen({ navigation }) {
           inputCount={6}
           tintColor="#fff"
           offTintColor="#9ca3af"
-          textInputStyle={{ color: "white", fontFamily: "Poppins_300Light" }}
+          textInputStyle={{
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderBottomWidth: 1,
+            paddingTop:3
+          }}
         />
         <Text
           style={styles.link}

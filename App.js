@@ -10,7 +10,6 @@ import VerifyCodeScreen from "./src/screens/VerifyCodeScreen"; //✓
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen"; //✓
 import ExpensesScreen from "./src/screens/ExpensesScreen"; //✓
 import ExpenseScreen from "./src/screens/ExpenseScreen"; //✓
-import EditExpenseScreen from "./src/screens/EditExpenseScreen"; //✓
 import FinishCreateExpenseScreen from "./src/screens/FinishCreateExpenseScreen"; //
 import CategoryScreen from "./src/screens/CategoryScreen"; //
 import {
@@ -27,6 +26,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ExpenseContextProvider } from "./src/context/ExpenseContext";
 import { CategoryContextProvider } from "./src/context/CategoryContext";
+import { UserContextProvider } from "./src/context/UserContext";
 import { MenuProvider } from "react-native-popup-menu";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -62,42 +62,40 @@ export default function App() {
       <SafeAreaProvider>
         <ExpenseContextProvider>
           <CategoryContextProvider>
-            <MenuProvider>
-              <NavigationContainer>
-                <Stack.Navigator
-                  screenOptions={{ headerShown: false }}
-                  initialRouteName={auth ? "Home" : "Hero"}
-                >
-                  <Stack.Screen name="Hero" component={HeroScreen} />
-                  <Stack.Screen name="Login" component={LoginScreen} />
-                  <Stack.Screen name="Home" component={HomeScreen} />
-                  <Stack.Screen name="Register" component={RegisterScreen} />
-                  <Stack.Screen
-                    name="ForgotPassword"
-                    component={ForgotPasswordScreen}
-                  />
-                  <Stack.Screen
-                    name="ResetPassword"
-                    component={ResetPasswordScreen}
-                  />
-                  <Stack.Screen
-                    name="VerifyCode"
-                    component={VerifyCodeScreen}
-                  />
-                  <Stack.Screen name="Expenses" component={ExpensesScreen} />
-                  <Stack.Screen name="Expense" component={ExpenseScreen} />
-                  <Stack.Screen name="FinishCreateExpense" component={FinishCreateExpenseScreen} />
-                  <Stack.Screen
-                    name="EditExpense"
-                    component={EditExpenseScreen}
-                  />
-                  <Stack.Screen
-                    name="Category"
-                    component={CategoryScreen}
-                  />
-                </Stack.Navigator>
-              </NavigationContainer>
-            </MenuProvider>
+            <UserContextProvider>
+              <MenuProvider>
+                <NavigationContainer>
+                  <Stack.Navigator
+                    screenOptions={{ headerShown: false }}
+                    initialRouteName={auth ? "Home" : "Hero"}
+                  >
+                    <Stack.Screen name="Hero" component={HeroScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen
+                      name="ForgotPassword"
+                      component={ForgotPasswordScreen}
+                    />
+                    <Stack.Screen
+                      name="ResetPassword"
+                      component={ResetPasswordScreen}
+                    />
+                    <Stack.Screen
+                      name="VerifyCode"
+                      component={VerifyCodeScreen}
+                    />
+                    <Stack.Screen name="Expenses" component={ExpensesScreen} />
+                    <Stack.Screen name="Expense" component={ExpenseScreen} />
+                    <Stack.Screen
+                      name="FinishCreateExpense"
+                      component={FinishCreateExpenseScreen}
+                    />
+                    <Stack.Screen name="Category" component={CategoryScreen} />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              </MenuProvider>
+            </UserContextProvider>
           </CategoryContextProvider>
         </ExpenseContextProvider>
       </SafeAreaProvider>

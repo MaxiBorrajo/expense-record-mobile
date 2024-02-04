@@ -5,6 +5,7 @@ import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import IconCarouselComponent from "../components/IconCarouselComponent";
+import { Icon, Dialog, Button } from "@rneui/themed";
 
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
@@ -26,7 +27,7 @@ export default function CategoryScreen({ route, navigation }) {
     });
   }, []);
 
-  const { getIcons, getCategoryById, updateCategoryById } =
+  const { getIcons, getCategoryById, updateCategoryById, deleteCategoryById } =
     useContext(CategoryContext);
 
   const [categoryForm, setCategoryForm] = useState({
@@ -49,6 +50,11 @@ export default function CategoryScreen({ route, navigation }) {
     }
 
     setLoading(false);
+  };
+
+  const deleteCategory = async () => {
+    await deleteCategoryById(id);
+    navigation.navigate("Categories", { actionCompleted: true });
   };
 
   const validateCategoryForm = () => {
@@ -95,10 +101,96 @@ export default function CategoryScreen({ route, navigation }) {
     }
   };
 
+  const toggleDialog = () => {
+    setVisible(!visible);
+  };
+  const [visible, setVisible] = useState(false);
+
   return (
     <View style={styles.container}>
+      <Dialog
+        isVisible={visible}
+        onBackdropPress={toggleDialog}
+        overlayStyle={{
+          borderRadius: 5,
+          elevation: 5,
+          backgroundColor: "#1c1917",
+          borderColor: "white",
+          borderWidth: 1,
+          borderStyle: "solid",
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: "Poppins_500Medium",
+            color: "white",
+            fontSize: 20,
+          }}
+        >
+          Delete category
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Poppins_300Light",
+            color: "white",
+            fontSize: 12,
+          }}
+        >
+          Are you sure you want to delete this category? All information will be
+          deleted and cannot be recovered
+        </Text>
+        <Dialog.Actions>
+          <Button
+            title="Delete"
+            titleStyle={{
+              color: "#fff",
+              fontSize: 12,
+              fontFamily: "Poppins_500Medium",
+            }}
+            buttonStyle={{
+              backgroundColor: "#eb1717",
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => deleteCategory()}
+          />
+          <View style={{ width: 15 }}></View>
+          <Button
+            title="Cancel"
+            titleStyle={{
+              color: "#000",
+              fontSize: 12,
+              fontFamily: "Poppins_500Medium",
+            }}
+            buttonStyle={{
+              backgroundColor: "#fff",
+              borderRadius: 5,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => setVisible(false)}
+          />
+        </Dialog.Actions>
+      </Dialog>
       <GoBackButtonComponent />
-      <Text style={styles.title}>Edit category</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text style={styles.title}>Edit category</Text>
+        <Icon
+          name="trash-alt"
+          type="font-awesome-5"
+          iconStyle={{ fontSize: 20, color: "red", paddingBottom: 7 }}
+          onPress={toggleDialog}
+        />
+      </View>
+
       <IconCarouselComponent
         icons={icons}
         index={index}

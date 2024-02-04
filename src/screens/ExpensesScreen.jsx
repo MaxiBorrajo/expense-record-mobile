@@ -29,6 +29,7 @@ export default function ExpensesScreen() {
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
   const [categories, setCategories] = useState(null);
+  const [reload, setReload] = useState(false);
 
   const bottomSheetParameters = useRef(null);
 
@@ -55,6 +56,8 @@ export default function ExpensesScreen() {
   const categorySelect = useRef({});
 
   useEffect(() => {
+    setReload(false);
+
     const filters = [
       {
         filter: "year",
@@ -89,7 +92,7 @@ export default function ExpensesScreen() {
     getCategories().then((categories) => {
       setCategories(categories);
     });
-  }, [sort, order, category, keyword, year, month, day, type]);
+  }, [sort, order, category, keyword, year, month, day, type, reload]);
 
   const cancelSearch = () => {
     if (searchBar.current) {
@@ -168,7 +171,9 @@ export default function ExpensesScreen() {
         style={{ height: "100%" }}
         data={expenses}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <ExpenseComponent item={item} />}
+        renderItem={({ item }) => (
+          <ExpenseComponent item={item} setReload={setReload} />
+        )}
         ListEmptyComponent={() => (
           <Text
             style={{
@@ -282,9 +287,11 @@ export default function ExpensesScreen() {
               />
               <SelectDropdown
                 ref={monthSelect}
-                data={['None', ...months]}
+                data={["None", ...months]}
                 onSelect={(selectedItem, index) => {
-                  selectedItem === 'None' ? setMonth(null) : setMonth(index);
+                  selectedItem === "None"
+                    ? setMonth(null)
+                    : setMonth(index - 1);
                 }}
                 buttonTextAfterSelection={(selectedItem) => {
                   return selectedItem;

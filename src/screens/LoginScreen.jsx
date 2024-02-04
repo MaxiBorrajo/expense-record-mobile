@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
       }
     }
   }
-  
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -50,7 +50,24 @@ export default function LoginScreen({ navigation }) {
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Input
           placeholder="Email"
-          inputStyle={{ color: "white", fontFamily: "Poppins_300Light" }}
+          inputStyle={{
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            width: "100%",
+          }}
+          inputContainerStyle={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingHorizontal: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
           onChangeText={(newText) =>
             setLoginForm({ ...loginForm, email: newText })
           }
@@ -67,7 +84,24 @@ export default function LoginScreen({ navigation }) {
             />
           }
           secureTextEntry={!showPassword}
-          inputStyle={{ color: "white", fontFamily: "Poppins_300Light" }}
+          inputStyle={{
+            color: "white",
+            fontFamily: "Poppins_300Light",
+            fontSize: 12,
+            width: "100%",
+          }}
+          inputContainerStyle={{
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "#1c1917",
+            paddingVertical: 10,
+            paddingLeft: 20,
+            borderRadius: 5,
+            elevation: 5,
+            borderColor: "white",
+            borderWidth: 1,
+            borderStyle: "solid",
+          }}
           onChangeText={(newText) =>
             setLoginForm({ ...loginForm, password: newText })
           }

@@ -275,7 +275,7 @@ export function ExpenseContextProvider(props) {
 
   async function applyConversion(conversion) {
     try {
-      const result = await axios.post(
+      const result = await axios.put(
         `http://192.168.0.159:3000/api/expenses/conversion`,
         conversion,
         {

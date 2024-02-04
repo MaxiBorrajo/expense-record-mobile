@@ -23,6 +23,7 @@ export default function CategoriesScreen({ route, navigation }) {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const next = () => {
     if (index + 1 >= icons.length) {
@@ -78,6 +79,7 @@ export default function CategoriesScreen({ route, navigation }) {
   };
 
   useEffect(() => {
+    setReload(false);
     getCategories(keyword).then((categories) => {
       setCategories(categories);
     });
@@ -85,7 +87,7 @@ export default function CategoriesScreen({ route, navigation }) {
     getIcons().then((icons) => {
       setIcons(icons);
     });
-  }, [keyword]);
+  }, [keyword, reload]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -195,7 +197,13 @@ export default function CategoriesScreen({ route, navigation }) {
         style={{ height: "100%" }}
         data={categories}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <CategoryComponent item={item} setErrorMessage={setErrorMessage}/>}
+        renderItem={({ item }) => (
+          <CategoryComponent
+            item={item}
+            setErrorMessage={setErrorMessage}
+            setReload={setReload}
+          />
+        )}
         ItemSeparatorComponent={() => (
           <View style={{ height: 20, width: "100%" }}></View>
         )}

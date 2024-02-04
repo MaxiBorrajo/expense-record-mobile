@@ -1,73 +1,63 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useRef, useMemo, useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import InfoComponent from "../components/InfoComponent";
-import HeaderComponent from "../components/HeaderComponent";
-import AmountComponent from "../components/AmountComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
-import BottomSheet from "@gorhom/bottom-sheet";
-import SelectDropdown from "react-native-select-dropdown";
 import { Icon } from "@rneui/themed";
-import { months, generateYearList } from "../utils/utils";
+import { UserContext } from "../context/UserContext";
 
-export default function MainScreen() {
+export default function MainScreen({ route, navigation }) {
   const { getChange } = useContext(ExpenseContext);
+  const { getCurrentUser } = useContext(UserContext);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
+    setReload(false);
+
     getChange().then((percentage) => {
       setChange(percentage);
     });
-  }, []);
 
-  const bottomSheetParameters = useRef(null);
-  const bottomSheetYearMonth = useRef(null);
-  const [openedParameters, setOpenedParameters] = useState(false);
-  const [openedYearMonth, setOpenedYearMonth] = useState(false);
+    getCurrentUser().then((user) => {
+      setUser(user);
+    });
+  }, [reload]);
 
-  const snapPoints = useMemo(() => ["25%", "25%"], []);
-  const openParameteres = () => {
-    setOpenedParameters(!openedParameters);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (route.params?.actionCompleted) {
+        getChange().then((percentage) => {
+          setChange(percentage);
+        });
 
-    if (openedParameters) {
-      bottomSheetParameters.current.close();
-    }
+        getCurrentUser().then((user) => {
+          setUser(user);
+        });
+      }
+    });
 
-    bottomSheetParameters.current.snapToIndex(1);
-  };
+    return unsubscribe;
+  }, [navigation, route.params?.actionCompleted]);
 
-  const openYearMonth = () => {
-    setOpenedYearMonth(!openedYearMonth);
+  const [user, setUser] = useState(null);
 
-    if (openedYearMonth) {
-      bottomSheetYearMonth.current.close();
-    }
-    bottomSheetYearMonth.current.snapToIndex(1);
-  };
-
-  const [sort, setSort] = useState(null);
-  const [order, setOrder] = useState(null);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [keyword, setKeyword] = useState(null);
   const [change, setChange] = useState(null);
-  const sortSelect = React.createRef();
-  const orderSelect = React.createRef();
-
-  function resetParameters() {
-    sortSelect.current.reset();
-    orderSelect.current.reset();
-    setSort(null);
-    setOrder(null);
-  }
 
   return (
     <View style={styles.container}>
-      <InfoComponent/>
+      {user ? (
+        <Text style={styles.title}>
+          Welcome, {user.firstName} {user.lastName}{" "}
+        </Text>
+      ) : null}
+      <InfoComponent route={route} navigation={navigation} reload={reload} />
       <View
         style={{
           flexDirection: "row",
-          paddingHorizontal: 50,
           alignItems: "center",
+          justifyContent: "flex-start",
+          width: "100%",
+          paddingLeft: 30,
         }}
       >
         <Icon
@@ -83,6 +73,7 @@ export default function MainScreen() {
               fontFamily: "Poppins_400Regular",
               fontSize: 11,
               marginHorizontal: 5,
+              marginTop: 5,
             },
             change && change.percentage > 0 ? styles.profit : styles.loss,
           ]}
@@ -100,245 +91,12 @@ export default function MainScreen() {
           compared to last month
         </Text>
       </View>
-      <ExpensesComponent />
-      {/* <CreateExpenseButtonComponent />
-      <HeaderComponent keyword={keyword} setKeyword={setKeyword} />
-      <AmountComponent
-        openYearMonth={openYearMonth}
-        year={year}
-        month={month}
-      />
       <ExpensesComponent
-        sort={sort}
-        order={order}
-        openParameteres={openParameteres}
-        year={year}
-        month={month}
-        keyword={keyword}
+        route={route}
+        navigation={navigation}
+        setReload={setReload}
+        reload={reload}
       />
-      <BottomSheet
-        ref={bottomSheetParameters}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose
-        animateOnMount
-        backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
-      >
-        <View
-          style={{
-            rowGap: 20,
-            flex: 1,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-
-              paddingTop: 30,
-              paddingHorizontal: 20,
-              paddingBottom: 10,
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 17,
-                fontFamily: "Poppins_500Medium",
-              }}
-            >
-              Configure parameters
-            </Text>
-            {sort || order ? (
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  columnGap: 10,
-                }}
-                onPress={() => resetParameters()}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Poppins_300Light",
-                    fontSize: 12,
-                  }}
-                >
-                  Reset
-                </Text>
-                <Icon
-                  name="times"
-                  color="white"
-                  type="font-awesome-5"
-                  iconStyle={{ fontSize: 12 }}
-                />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              columnGap: 40,
-            }}
-          >
-            <SelectDropdown
-              data={[
-                { sort: "Creation date", value: "createdAt" },
-                { sort: "Title", value: "title" },
-                { sort: "Amount", value: "amount" },
-              ]}
-              onSelect={(selectedItem) => {
-                setSort(selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem) => {
-                return selectedItem.sort;
-              }}
-              rowTextForSelection={(item) => {
-                return item.sort;
-              }}
-              defaultButtonText="Sort by"
-              defaultValue={sort}
-              buttonStyle={{ borderRadius: 10, width: 170 }}
-              buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-              ref={sortSelect}
-            />
-            <SelectDropdown
-              data={[
-                { order: "Upward", value: "asc" },
-                { order: "Downward", value: "desc" },
-              ]}
-              onSelect={(selectedItem, index) => {
-                setOrder(selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem) => {
-                return selectedItem.order;
-              }}
-              rowTextForSelection={(item) => {
-                return item.order;
-              }}
-              defaultButtonText="Order by"
-              defaultValue={order}
-              buttonStyle={{ borderRadius: 10, width: 170 }}
-              buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-              ref={orderSelect}
-            />
-          </View>
-        </View>
-      </BottomSheet>
-      <BottomSheet
-        ref={bottomSheetYearMonth}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose
-        animateOnMount
-        backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
-      >
-        <View
-          style={{
-            rowGap: 20,
-            flex: 1,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-
-              paddingTop: 30,
-              paddingHorizontal: 20,
-              paddingBottom: 10,
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 17,
-                fontFamily: "Poppins_500Medium",
-              }}
-            >
-              Configure year and month
-            </Text>
-            {sort || order ? (
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  columnGap: 10,
-                }}
-                onPress={() => resetParameters()}
-              >
-                <Text
-                  style={{
-                    color: "white",
-                    fontFamily: "Poppins_300Light",
-                    fontSize: 12,
-                  }}
-                >
-                  Reset
-                </Text>
-                <Icon
-                  name="times"
-                  color="white"
-                  type="font-awesome-5"
-                  iconStyle={{ fontSize: 12 }}
-                />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              columnGap: 40,
-            }}
-          >
-            <SelectDropdown
-              data={generateYearList(2002)}
-              onSelect={(selectedItem) => {
-                setYear(selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem) => {
-                return selectedItem;
-              }}
-              rowTextForSelection={(item) => {
-                return item;
-              }}
-              defaultButtonText="Select a year"
-              defaultValue={year}
-              buttonStyle={{ borderRadius: 10, width: 170 }}
-              buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-            />
-            <SelectDropdown
-              data={months}
-              onSelect={(selectedItem, index) => {
-                setMonth(index);
-              }}
-              buttonTextAfterSelection={(selectedItem) => {
-                return selectedItem;
-              }}
-              rowTextForSelection={(item) => {
-                return item;
-              }}
-              defaultButtonText="Select month"
-              defaultValue={months[month]}
-              buttonStyle={{ borderRadius: 10, width: 170 }}
-              buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-            />
-          </View>
-        </View>
-      </BottomSheet> */}
     </View>
   );
 }
@@ -349,7 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#0c0a09",
     color: "fff",
     paddingTop: 40,
-    rowGap: 5,
     alignItems: "center",
     position: "relative",
   },
@@ -357,9 +114,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profit: {
-    color: "green",
+    color: "#58eb34",
   },
   loss: {
     color: "red",
+  },
+  title: {
+    fontSize: 15,
+    fontFamily: "Poppins_500Medium",
+    color: "#fff",
+    alignSelf: "flex-start",
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
 });

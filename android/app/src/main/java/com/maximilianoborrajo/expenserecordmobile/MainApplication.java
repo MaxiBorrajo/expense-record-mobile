@@ -15,47 +15,30 @@ import com.facebook.soloader.SoLoader;
 
 import expo.modules.ApplicationLifecycleDispatcher;
 import expo.modules.ReactNativeHostWrapper;
-
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
-  private final ReactNativeHost mReactNativeHost =
-    new ReactNativeHostWrapper(this, new DefaultReactNativeHost(this) {
-      @Override
-      public boolean getUseDeveloperSupport() {
-        return BuildConfig.DEBUG;
-      }
+  private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+            return BuildConfig.DEBUG;
+        }
 
-      @Override
-      protected List<ReactPackage> getPackages() {
-        @SuppressWarnings("UnnecessaryLocalVariable")
-        List<ReactPackage> packages = new PackageList(this).getPackages();
-        // Packages that cannot be autolinked yet can be added manually here, for example:
-        // packages.add(new MyReactNativePackage());
-        return packages;
-      }
+        @Override
+        protected List<ReactPackage> getPackages() {
+            return Arrays.<ReactPackage>asList(
+                    new MainReactPackage(),
+            new SplashScreenReactPackage()  //here
+            );
+        }
+    };
 
-      @Override
-      protected String getJSMainModuleName() {
-        return ".expo/.virtual-metro-entry";
-      }
-
-      @Override
-      protected boolean isNewArchEnabled() {
-        return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;
-      }
-
-      @Override
-      protected Boolean isHermesEnabled() {
-        return BuildConfig.IS_HERMES_ENABLED;
-      }
-  });
-
-  @Override
-  public ReactNativeHost getReactNativeHost() {
-    return mReactNativeHost;
-  }
+    @Override
+    public ReactNativeHost getReactNativeHost() {
+        return mReactNativeHost;
+    }
 
   @Override
   public void onCreate() {

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontFamily: "Poppins_900Black",
+    fontFamily: "Poppins_500Medium",
     fontSize: 15,
     color: "#fff",
   },

@@ -7,11 +7,9 @@ import { ExpenseContext } from "../context/ExpenseContext";
 
 export default function CreateExpenseScreen({ route, navigation }) {
   useEffect(() => {
-    const multiplier = finishExpenseForm.isIncome ? 1 : -1;
-    const amount = +finishExpenseForm.amount;
     setFinishExpenseForm({
       ...finishExpenseForm,
-      amount: amount * multiplier,
+      amount: +expenseForm.amount,
     });
   }, []);
   const { createExpense } = useContext(ExpenseContext);
@@ -25,7 +23,7 @@ export default function CreateExpenseScreen({ route, navigation }) {
     const validation = validateExpenseForm();
     if (validation) {
       await createExpense(finishExpenseForm);
-      navigation.navigate("Main");
+      navigation.navigate("Main", { actionCompleted: true });
     }
     setLoading(false);
   };

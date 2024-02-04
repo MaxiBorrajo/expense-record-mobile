@@ -5,7 +5,12 @@ import { Card, Icon, Divider } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 
-export default function ExpensesComponent() {
+export default function ExpensesComponent({
+  route,
+  navigation,
+  setReload,
+  reload,
+}) {
   const { errorMessage, getExpenses } = useContext(ExpenseContext);
   const [expenses, setExpenses] = useState(null);
   useEffect(() => {
@@ -17,13 +22,36 @@ export default function ExpensesComponent() {
       {
         filter: "month",
         value: new Date().getMonth(),
-      }
+      },
     ];
 
     getExpenses(null, null, filters).then((expenses) => {
-      setExpenses(expenses.splice(0, 4));
+      setExpenses(expenses.splice(0, 3));
     });
-  }, []);
+  }, [reload]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (route.params?.actionCompleted) {
+        const filters = [
+          {
+            filter: "year",
+            value: new Date().getFullYear(),
+          },
+          {
+            filter: "month",
+            value: new Date().getMonth(),
+          },
+        ];
+
+        getExpenses(null, null, filters).then((expenses) => {
+          setExpenses(expenses.splice(0, 3));
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params?.actionCompleted]);
 
   return (
     <Card
@@ -40,7 +68,9 @@ export default function ExpensesComponent() {
         style={{ height: "100%" }}
         data={expenses}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => <ExpenseComponent item={item} />}
+        renderItem={({ item }) => (
+          <ExpenseComponent item={item} setReload={setReload} />
+        )}
         ListEmptyComponent={() => (
           <Text
             style={{
