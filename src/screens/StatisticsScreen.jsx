@@ -4,7 +4,7 @@ import {
   View,
   Dimensions,
   SafeAreaView,
-  FlatList,
+  FlatList
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
@@ -68,7 +68,7 @@ export default function StatisticsScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <FlatList
         contentContainerStyle={[
           { backgroundColor: "black" },
@@ -429,15 +429,15 @@ export default function StatisticsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    height: "auto",
+    flex: 1,
     backgroundColor: "#0c0a09",
     color: "fff",
-    paddingTop: 60,
     paddingBottom: 100,
     rowGap: 20,
     alignItems: "center",
     position: "relative",
     paddingHorizontal: 20,
     overflow: "scroll",
+    minHeight: Dimensions.get("window").height
   },
 });

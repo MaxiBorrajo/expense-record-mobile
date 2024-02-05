@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -51,7 +51,7 @@ export default function ResetPasswordScreen({ navigation }) {
     }
   }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <GoBackButtonComponent />
         <Text style={styles.title}>Reset password</Text>
@@ -138,10 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "fff",
     paddingHorizontal: 30,
-    paddingTop: 100,
     justifyContent: "center",
     position: "relative",
     rowGap: 30,
+    minHeight: Dimensions.get("window").height
   },
   safeArea: {
     flex: 1,

@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import TabBarIcon from "../components/TabBarIcon";
@@ -30,7 +31,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen
           name="Main"

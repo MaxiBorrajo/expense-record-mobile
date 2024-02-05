@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -107,7 +107,7 @@ export default function CategoryScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <Dialog
           isVisible={visible}
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     rowGap: 50,
+    minHeight: Dimensions.get("window").height
   },
   title: {
     fontSize: 20,

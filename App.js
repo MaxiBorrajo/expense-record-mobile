@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HeroScreen from "./src/screens/HeroScreen"; //✓
@@ -60,6 +60,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
+        <StatusBar backgroundColor="black" barStyle="light-content" hidden/>
         <ExpenseContextProvider>
           <CategoryContextProvider>
             <UserContextProvider>

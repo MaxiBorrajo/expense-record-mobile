@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState } from "react";
 import axios from "axios";
@@ -43,7 +43,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <GoBackButtonComponent />
         <Text style={styles.title}>Sign in</Text>
@@ -132,10 +132,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "fff",
     paddingHorizontal: 30,
-    paddingTop: 100,
     justifyContent: "center",
     position: "relative",
     rowGap: 30,
+    minHeight: Dimensions.get("window").height
   },
   safeArea: {
     flex: 1,

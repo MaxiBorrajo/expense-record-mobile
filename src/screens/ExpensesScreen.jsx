@@ -4,7 +4,8 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Dimensions
 } from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -127,7 +128,7 @@ export default function ExpensesScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <GoBackButtonComponent />
         <View
@@ -461,10 +462,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0c0a09",
     color: "fff",
-    paddingTop: 100,
     rowGap: 20,
     alignItems: "center",
     position: "relative",
     paddingHorizontal: 20,
+    paddingTop:60,
+    minHeight: Dimensions.get("window").height
   },
 });

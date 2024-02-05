@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { CategoryContext } from "../context/CategoryContext";
@@ -74,7 +74,7 @@ export default function ExpenseScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <Dialog
           isVisible={visible}
@@ -348,6 +348,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     rowGap: 50,
     justifyContent: "center",
+    minHeight: Dimensions.get("window").height
   },
   title: {
     fontSize: 20,

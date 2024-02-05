@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import InfoComponent from "../components/InfoComponent";
@@ -44,7 +44,7 @@ export default function MainScreen({ route, navigation }) {
   const [change, setChange] = useState(null);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         {user ? (
           <Text style={styles.title}>
@@ -108,9 +108,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0c0a09",
     color: "fff",
-    paddingTop: 40,
     alignItems: "center",
     position: "relative",
+    minHeight: Dimensions.get("window").height
   },
   safeArea: {
     flex: 1,
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     alignSelf: "flex-start",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
 });

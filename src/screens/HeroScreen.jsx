@@ -4,6 +4,7 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
+  Dimensions
 } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 export default function HeroScreen({ navigation }) {
@@ -35,11 +36,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     color: "fff",
-    paddingHorizontal: 30,
-    paddingVertical:50,
+    padding: 30,
     justifyContent: "space-between",
     rowGap: 150,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
+    minHeight: Dimensions.get("window").height
   },
   safeArea: {
     flex: 1,

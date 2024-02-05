@@ -5,6 +5,7 @@ import {
   FlatList,
   TextInput,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { SearchBar } from "@rneui/themed";
@@ -164,7 +165,9 @@ export default function CategoriesScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
       <View style={styles.container}>
         <CreateCategoryButtonComponent action={openCreateBottomSheet} />
         <View
@@ -299,10 +302,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0c0a09",
     color: "fff",
-    paddingVertical: 60,
     rowGap: 20,
     alignItems: "center",
     position: "relative",
     paddingHorizontal: 20,
+    paddingBottom: 60,
+    paddingTop: 20,
+    minHeight: Dimensions.get("window").height,
   },
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState } from "react";
 import axios from "axios";
@@ -49,7 +49,7 @@ export default function RegisterScreen({ navigation }) {
     }
   }
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <GoBackButtonComponent />
         <Text style={styles.title}>Sign up</Text>
@@ -179,10 +179,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     color: "fff",
     paddingHorizontal: 30,
-    paddingTop: 100,
     justifyContent: "center",
     position: "relative",
-    rowGap: 30,
+    rowGap: 20,
+    minHeight: Dimensions.get("window").height
   },
   safeArea: {
     flex: 1,
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_500Medium",
     fontSize: 30,
     color: "#fff",
+    paddingBottom:10
   },
   link: {
     fontFamily: "Poppins_300Light",

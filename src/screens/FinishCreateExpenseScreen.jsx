@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, TextInput, Dimensions} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -43,7 +43,7 @@ export default function CreateExpenseScreen({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
       <View style={styles.container}>
         <GoBackButtonComponent />
         <Text style={styles.title}>Finish new expense</Text>
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "relative",
     rowGap: 50,
+    minHeight: Dimensions.get("window").height
   },
   title: {
     fontSize: 20,
