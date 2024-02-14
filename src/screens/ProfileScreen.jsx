@@ -1,17 +1,19 @@
-import { StyleSheet, Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
-import React, { useEffect, useState, useContext } from "react";
+import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
+import { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { currencies } from "../utils/utils";
 import { Button, Dialog } from "@rneui/themed";
-import ButtonComponent from "../components/ButtonComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../context/UserContext";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import ErrorComponent from "../components/ErrorComponent";
+import { AppContext } from "../context/AppContext";
+import ToggleThemeComponent from "../components/ToggleThemeComponent";
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
   const [errorMessage, setErrorMessage] = useState(null);
   const [userForm, setUserForm] = useState({
     firstName: "",
@@ -92,17 +94,36 @@ export default function ProfileScreen() {
     return true;
   };
 
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
+
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          rowGap: 50,
+          justifyContent: "center",
+          minHeight: Dimensions.get("window").height,
+          position: "relative",
+        }}
+      >
+        <ToggleThemeComponent
+          isDarkTheme={isDarkTheme}
+          setIsDarkTheme={setIsDarkTheme}
+        />
         <Dialog
           isVisible={visible}
           onBackdropPress={toggleDialog}
           overlayStyle={{
             borderRadius: 5,
             elevation: 5,
-            backgroundColor: "#1c1917",
-            borderColor: "white",
+            backgroundColor: colors.card,
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -110,7 +131,7 @@ export default function ProfileScreen() {
           <Text
             style={{
               fontFamily: "Poppins_500Medium",
-              color: "white",
+              color: colors.text,
               fontSize: 20,
             }}
           >
@@ -119,7 +140,7 @@ export default function ProfileScreen() {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              color: "white",
+              color: colors.text,
               fontSize: 12,
             }}
           >
@@ -130,7 +151,7 @@ export default function ProfileScreen() {
             <Button
               title="Delete"
               titleStyle={{
-                color: "#fff",
+                color: "white",
                 fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
@@ -146,12 +167,12 @@ export default function ProfileScreen() {
             <Button
               title="Cancel"
               titleStyle={{
-                color: "#000",
+                color: colors.text,
                 fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
               buttonStyle={{
-                backgroundColor: "#fff",
+                backgroundColor: colors.background,
                 borderRadius: 5,
                 alignItems: "center",
                 justifyContent: "center",
@@ -160,25 +181,33 @@ export default function ProfileScreen() {
             />
           </Dialog.Actions>
         </Dialog>
-        <Text style={styles.title}>Profile</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontFamily: "Poppins_500Medium",
+            color: colors.text,
+          }}
+        >
+          Profile
+        </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <View
           style={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingHorizontal: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
         >
           <TextInput
             style={{
-              color: "white",
+              color: colors.text,
               fontFamily: "Poppins_300Light",
               fontSize: 12,
               width: "100%",
@@ -189,26 +218,26 @@ export default function ProfileScreen() {
             }}
             value={userForm.firstName}
             placeholder="First Name"
-            placeholderTextColor="white"
+            placeholderTextColor={colors.text}
           />
         </View>
         <View
           style={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingHorizontal: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
         >
           <TextInput
             style={{
-              color: "white",
+              color: colors.text,
               fontFamily: "Poppins_300Light",
               fontSize: 12,
               width: "100%",
@@ -219,7 +248,7 @@ export default function ProfileScreen() {
             }}
             value={userForm.lastName}
             placeholder="Last Name"
-            placeholderTextColor="white"
+            placeholderTextColor={colors.text}
           />
         </View>
         <View
@@ -249,31 +278,34 @@ export default function ProfileScreen() {
               borderRadius: 5,
               alignSelf: "center",
               height: "100%",
-              backgroundColor: "#1c1917",
-              color: "white",
-              borderColor: "white",
+              backgroundColor: colors.card,
+              color: colors.text,
+              borderColor: colors.border,
               borderWidth: 1,
               borderStyle: "solid",
               flexGrow: 1,
             }}
-            buttonTextStyle={{ fontFamily: "Poppins_300Light", color: "white" }}
+            buttonTextStyle={{
+              fontFamily: "Poppins_300Light",
+              color: colors.text,
+            }}
             rowTextStyle={{ fontFamily: "Poppins_300Light" }}
           />
           <Button
             loading={loading}
             loadingProps={{
               size: "small",
-              color: "black",
+              color: colors.text,
             }}
             onPress={updateUser}
             title="Update"
             titleStyle={{
-              color: "#000",
+              color: colors.background,
               fontSize: 15,
               fontFamily: "Poppins_500Medium",
             }}
             buttonStyle={{
-              backgroundColor: "#fff",
+              backgroundColor: colors.text,
               paddingVertical: 10,
               paddingHorizontal: 30,
               borderRadius: 5,
@@ -294,12 +326,12 @@ export default function ProfileScreen() {
           <Button
             title="Logout"
             titleStyle={{
-              color: "#000",
+              color: colors.background,
               fontSize: 15,
               fontFamily: "Poppins_500Medium",
             }}
             buttonStyle={{
-              backgroundColor: "#fff",
+              backgroundColor: colors.text,
               paddingVertical: 10,
               paddingHorizontal: 30,
               borderRadius: 5,
@@ -330,20 +362,3 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    rowGap: 50,
-    justifyContent: "center",
-    minHeight: Dimensions.get("window").height
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-  },
-});

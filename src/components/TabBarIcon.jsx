@@ -1,8 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import { Icon } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
 export default function TabBarIcon({ icon, focused }) {
+  const { colors } = useTheme();
+
   return (
     <View
       style={
@@ -13,14 +16,17 @@ export default function TabBarIcon({ icon, focused }) {
               height: 60,
               width: 60,
               marginBottom: 20,
-              backgroundColor: "white",
+              backgroundColor: colors.text,
               alignItems: "center",
               justifyContent: "center",
               elevation: 4,
+              borderColor: colors.background,
+              borderStyle: 'solid',
+              borderWidth: 1
             }
           : {
               position: "relative",
-              backgroundColor: "white",
+              backgroundColor: colors.text,
               alignItems: "center",
               justifyContent: "center",
               elevation: 0,
@@ -30,7 +36,7 @@ export default function TabBarIcon({ icon, focused }) {
       <Icon
         name={icon}
         type="font-awesome-5"
-        color={focused ? "black" : "#737373"}
+        color={colors.background}
         iconStyle={focused ? { fontSize: 30 } : { fontSize: 25 }}
       />
     </View>

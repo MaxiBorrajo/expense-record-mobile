@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import { Icon } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
 export default function IconCarouselComponent({ icons, index, next, prev }) {
-
+  const { colors } = useTheme();
   return (
     <View
       style={{
@@ -16,13 +16,13 @@ export default function IconCarouselComponent({ icons, index, next, prev }) {
       <Icon
         name="chevron-left"
         type="font-awesome-5"
-        iconStyle={{ fontSize: 40, color: "white", padding: 10 }}
+        iconStyle={{ fontSize: 40, color: colors.text, padding: 10 }}
         onPress={prev}
       />
       <View
         style={{
           borderRadius: 5,
-          backgroundColor: "#78716c",
+          backgroundColor: colors.softCard,
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
@@ -33,17 +33,15 @@ export default function IconCarouselComponent({ icons, index, next, prev }) {
         <Icon
           name={icons ? icons[index].icon : "money-bill-wave"}
           type="font-awesome-5"
-          iconStyle={{ fontSize: 20, color: "white" }}
+          iconStyle={{ fontSize: 20, color: colors.text }}
         />
       </View>
       <Icon
         name="chevron-right"
         type="font-awesome-5"
-        iconStyle={{ fontSize: 40, color: "white", padding: 10 }}
+        iconStyle={{ fontSize: 40, color: colors.text, padding: 10 }}
         onPress={next}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

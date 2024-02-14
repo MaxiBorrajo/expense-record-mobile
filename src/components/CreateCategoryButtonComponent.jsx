@@ -1,21 +1,22 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import React from "react";
 import { Icon } from "@rneui/themed";
-import { useNavigation } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 
-const CreateCategoryButtonComponent = ({action}) => {
-  const navigation = useNavigation();
+const CreateCategoryButtonComponent = ({ action }) => {
+  const { colors } = useTheme();
+
   return (
     <TouchableOpacity
       style={{
         borderRadius: 50,
-        backgroundColor: "white",
+        backgroundColor: colors.text,
         width: 55,
         height: 55,
         position: "absolute",
         bottom: 80,
         right: 15,
-        zIndex:1,
+        zIndex: 1,
         alignContent: "center",
         justifyContent: "center",
       }}
@@ -24,12 +25,10 @@ const CreateCategoryButtonComponent = ({action}) => {
       <Icon
         name="plus"
         type="font-awesome-5"
-        iconStyle={{ fontSize: 25, color: "black" }}
+        iconStyle={{ fontSize: 25, color: colors.background}}
       ></Icon>
     </TouchableOpacity>
   );
 };
 
 export default CreateCategoryButtonComponent;
-
-const styles = StyleSheet.create({});

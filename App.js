@@ -29,11 +29,15 @@ import { CategoryContextProvider } from "./src/context/CategoryContext";
 import { UserContextProvider } from "./src/context/UserContext";
 import { MenuProvider } from "react-native-popup-menu";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import DarkTheme from "./src/theme/DarkTheme";
+import LightTheme from "./src/theme/LightTheme";
+import { AppContext } from "./src/context/AppContext";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [auth, setAuth] = useState(null);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   useEffect(() => {
     const getAuth = async () => {
@@ -60,40 +64,53 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar backgroundColor="black" barStyle="light-content" hidden/>
+        <StatusBar backgroundColor="black" barStyle="light-content" hidden />
         <ExpenseContextProvider>
           <CategoryContextProvider>
             <UserContextProvider>
               <MenuProvider>
-                <NavigationContainer>
-                  <Stack.Navigator
-                    screenOptions={{ headerShown: false }}
-                    initialRouteName={auth ? "Home" : "Hero"}
-                  >
-                    <Stack.Screen name="Hero" component={HeroScreen} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Register" component={RegisterScreen} />
-                    <Stack.Screen
-                      name="ForgotPassword"
-                      component={ForgotPasswordScreen}
-                    />
-                    <Stack.Screen
-                      name="ResetPassword"
-                      component={ResetPasswordScreen}
-                    />
-                    <Stack.Screen
-                      name="VerifyCode"
-                      component={VerifyCodeScreen}
-                    />
-                    <Stack.Screen name="Expenses" component={ExpensesScreen} />
-                    <Stack.Screen name="Expense" component={ExpenseScreen} />
-                    <Stack.Screen
-                      name="FinishCreateExpense"
-                      component={FinishCreateExpenseScreen}
-                    />
-                    <Stack.Screen name="Category" component={CategoryScreen} />
-                  </Stack.Navigator>
+                <NavigationContainer
+                  theme={isDarkTheme ? DarkTheme : LightTheme}
+                >
+                  <AppContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
+                    <Stack.Navigator
+                      screenOptions={{ headerShown: false }}
+                      initialRouteName={auth ? "Home" : "Hero"}
+                    >
+                      <Stack.Screen name="Hero" component={HeroScreen} />
+                      <Stack.Screen name="Login" component={LoginScreen} />
+                      <Stack.Screen name="Home" component={HomeScreen} />
+                      <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                      />
+                      <Stack.Screen
+                        name="ForgotPassword"
+                        component={ForgotPasswordScreen}
+                      />
+                      <Stack.Screen
+                        name="ResetPassword"
+                        component={ResetPasswordScreen}
+                      />
+                      <Stack.Screen
+                        name="VerifyCode"
+                        component={VerifyCodeScreen}
+                      />
+                      <Stack.Screen
+                        name="Expenses"
+                        component={ExpensesScreen}
+                      />
+                      <Stack.Screen name="Expense" component={ExpenseScreen} />
+                      <Stack.Screen
+                        name="FinishCreateExpense"
+                        component={FinishCreateExpenseScreen}
+                      />
+                      <Stack.Screen
+                        name="Category"
+                        component={CategoryScreen}
+                      />
+                    </Stack.Navigator>
+                  </AppContext.Provider>
                 </NavigationContainer>
               </MenuProvider>
             </UserContextProvider>

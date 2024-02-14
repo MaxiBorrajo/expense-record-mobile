@@ -6,6 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
+import { useTheme } from "@react-navigation/native";
+
 export default function ResetPasswordScreen({ navigation }) {
   useEffect(() => {
     const getEmail = async () => {
@@ -20,6 +22,8 @@ export default function ResetPasswordScreen({ navigation }) {
     password: "",
     confirm_password: "",
   });
+
+  const { colors } = useTheme();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,11 +55,38 @@ export default function ResetPasswordScreen({ navigation }) {
     }
   }
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          justifyContent: "center",
+          position: "relative",
+          rowGap: 30,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <GoBackButtonComponent />
-        <Text style={styles.title}>Reset password</Text>
-        <Text style={styles.subtitle}>
+        <Text
+          style={{
+            fontFamily: "Poppins_500Medium",
+            fontSize: 30,
+            color: colors.text,
+          }}
+        >
+          Reset password
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Poppins_300Light",
+            fontSize: 15,
+            color: colors.text,
+          }}
+        >
           Set your new password so you can login and access to your account
           again.
         </Text>
@@ -66,14 +97,15 @@ export default function ResetPasswordScreen({ navigation }) {
             <Icon
               name={showPassword ? "eye-slash" : "eye"}
               size={20}
-              reverse
               type="font-awesome-5"
               onPress={() => setShowPassword(!showPassword)}
+              iconStyle={{ color: colors.text }}
             />
           }
+          rightIconContainerStyle={{ marginRight: 10 }}
           secureTextEntry={!showPassword}
           inputStyle={{
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             width: "100%",
@@ -81,12 +113,12 @@ export default function ResetPasswordScreen({ navigation }) {
           inputContainerStyle={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingLeft: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -98,7 +130,7 @@ export default function ResetPasswordScreen({ navigation }) {
           placeholder="Confirm password"
           secureTextEntry={true}
           inputStyle={{
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             width: "100%",
@@ -106,12 +138,12 @@ export default function ResetPasswordScreen({ navigation }) {
           inputContainerStyle={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingHorizontal: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -131,35 +163,3 @@ export default function ResetPasswordScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    justifyContent: "center",
-    position: "relative",
-    rowGap: 30,
-    minHeight: Dimensions.get("window").height
-  },
-  safeArea: {
-    flex: 1,
-  },
-  title: {
-    fontFamily: "Poppins_500Medium",
-    fontSize: 30,
-    color: "#fff",
-  },
-
-  subtitle: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 15,
-    color: "#9ca3af",
-  },
-  link: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 15,
-    color: "#fff",
-  },
-});

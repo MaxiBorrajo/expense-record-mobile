@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, TextInput, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -6,9 +6,11 @@ import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import IconCarouselComponent from "../components/IconCarouselComponent";
 import { Icon, Dialog, Button } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
+  const { colors } = useTheme();
 
   useEffect(() => {
     getCategoryById(id).then((category) => {
@@ -107,16 +109,29 @@ export default function CategoryScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          justifyContent: "center",
+          position: "relative",
+          rowGap: 50,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <Dialog
           isVisible={visible}
           onBackdropPress={toggleDialog}
           overlayStyle={{
             borderRadius: 5,
             elevation: 5,
-            backgroundColor: "#1c1917",
-            borderColor: "white",
+            backgroundColor: colors.card,
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -124,7 +139,7 @@ export default function CategoryScreen({ route, navigation }) {
           <Text
             style={{
               fontFamily: "Poppins_500Medium",
-              color: "white",
+              color: colors.text,
               fontSize: 20,
             }}
           >
@@ -133,7 +148,7 @@ export default function CategoryScreen({ route, navigation }) {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              color: "white",
+              color: colors.text,
               fontSize: 12,
             }}
           >
@@ -160,12 +175,12 @@ export default function CategoryScreen({ route, navigation }) {
             <Button
               title="Cancel"
               titleStyle={{
-                color: "#000",
+                color: colors.text,
                 fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
               buttonStyle={{
-                backgroundColor: "#fff",
+                backgroundColor: colors.background,
                 borderRadius: 5,
                 alignItems: "center",
                 justifyContent: "center",
@@ -183,7 +198,15 @@ export default function CategoryScreen({ route, navigation }) {
             justifyContent: "space-between",
           }}
         >
-          <Text style={styles.title}>Edit category</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: "Poppins_500Medium",
+              color: colors.text,
+            }}
+          >
+            Edit category
+          </Text>
           <Icon
             name="trash-alt"
             type="font-awesome-5"
@@ -201,14 +224,14 @@ export default function CategoryScreen({ route, navigation }) {
         <TextInput
           style={{
             width: "100%",
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             padding: 10,
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -217,7 +240,7 @@ export default function CategoryScreen({ route, navigation }) {
           }
           value={categoryForm.category_name ? categoryForm.category_name : ""}
           placeholder="Write a category name"
-          placeholderTextColor="white"
+          placeholderTextColor={colors.text}
         />
 
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
@@ -230,21 +253,3 @@ export default function CategoryScreen({ route, navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    justifyContent: "center",
-    position: "relative",
-    rowGap: 50,
-    minHeight: Dimensions.get("window").height
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-  },
-});

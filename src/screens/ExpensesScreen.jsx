@@ -5,7 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -17,6 +17,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import SelectDropdown from "react-native-select-dropdown";
 import { months, generateYearList, getDaysOfTheMonth } from "../utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "@react-navigation/native";
 
 export default function ExpensesScreen() {
   const { getExpenses } = useContext(ExpenseContext);
@@ -34,8 +35,9 @@ export default function ExpensesScreen() {
   const [categories, setCategories] = useState(null);
   const [reload, setReload] = useState(false);
   const [firstYear, setFirstYear] = useState(null);
-
   const bottomSheetParameters = useRef(null);
+
+  const { colors } = useTheme();
 
   const [openedParameters, setOpenedParameters] = useState(false);
 
@@ -128,8 +130,22 @@ export default function ExpensesScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          rowGap: 20,
+          alignItems: "center",
+          position: "relative",
+          paddingHorizontal: 20,
+          paddingTop: 60,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <GoBackButtonComponent />
         <View
           style={{
@@ -141,7 +157,7 @@ export default function ExpensesScreen() {
         >
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 20,
               fontFamily: "Poppins_500Medium",
             }}
@@ -151,7 +167,7 @@ export default function ExpensesScreen() {
           <Icon
             name="sliders"
             type="font-awesome"
-            color="white"
+            color={colors.text}
             onPress={() => openParameteres()}
           />
         </View>
@@ -165,15 +181,16 @@ export default function ExpensesScreen() {
             width: "100%",
             borderRadius: 50,
             backgroundColor: "transparent",
+            borderColor: "transparent",
           }}
           inputContainerStyle={{
             borderRadius: 50,
-            backgroundColor: "white",
+            backgroundColor: colors.card,
           }}
           inputStyle={{
             fontSize: 10,
             fontFamily: "Poppins_300Light",
-            color: "black",
+            color: colors.text,
           }}
         />
         <FlatList
@@ -186,7 +203,7 @@ export default function ExpensesScreen() {
           ListEmptyComponent={() => (
             <Text
               style={{
-                color: "white",
+                color: colors.text,
                 fontSize: 25,
                 fontFamily: "Poppins_700Bold",
                 textAlign: "center",
@@ -206,7 +223,7 @@ export default function ExpensesScreen() {
           snapPoints={snapPoints}
           enablePanDownToClose
           animateOnMount
-          backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
+          backgroundStyle={{ backgroundColor: colors.card, borderRadius: 30 }}
         >
           <View style={{ flex: 1, paddingBottom: 30, rowGap: 20 }}>
             <View
@@ -214,14 +231,13 @@ export default function ExpensesScreen() {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-
                 paddingTop: 20,
                 paddingHorizontal: 20,
               }}
             >
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 17,
                   fontFamily: "Poppins_500Medium",
                 }}
@@ -240,7 +256,7 @@ export default function ExpensesScreen() {
                 >
                   <Text
                     style={{
-                      color: "white",
+                      color: colors.text,
                       fontFamily: "Poppins_300Light",
                       fontSize: 12,
                     }}
@@ -249,7 +265,7 @@ export default function ExpensesScreen() {
                   </Text>
                   <Icon
                     name="times"
-                    color="white"
+                    color={colors.text}
                     type="font-awesome-5"
                     iconStyle={{ fontSize: 12 }}
                   />
@@ -266,7 +282,7 @@ export default function ExpensesScreen() {
             >
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 15,
                   fontFamily: "Poppins_300Light",
                   alignSelf: "flex-start",
@@ -395,7 +411,7 @@ export default function ExpensesScreen() {
             >
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 15,
                   fontFamily: "Poppins_300Light",
                   alignSelf: "flex-start",
@@ -456,17 +472,3 @@ export default function ExpensesScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0c0a09",
-    color: "fff",
-    rowGap: 20,
-    alignItems: "center",
-    position: "relative",
-    paddingHorizontal: 20,
-    paddingTop:60,
-    minHeight: Dimensions.get("window").height
-  },
-});

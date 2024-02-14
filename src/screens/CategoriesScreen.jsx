@@ -1,11 +1,10 @@
 import {
-  StyleSheet,
   Text,
   View,
   FlatList,
   TextInput,
   SafeAreaView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { SearchBar } from "@rneui/themed";
@@ -16,8 +15,10 @@ import CreateCategoryButtonComponent from "../components/CreateCategoryButtonCom
 import ButtonComponent from "../components/ButtonComponent";
 import IconCarouselComponent from "../components/IconCarouselComponent";
 import ErrorComponent from "../components/ErrorComponent";
+import { useTheme } from "@react-navigation/native";
 
 export default function CategoriesScreen({ route, navigation }) {
+  const { colors } = useTheme();
   const { getCategories, createCategory, getIcons } =
     useContext(CategoryContext);
   const searchBar = useRef(null);
@@ -168,7 +169,20 @@ export default function CategoriesScreen({ route, navigation }) {
     <SafeAreaView
       style={{ flex: 1, minHeight: Dimensions.get("window").height }}
     >
-      <View style={styles.container}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          rowGap: 20,
+          alignItems: "center",
+          position: "relative",
+          paddingHorizontal: 20,
+          paddingBottom: 60,
+          paddingTop: 20,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <CreateCategoryButtonComponent action={openCreateBottomSheet} />
         <View
           style={{
@@ -180,7 +194,7 @@ export default function CategoriesScreen({ route, navigation }) {
         >
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 20,
               fontFamily: "Poppins_500Medium",
             }}
@@ -191,6 +205,7 @@ export default function CategoriesScreen({ route, navigation }) {
         <SearchBar
           ref={searchBar}
           placeholder="Search by category name"
+          placeholderTextColor={colors.text}
           onChangeText={(newValue) => setKeyword(newValue)}
           onClear={() => cancelSearch()}
           value={keyword}
@@ -198,15 +213,17 @@ export default function CategoriesScreen({ route, navigation }) {
             width: "100%",
             borderRadius: 50,
             backgroundColor: "transparent",
+            borderColor: "transparent",
           }}
           inputContainerStyle={{
             borderRadius: 50,
-            backgroundColor: "white",
+            backgroundColor: colors.card,
           }}
           inputStyle={{
             fontSize: 10,
             fontFamily: "Poppins_300Light",
-            color: "black",
+            color: colors.text,
+            paddingHorizontal:5
           }}
         />
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
@@ -231,7 +248,7 @@ export default function CategoriesScreen({ route, navigation }) {
           snapPoints={snapPoints}
           enablePanDownToClose
           animateOnMount
-          backgroundStyle={{ backgroundColor: "#3f3f46", borderRadius: 30 }}
+          backgroundStyle={{ backgroundColor: colors.card, borderRadius: 30 }}
         >
           <View
             style={{
@@ -244,7 +261,7 @@ export default function CategoriesScreen({ route, navigation }) {
           >
             <Text
               style={{
-                color: "white",
+                color: colors.text,
                 fontSize: 17,
                 fontFamily: "Poppins_500Medium",
               }}
@@ -262,14 +279,14 @@ export default function CategoriesScreen({ route, navigation }) {
             >
               <TextInput
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontFamily: "Poppins_300Light",
                   fontSize: 12,
                   padding: 10,
-                  backgroundColor: "#1c1917",
+                  backgroundColor: colors.card,
                   borderRadius: 5,
                   elevation: 5,
-                  borderColor: "white",
+                  borderColor: colors.border,
                   borderWidth: 1,
                   borderStyle: "solid",
                   flexGrow: 1,
@@ -279,7 +296,7 @@ export default function CategoriesScreen({ route, navigation }) {
                 }
                 value={newCategory.category_name}
                 placeholder="Write a category name"
-                placeholderTextColor="white"
+                placeholderTextColor={colors.text}
               />
             </View>
             {errorCreateMessage ? (
@@ -296,18 +313,3 @@ export default function CategoriesScreen({ route, navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0c0a09",
-    color: "fff",
-    rowGap: 20,
-    alignItems: "center",
-    position: "relative",
-    paddingHorizontal: 20,
-    paddingBottom: 60,
-    paddingTop: 20,
-    minHeight: Dimensions.get("window").height,
-  },
-});

@@ -4,7 +4,7 @@ import {
   View,
   Dimensions,
   SafeAreaView,
-  FlatList
+  FlatList,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
@@ -14,6 +14,7 @@ import { PieChart } from "react-native-chart-kit";
 import InfoCardComponent from "../components/InfoCardComponent";
 import MonthsCarouselComponent from "../components/MonthsCarouselComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "@react-navigation/native";
 
 export default function StatisticsScreen() {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -23,6 +24,7 @@ export default function StatisticsScreen() {
   const [statistics, setStatistics] = useState(null);
   const [categoryStatistics, setCategoryStatistics] = useState(null);
   const [firstYear, setFirstYear] = useState(null);
+  const { colors } = useTheme();
 
   function getTotal(amounts) {
     let total = 0;
@@ -68,17 +70,32 @@ export default function StatisticsScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
       <FlatList
         contentContainerStyle={[
-          { backgroundColor: "black" },
+          { backgroundColor: colors.background },
           !statistics ? { flex: 1 } : null,
         ]}
         ListHeaderComponent={
-          <View style={styles.container}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: colors.background,
+              color: colors.text,
+              paddingBottom: 100,
+              rowGap: 20,
+              alignItems: "center",
+              position: "relative",
+              paddingHorizontal: 20,
+              overflow: "scroll",
+              minHeight: Dimensions.get("window").height,
+            }}
+          >
             <Text
               style={{
-                color: "white",
+                color: colors.text,
                 fontSize: 20,
                 fontFamily: "Poppins_500Medium",
                 alignSelf: "flex-start",
@@ -97,7 +114,7 @@ export default function StatisticsScreen() {
             >
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 16,
                   fontFamily: "Poppins_300Light",
                 }}
@@ -173,7 +190,7 @@ export default function StatisticsScreen() {
                 ) : (
                   <Text
                     style={{
-                      color: "white",
+                      color: colors.text,
                       fontSize: 25,
                       fontFamily: "Poppins_700Bold",
                       textAlign: "center",
@@ -192,7 +209,7 @@ export default function StatisticsScreen() {
                 >
                   <Text
                     style={{
-                      color: "white",
+                      color: colors.text,
                       fontSize: 16,
                       fontFamily: "Poppins_300Light",
                     }}
@@ -213,7 +230,7 @@ export default function StatisticsScreen() {
                   ) : (
                     <Text
                       style={{
-                        color: "white",
+                        color: colors.text,
                         fontSize: 25,
                         fontFamily: "Poppins_700Bold",
                         textAlign: "center",
@@ -233,7 +250,7 @@ export default function StatisticsScreen() {
                 >
                   <Text
                     style={{
-                      color: "white",
+                      color: colors.text,
                       fontSize: 16,
                       fontFamily: "Poppins_300Light",
                     }}
@@ -372,7 +389,7 @@ export default function StatisticsScreen() {
                           ></View>
                           <Text
                             style={{
-                              color: "white",
+                              color: colors.text,
                               fontSize: 12,
                               fontFamily: "Poppins_300Light",
                             }}
@@ -382,7 +399,7 @@ export default function StatisticsScreen() {
                         </View>
                         <Text
                           style={{
-                            color: "white",
+                            color: colors.text,
                             fontSize: 12,
                             fontFamily: "Poppins_300Light",
                           }}
@@ -409,7 +426,7 @@ export default function StatisticsScreen() {
             ) : (
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 25,
                   fontFamily: "Poppins_700Bold",
                   textAlign: "center",
@@ -426,18 +443,3 @@ export default function StatisticsScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0c0a09",
-    color: "fff",
-    paddingBottom: 100,
-    rowGap: 20,
-    alignItems: "center",
-    position: "relative",
-    paddingHorizontal: 20,
-    overflow: "scroll",
-    minHeight: Dimensions.get("window").height
-  },
-});

@@ -1,9 +1,17 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput, Dimensions} from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TextInput,
+  Dimensions,
+} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { ExpenseContext } from "../context/ExpenseContext";
+import { useTheme } from "@react-navigation/native";
 
 export default function CreateExpenseScreen({ route, navigation }) {
   useEffect(() => {
@@ -16,6 +24,8 @@ export default function CreateExpenseScreen({ route, navigation }) {
   const { expenseForm } = route.params;
 
   const [finishExpenseForm, setFinishExpenseForm] = useState(expenseForm);
+
+  const { colors } = useTheme();
 
   const createNewExpense = async () => {
     setErrorMessage(null);
@@ -43,22 +53,43 @@ export default function CreateExpenseScreen({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          justifyContent: "center",
+          position: "relative",
+          rowGap: 50,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <GoBackButtonComponent />
-        <Text style={styles.title}>Finish new expense</Text>
+        <Text
+          style={{
+            fontSize: 20,
+            fontFamily: "Poppins_500Medium",
+            color: colors.text,
+          }}
+        >
+          Finish new expense
+        </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <TextInput
           style={{
             width: "100%",
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             padding: 10,
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -67,22 +98,22 @@ export default function CreateExpenseScreen({ route, navigation }) {
           }
           value={finishExpenseForm.title ? finishExpenseForm.title : ""}
           placeholder="Write a title"
-          placeholderTextColor="white"
+          placeholderTextColor={colors.text}
         />
         <TextInput
           multiline
           numberOfLines={5}
-          placeholderTextColor="white"
+          placeholderTextColor={colors.text}
           style={{
             width: "100%",
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             padding: 10,
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
             textAlignVertical: "top",
@@ -104,21 +135,3 @@ export default function CreateExpenseScreen({ route, navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    justifyContent: "center",
-    position: "relative",
-    rowGap: 50,
-    minHeight: Dimensions.get("window").height
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-  },
-});

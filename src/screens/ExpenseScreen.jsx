@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  SafeAreaView,
+  Dimensions,
+} from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { CategoryContext } from "../context/CategoryContext";
@@ -9,6 +16,7 @@ import IncomeOrLossComponent from "../components/IncomeOrLossComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { Icon, Dialog, Button } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
+import { useTheme } from "@react-navigation/native";
 
 export default function ExpenseScreen({ route, navigation }) {
   const { deleteExpenseById, getExpenseById, updateExpenseById } =
@@ -22,6 +30,7 @@ export default function ExpenseScreen({ route, navigation }) {
     setVisible(!visible);
   };
   const [visible, setVisible] = useState(false);
+  const { colors } = useTheme();
 
   useEffect(() => {
     getExpenseById(id).then((exp) => {
@@ -74,16 +83,28 @@ export default function ExpenseScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          rowGap: 50,
+          justifyContent: "center",
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <Dialog
           isVisible={visible}
           onBackdropPress={toggleDialog}
           overlayStyle={{
             borderRadius: 5,
             elevation: 5,
-            backgroundColor: "#1c1917",
-            borderColor: "white",
+            backgroundColor: colors.background,
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -91,7 +112,7 @@ export default function ExpenseScreen({ route, navigation }) {
           <Text
             style={{
               fontFamily: "Poppins_500Medium",
-              color: "white",
+              color: colors.text,
               fontSize: 20,
             }}
           >
@@ -100,7 +121,7 @@ export default function ExpenseScreen({ route, navigation }) {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              color: "white",
+              color: colors.text,
               fontSize: 12,
             }}
           >
@@ -127,12 +148,12 @@ export default function ExpenseScreen({ route, navigation }) {
             <Button
               title="Cancel"
               titleStyle={{
-                color: "#000",
+                color: colors.background,
                 fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
               buttonStyle={{
-                backgroundColor: "#fff",
+                backgroundColor: colors.text,
                 borderRadius: 5,
                 alignItems: "center",
                 justifyContent: "center",
@@ -151,7 +172,15 @@ export default function ExpenseScreen({ route, navigation }) {
               justifyContent: "space-between",
             }}
           >
-            <Text style={styles.title}>Details</Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "Poppins_500Medium",
+                color: colors.text,
+              }}
+            >
+              Details
+            </Text>
             <Icon
               name="trash-alt"
               type="font-awesome-5"
@@ -162,7 +191,7 @@ export default function ExpenseScreen({ route, navigation }) {
           {expense ? (
             <Text
               style={{
-                color: "white",
+                color: colors.text,
                 fontSize: 10,
                 fontFamily: "Poppins_300Light",
               }}
@@ -176,19 +205,19 @@ export default function ExpenseScreen({ route, navigation }) {
           style={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingHorizontal: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
         >
           <TextInput
             style={{
-              color: "white",
+              color: colors.text,
               fontFamily: "Poppins_300Light",
               fontSize: 12,
               width: "100%",
@@ -199,7 +228,7 @@ export default function ExpenseScreen({ route, navigation }) {
             }}
             value={expense ? expense.title : ""}
             placeholder="Write a title"
-            placeholderTextColor="white"
+            placeholderTextColor={colors.text}
           />
         </View>
         <View
@@ -218,19 +247,19 @@ export default function ExpenseScreen({ route, navigation }) {
               width: "90%",
               alignItems: "center",
               columnGap: 3,
-              backgroundColor: "#1c1917",
+              backgroundColor: colors.card,
               paddingVertical: 10,
               paddingHorizontal: 20,
               borderRadius: 5,
               elevation: 5,
-              borderColor: "white",
+              borderColor: colors.border,
               borderWidth: 1,
               borderStyle: "solid",
             }}
           >
             <Text
               style={{
-                color: "white",
+                color: colors.text,
                 fontFamily: "Poppins_500Medium",
                 fontSize: 15,
               }}
@@ -239,7 +268,7 @@ export default function ExpenseScreen({ route, navigation }) {
             </Text>
             <TextInput
               style={{
-                color: "white",
+                color: colors.text,
                 fontFamily: "Poppins_300Light",
                 fontSize: 12,
                 width: "100%",
@@ -262,17 +291,17 @@ export default function ExpenseScreen({ route, navigation }) {
         <TextInput
           multiline
           numberOfLines={5}
-          placeholderTextColor="white"
+          placeholderTextColor={colors.text}
           style={{
             width: "100%",
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             padding: 10,
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
             textAlignVertical: "top",
@@ -308,16 +337,16 @@ export default function ExpenseScreen({ route, navigation }) {
                 borderRadius: 5,
                 alignSelf: "center",
                 height: "100%",
-                backgroundColor: "#1c1917",
-                color: "white",
-                borderColor: "white",
+                backgroundColor: colors.card,
+                color: colors.text,
+                borderColor: colors.border,
                 borderWidth: 1,
                 borderStyle: "solid",
                 flexGrow: 1,
               }}
               buttonTextStyle={{
                 fontFamily: "Poppins_300Light",
-                color: "white",
+                color: colors.text,
               }}
               rowTextStyle={{ fontFamily: "Poppins_300Light" }}
             />
@@ -339,20 +368,3 @@ export default function ExpenseScreen({ route, navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    rowGap: 50,
-    justifyContent: "center",
-    minHeight: Dimensions.get("window").height
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-  },
-});

@@ -1,23 +1,18 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  SafeAreaView,
-  Dimensions
-} from "react-native";
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import { SafeAreaView, Dimensions } from "react-native";
 import TabBarIcon from "../components/TabBarIcon";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import CreateExpenseScreen from "./CreateExpenseScreen"; //✓
-import StatisticsScreen from "./StatisticsScreen"; //✓
-import CategoriesScreen from "./CategoriesScreen"; //✓
-import ProfileScreen from "./ProfileScreen"; //✓
-import MainScreen from "./MainScreen"; //✓
+import CreateExpenseScreen from "./CreateExpenseScreen";
+import StatisticsScreen from "./StatisticsScreen";
+import CategoriesScreen from "./CategoriesScreen";
+import ProfileScreen from "./ProfileScreen";
+import MainScreen from "./MainScreen";
+import { useTheme } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {
+  const { colors } = useTheme();
+
   const screenOptions = {
     tabBarShowLabel: false,
     headerShown: false,
@@ -26,12 +21,14 @@ export default function HomeScreen() {
       bottom: 0,
       elevation: 0,
       height: 60,
-      backgroundColor: "#FFFFFF",
+      backgroundColor: colors.text,
     },
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen
           name="Main"

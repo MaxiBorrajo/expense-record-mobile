@@ -4,6 +4,7 @@ import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { CategoryContext } from "../context/CategoryContext";
+import { useTheme } from "@react-navigation/native";
 
 export default function CategoryComponent({
   item,
@@ -13,6 +14,7 @@ export default function CategoryComponent({
   const navigation = useNavigation();
   const swipeableRef = useRef(null);
   const { deleteCategoryById } = useContext(CategoryContext);
+  const { colors } = useTheme();
 
   async function handleDelete() {
     swipeableRef.current.close();
@@ -52,7 +54,7 @@ export default function CategoryComponent({
           justifyContent: "space-between",
           padding: 20,
           alignItems: "center",
-          backgroundColor: "#1c1917",
+          backgroundColor: colors.card,
           width: "100%",
           elevation: 5,
           borderRadius: 5,
@@ -82,7 +84,7 @@ export default function CategoryComponent({
           <View
             style={{
               borderRadius: 5,
-              backgroundColor: "#78716c",
+              backgroundColor: colors.softCard,
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
@@ -93,12 +95,12 @@ export default function CategoryComponent({
             <Icon
               name={item.icon_id.icon}
               type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: "white" }}
+              iconStyle={{ fontSize: 20, color: colors.text }}
             ></Icon>
           </View>
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 15,
               fontFamily: "Poppins_500Medium",
             }}

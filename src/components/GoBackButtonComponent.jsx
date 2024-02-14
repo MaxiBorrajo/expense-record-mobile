@@ -1,13 +1,22 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 export default function GoBackButtonComponent() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
   return (
     <TouchableOpacity
       style={styles.backButton}
       onPress={() => navigation.goBack()}
     >
-      <Text style={styles.label}>{"< Go back"}</Text>
+      <Text
+        style={{
+          fontSize: 12,
+          color: colors.text,
+          fontFamily: "Poppins_300Light",
+        }}
+      >
+        {"< Go back"}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -18,10 +27,5 @@ const styles = StyleSheet.create({
     top: 20,
     left: 20,
     zIndex: 100,
-  },
-  label: {
-    fontSize: 12,
-    color: "#fff",
-    fontFamily: "Poppins_300Light",
   },
 });

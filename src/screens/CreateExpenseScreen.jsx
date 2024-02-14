@@ -1,18 +1,26 @@
-import { StyleSheet, Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  SafeAreaView,
+  Dimensions,
+} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect, useRef } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
-import { Input, Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
 import IncomeOrLossComponent from "../components/IncomeOrLossComponent";
+import { useTheme } from "@react-navigation/native";
 
 export default function CreateExpenseScreen() {
   const { getCategories } = useContext(CategoryContext);
   const firstCharge = useRef(true);
   const navigation = useNavigation();
+  const { colors } = useTheme();
 
   useEffect(() => {
     getCategories().then((categories) => {
@@ -52,30 +60,49 @@ export default function CreateExpenseScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          position: "relative",
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <GoBackButtonComponent />
         <View
           style={{
-            flex:1,
+            flex: 1,
             rowGap: 50,
             justifyContent: "center",
           }}
         >
-          <Text style={styles.title}>Create new expense</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontFamily: "Poppins_500Medium",
+              color: colors.text,
+            }}
+          >
+            Create new expense
+          </Text>
           {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
           {expenseForm.category_id ? (
             <View
               style={{
                 borderRadius: 5,
-                backgroundColor: "#1c1917",
+                backgroundColor: colors.card,
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
                 width: 70,
                 height: 70,
                 elevation: 5,
-                borderColor: "white",
+                borderColor: colors.border,
                 borderWidth: 1,
                 borderStyle: "solid",
                 alignSelf: "center",
@@ -84,7 +111,7 @@ export default function CreateExpenseScreen() {
               <Icon
                 name={icon}
                 type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "white" }}
+                iconStyle={{ fontSize: 20, color: colors.text }}
               ></Icon>
             </View>
           ) : null}
@@ -112,19 +139,19 @@ export default function CreateExpenseScreen() {
                 width: "65%",
                 alignItems: "center",
                 columnGap: expenseForm.isIncome ? 10 : 3,
-                backgroundColor: "#1c1917",
+                backgroundColor: colors.card,
                 paddingVertical: 10,
                 paddingHorizontal: 20,
                 borderRadius: 5,
                 elevation: 5,
-                borderColor: "white",
+                borderColor: colors.border,
                 borderWidth: 1,
                 borderStyle: "solid",
               }}
             >
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontFamily: "Poppins_500Medium",
                   fontSize: 15,
                 }}
@@ -133,7 +160,7 @@ export default function CreateExpenseScreen() {
               </Text>
               <TextInput
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontFamily: "Poppins_500Medium",
                   fontSize: 15,
                   width: "100%",
@@ -180,16 +207,16 @@ export default function CreateExpenseScreen() {
                 borderRadius: 5,
                 alignSelf: "center",
                 height: "100%",
-                backgroundColor: "#1c1917",
-                color: "white",
-                borderColor: "white",
+                backgroundColor: colors.card,
+                color: colors.text,
+                borderColor: colors.border,
                 borderWidth: 1,
                 borderStyle: "solid",
                 flexGrow: 1,
               }}
               buttonTextStyle={{
                 fontFamily: "Poppins_300Light",
-                color: "white",
+                color: colors.text,
               }}
               rowTextStyle={{ fontFamily: "Poppins_300Light" }}
             />
@@ -210,19 +237,3 @@ export default function CreateExpenseScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    position: "relative",
-    minHeight: Dimensions.get("window").height
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-  },
-});

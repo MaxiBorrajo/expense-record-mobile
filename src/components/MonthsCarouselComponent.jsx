@@ -1,9 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
 export default function MonthsCarouselComponent({ monthsInfo, months }) {
   const [index, setIndex] = useState(0);
+  const { colors } = useTheme();
 
   useEffect(() => {
     setIndex(
@@ -40,7 +42,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
         name="chevron-left"
         type="font-awesome-5"
         iconStyle={[
-          { fontSize: 30, color: "white" },
+          { fontSize: 30, color: colors.text },
           index != 0 ? null : { opacity: 0 },
         ]}
         onPress={prev}
@@ -48,7 +50,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
       <View
         style={{
           width: 290,
-          backgroundColor: "#1c1917",
+          backgroundColor: colors.card,
           elevation: 5,
           borderRadius: 5,
           padding: 20,
@@ -58,7 +60,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
       >
         <Text
           style={{
-            color: "white",
+            color: colors.text,
             fontSize: 15,
             fontFamily: "Poppins_300Light",
             justifyContent: "flex-start",
@@ -68,7 +70,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
         </Text>
         <Text
           style={{
-            color: "white",
+            color: colors.text,
             fontSize: 12,
             fontFamily: "Poppins_300Light",
             paddingHorizontal: 10,
@@ -87,7 +89,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
         >
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 12,
               fontFamily: "Poppins_300Light",
               paddingRight: 5,
@@ -103,7 +105,6 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
           />
           <Text
             style={{
-              color: "white",
               fontSize: 12,
               fontFamily: "Poppins_300Light",
               color: "#58eb34",
@@ -122,7 +123,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
         >
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 12,
               fontFamily: "Poppins_300Light",
               paddingRight: 5,
@@ -138,7 +139,6 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
           />
           <Text
             style={{
-              color: "white",
               fontSize: 12,
               fontFamily: "Poppins_300Light",
               color: "red",
@@ -152,7 +152,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
         name="chevron-right"
         type="font-awesome-5"
         iconStyle={[
-          { fontSize: 30, color: "white" },
+          { fontSize: 30, color: colors.text },
           index != monthsInfo.length - 1 ? null : { opacity: 0 },
         ]}
         onPress={next}
@@ -160,5 +160,3 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

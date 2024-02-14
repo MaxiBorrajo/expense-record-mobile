@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Icon } from "@rneui/themed";
-import { useState } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
-export default function ExpensesHeaderComponent({ openParameteres }) {
+export default function ExpensesHeaderComponent() {
   const navigation = useNavigation();
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -13,14 +14,14 @@ export default function ExpensesHeaderComponent({ openParameteres }) {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom:20
+        marginBottom: 20,
       }}
     >
       <Text
         style={{
           fontSize: 15,
           fontFamily: "Poppins_500Medium",
-          color: "white",
+          color: colors.text,
         }}
       >
         Recent expenses
@@ -38,7 +39,7 @@ export default function ExpensesHeaderComponent({ openParameteres }) {
           style={{
             fontSize: 12,
             fontFamily: "Poppins_300Light",
-            color: "white",
+            color: colors.text,
           }}
         >
           See all
@@ -48,12 +49,10 @@ export default function ExpensesHeaderComponent({ openParameteres }) {
           type="font-awesome-5"
           iconStyle={{
             fontSize: 12,
-            color: "white",
+            color: colors.text,
           }}
         />
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

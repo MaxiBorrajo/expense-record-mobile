@@ -3,7 +3,7 @@ import React, { useContext, useRef } from "react";
 import { Icon } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { ExpenseContext } from "../context/ExpenseContext";
 
@@ -11,6 +11,7 @@ export default function ExpenseComponent({ item, setReload }) {
   const { deleteExpenseById } = useContext(ExpenseContext);
   const navigation = useNavigation();
   const swipeableRef = useRef(null);
+  const { colors } = useTheme();
 
   async function handleDelete() {
     swipeableRef.current.close();
@@ -49,7 +50,7 @@ export default function ExpenseComponent({ item, setReload }) {
           justifyContent: "space-between",
           padding: 20,
           alignItems: "center",
-          backgroundColor: "#1c1917",
+          backgroundColor: colors.card,
           width: "100%",
           elevation: 5,
           borderRadius: 5,
@@ -67,7 +68,7 @@ export default function ExpenseComponent({ item, setReload }) {
           <View
             style={{
               borderRadius: 5,
-              backgroundColor: "#78716c",
+              backgroundColor: colors.softCard,
               alignItems: "center",
               justifyContent: "center",
               textAlign: "center",
@@ -80,7 +81,7 @@ export default function ExpenseComponent({ item, setReload }) {
                 item.category_id ? item.category_id.icon_id.icon : "money-bill"
               }
               type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: "white" }}
+              iconStyle={{ fontSize: 20, color: colors.text }}
             ></Icon>
           </View>
           <View
@@ -94,7 +95,7 @@ export default function ExpenseComponent({ item, setReload }) {
             <View style={{ alignItems: "flex-start" }}>
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 15,
                   fontFamily: "Poppins_500Medium",
                 }}
@@ -105,7 +106,7 @@ export default function ExpenseComponent({ item, setReload }) {
               </Text>
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 11,
                   fontFamily: "Poppins_300Light",
                 }}
@@ -127,7 +128,7 @@ export default function ExpenseComponent({ item, setReload }) {
               </Text>
               <Text
                 style={{
-                  color: "white",
+                  color: colors.text,
                   fontSize: 11,
                   fontFamily: "Poppins_300Light",
                 }}

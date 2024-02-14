@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { Text, View, FlatList } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
-import { Card, Icon, Divider } from "@rneui/themed";
+import { Card } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
+import { useTheme } from "@react-navigation/native";
 
 export default function ExpensesComponent({
   route,
@@ -11,7 +12,7 @@ export default function ExpensesComponent({
   setReload,
   reload,
 }) {
-  const { errorMessage, getExpenses } = useContext(ExpenseContext);
+  const { getExpenses } = useContext(ExpenseContext);
   const [expenses, setExpenses] = useState(null);
   useEffect(() => {
     const filters = [
@@ -53,6 +54,8 @@ export default function ExpensesComponent({
     return unsubscribe;
   }, [navigation, route.params?.actionCompleted]);
 
+  const { colors } = useTheme();
+
   return (
     <Card
       containerStyle={{
@@ -74,7 +77,7 @@ export default function ExpensesComponent({
         ListEmptyComponent={() => (
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontSize: 25,
               fontFamily: "Poppins_700Bold",
               textAlign: "center",
@@ -91,5 +94,3 @@ export default function ExpensesComponent({
     </Card>
   );
 }
-
-const styles = StyleSheet.create({});

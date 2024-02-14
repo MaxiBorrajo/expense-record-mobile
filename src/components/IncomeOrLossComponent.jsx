@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, TouchableOpacity } from "react-native";
 import { Icon } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
 export default function IncomeOrLossComponent({ amount, action }) {
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -12,7 +14,7 @@ export default function IncomeOrLossComponent({ amount, action }) {
         borderRadius: 5,
         borderWidth: 2,
         borderStyle: "solid",
-        borderColor: "white",
+        borderColor: colors.border,
       }}
     >
       <TouchableOpacity
@@ -50,5 +52,3 @@ export default function IncomeOrLossComponent({ amount, action }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

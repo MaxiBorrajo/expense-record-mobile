@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
-import { Card, Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { getMonth } from "../utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "@react-navigation/native";
+
 export default function AmountComponent({ openYearMonth, year, month }) {
   const { getAmount, getProfitPercentage, getCurrentAmount } =
     useContext(ExpenseContext);
@@ -23,6 +25,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
   const [currentAmount, setCurrentAmount] = useState(0);
   const [currency, setCurrency] = useState(null);
   const [profitPercentage, setProfitPercentage] = useState(0);
+  const { colors } = useTheme();
 
   return (
     <View
@@ -39,7 +42,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
           style={{
             fontFamily: "Poppins_300Light",
             fontSize: 15,
-            color: "white",
+            color: colors.text,
           }}
         >
           {year}, {getMonth(month)}
@@ -47,7 +50,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
         <Icon
           name="sliders"
           type="font-awesome"
-          iconStyle={{ color: "white" }}
+          iconStyle={{ color: colors.text }}
           onPress={() => openYearMonth()}
         />
       </View>
@@ -60,7 +63,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
           style={{
             fontSize: 35,
             fontFamily: "Poppins_500Medium",
-            color: "white",
+            color: colors.text,
           }}
         >
           $ {currentAmount ? currentAmount.toFixed(2) : 0} {">"}
@@ -70,7 +73,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
           style={{
             fontSize: 12,
             fontFamily: "Poppins_300Light",
-            color: "white",
+            color: colors.text,
           }}
         >
           ($ {amount ? amount.toFixed(2) : 0}) this month
@@ -98,7 +101,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
           style={{
             fontFamily: "Poppins_400Regular",
             fontSize: 12,
-            color: "white",
+            color: colors.text,
           }}
         >
           compared to last month

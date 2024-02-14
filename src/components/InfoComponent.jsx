@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 import { useState, useEffect, useContext } from "react";
 import InfoCardComponent from "./InfoCardComponent";
 import { ExpenseContext } from "../context/ExpenseContext";
@@ -92,5 +92,3 @@ export default function InfoComponent({ route, navigation, reload }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

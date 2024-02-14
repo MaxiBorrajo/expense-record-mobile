@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions} from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState } from "react";
 import axios from "axios";
@@ -6,6 +6,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
+import { useTheme } from "@react-navigation/native";
+
 export default function LoginScreen({ navigation }) {
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -15,6 +17,7 @@ export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const { colors } = useTheme();
 
   async function login() {
     try {
@@ -43,15 +46,36 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          paddingHorizontal: 30,
+          justifyContent: "center",
+          position: "relative",
+          rowGap: 30,
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         <GoBackButtonComponent />
-        <Text style={styles.title}>Sign in</Text>
+        <Text
+          style={{
+            fontFamily: "Poppins_500Medium",
+            fontSize: 30,
+            color: colors.text,
+          }}
+        >
+          Sign in
+        </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Input
           placeholder="Email"
           inputStyle={{
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             width: "100%",
@@ -59,12 +83,12 @@ export default function LoginScreen({ navigation }) {
           inputContainerStyle={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingHorizontal: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -78,14 +102,15 @@ export default function LoginScreen({ navigation }) {
             <Icon
               name={showPassword ? "eye-slash" : "eye"}
               size={20}
-              reverse
               type="font-awesome-5"
               onPress={() => setShowPassword(!showPassword)}
+              iconStyle={{color:colors.text}}
             />
           }
+          rightIconContainerStyle={{marginRight:10}}
           secureTextEntry={!showPassword}
           inputStyle={{
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_300Light",
             fontSize: 12,
             width: "100%",
@@ -93,12 +118,12 @@ export default function LoginScreen({ navigation }) {
           inputContainerStyle={{
             width: "100%",
             alignItems: "center",
-            backgroundColor: "#1c1917",
+            backgroundColor: colors.card,
             paddingVertical: 10,
             paddingLeft: 20,
             borderRadius: 5,
             elevation: 5,
-            borderColor: "white",
+            borderColor: colors.border,
             borderWidth: 1,
             borderStyle: "solid",
           }}
@@ -108,13 +133,21 @@ export default function LoginScreen({ navigation }) {
         />
         <View>
           <Text
-            style={styles.link}
+            style={{
+              fontFamily: "Poppins_300Light",
+              fontSize: 15,
+              color: colors.text,
+            }}
             onPress={() => navigation.navigate("ForgotPassword")}
           >
             Forgot password?
           </Text>
           <Text
-            style={styles.link}
+            style={{
+              fontFamily: "Poppins_300Light",
+              fontSize: 15,
+              color: colors.text,
+            }}
             onPress={() => navigation.navigate("Register")}
           >
             No account? Register
@@ -125,29 +158,3 @@ export default function LoginScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-    color: "fff",
-    paddingHorizontal: 30,
-    justifyContent: "center",
-    position: "relative",
-    rowGap: 30,
-    minHeight: Dimensions.get("window").height
-  },
-  safeArea: {
-    flex: 1,
-  },
-  title: {
-    fontFamily: "Poppins_500Medium",
-    fontSize: 30,
-    color: "#fff",
-  },
-  link: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 15,
-    color: "#fff",
-  },
-});

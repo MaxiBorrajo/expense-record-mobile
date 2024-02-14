@@ -1,8 +1,17 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Text, View } from "react-native";
 import { Icon } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
 
-export default function InfoCardComponent({ title, content, icon, iconColor, width, height }) {
+export default function InfoCardComponent({
+  title,
+  content,
+  icon,
+  iconColor,
+  width,
+  height,
+}) {
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -10,7 +19,7 @@ export default function InfoCardComponent({ title, content, icon, iconColor, wid
         height: height ? height : "100%",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#1c1917",
+        backgroundColor: colors.card,
         elevation: 5,
         borderRadius: 5,
         padding: 10,
@@ -19,7 +28,7 @@ export default function InfoCardComponent({ title, content, icon, iconColor, wid
     >
       <Text
         style={{
-          color: "white",
+          color: colors.text,
           fontFamily: "Poppins_300Light",
           fontSize: 12,
           textAlign: "center",
@@ -34,13 +43,18 @@ export default function InfoCardComponent({ title, content, icon, iconColor, wid
             columnGap: 10,
             alignItems: "center",
             justifyContent: "center",
-            width:'100%',
+            width: "100%",
           }}
         >
-          <Icon name={icon} color={iconColor ? iconColor : "white"} type="font-awesome-5" iconStyle={{fontSize: 15,}}/>
+          <Icon
+            name={icon}
+            color={iconColor ? iconColor : colors.text}
+            type="font-awesome-5"
+            iconStyle={{ fontSize: 15 }}
+          />
           <Text
             style={{
-              color: "white",
+              color: colors.text,
               fontFamily: "Poppins_500Medium",
               fontSize: 12,
               textAlign: "center",
@@ -52,7 +66,7 @@ export default function InfoCardComponent({ title, content, icon, iconColor, wid
       ) : (
         <Text
           style={{
-            color: "white",
+            color: colors.text,
             fontFamily: "Poppins_500Medium",
             fontSize: 12,
             textAlign: "center",
@@ -64,5 +78,3 @@ export default function InfoCardComponent({ title, content, icon, iconColor, wid
     </View>
   );
 }
-
-const styles = StyleSheet.create({});

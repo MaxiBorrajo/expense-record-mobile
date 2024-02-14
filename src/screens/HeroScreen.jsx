@@ -4,9 +4,10 @@ import {
   View,
   SafeAreaView,
   ImageBackground,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import ButtonComponent from "../components/ButtonComponent";
+import { Button } from "@rneui/themed";
+
 export default function HeroScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
@@ -16,14 +17,27 @@ export default function HeroScreen({ navigation }) {
         style={{ flex: 1 }}
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Expense-record</Text>
+          <Text style={styles.title}>Expense Record</Text>
           <View>
             <Text style={styles.subtitle}>
               Record your everyday expenses and earnings
             </Text>
-            <ButtonComponent
-              label="Get Started"
-              action={() => navigation.navigate("Login")}
+            <Button
+              title="Get Started"
+              buttonStyle={{
+                backgroundColor: "white",
+                paddingVertical: 10,
+                paddingHorizontal: 30,
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              titleStyle={{
+                color: "black",
+                fontSize: 15,
+                fontFamily: "Poppins_500Medium",
+              }}
+              onPress={() => navigation.navigate("Login")}
             />
           </View>
         </View>
@@ -40,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     rowGap: 150,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
-    minHeight: Dimensions.get("window").height
+    minHeight: Dimensions.get("window").height,
   },
   safeArea: {
     flex: 1,

@@ -1,38 +1,36 @@
-import { StyleSheet } from "react-native";
 import { Button } from "@rneui/themed";
+import { useTheme } from "@react-navigation/native";
+
 export default function ButtonComponent({ action, label, loading, disabled }) {
+  const { colors } = useTheme();
+
   return (
     <Button
       title={label}
-      buttonStyle={styles.button}
-      titleStyle={styles.label}
+      buttonStyle={{
+        backgroundColor: colors.text,
+        paddingVertical: 10,
+        paddingHorizontal: 30,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      titleStyle={{
+        color: colors.background,
+        fontSize: 15,
+        fontFamily: "Poppins_500Medium",
+      }}
       onPress={action}
       loading={loading}
       loadingProps={{
         size: "large",
-        color: "black",
+        color: colors.background,
       }}
       disabled={disabled}
       disabledStyle={{
-        backgroundColor: "#d4d4d4",
-        color:'#262626'
+        backgroundColor: colors.disabledBackground,
+        color: colors.disabledColor,
       }}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal:30,
-    borderRadius: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  label: {
-    color: "#000",
-    fontSize: 15,
-    fontFamily: "Poppins_500Medium",
-  },
-});

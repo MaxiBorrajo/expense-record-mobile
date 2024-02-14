@@ -5,11 +5,13 @@ import InfoComponent from "../components/InfoComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
 import { Icon } from "@rneui/themed";
 import { UserContext } from "../context/UserContext";
+import { useTheme } from "@react-navigation/native";
 
 export default function MainScreen({ route, navigation }) {
   const { getChange } = useContext(ExpenseContext);
   const { getCurrentUser } = useContext(UserContext);
   const [reload, setReload] = useState(false);
+  const { colors } = useTheme();
 
   useEffect(() => {
     setReload(false);
@@ -44,10 +46,30 @@ export default function MainScreen({ route, navigation }) {
   const [change, setChange] = useState(null);
 
   return (
-    <SafeAreaView style={{ flex: 1, minHeight: Dimensions.get("window").height }}>
-      <View style={styles.container}>
+    <SafeAreaView
+      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+    >
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: colors.background,
+          color: colors.text,
+          alignItems: "center",
+          position: "relative",
+          minHeight: Dimensions.get("window").height,
+        }}
+      >
         {user ? (
-          <Text style={styles.title}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontFamily: "Poppins_500Medium",
+              color: colors.text,
+              alignSelf: "flex-start",
+              paddingHorizontal: 20,
+              paddingTop: 10,
+            }}
+          >
             Welcome, {user.firstName} {user.lastName}{" "}
           </Text>
         ) : null}
@@ -85,7 +107,7 @@ export default function MainScreen({ route, navigation }) {
             style={{
               fontFamily: "Poppins_400Regular",
               fontSize: 11,
-              color: "white",
+              color: colors.text,
             }}
           >
             ($ {change && change.nominal ? change.nominal.toFixed(2) : 0})
@@ -104,29 +126,10 @@ export default function MainScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#0c0a09",
-    color: "fff",
-    alignItems: "center",
-    position: "relative",
-    minHeight: Dimensions.get("window").height
-  },
-  safeArea: {
-    flex: 1,
-  },
   profit: {
     color: "#58eb34",
   },
   loss: {
     color: "red",
-  },
-  title: {
-    fontSize: 15,
-    fontFamily: "Poppins_500Medium",
-    color: "#fff",
-    alignSelf: "flex-start",
-    paddingHorizontal: 20,
-    paddingTop: 10,
   },
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SearchBar, Icon } from "@rneui/themed";
 import { useState, useRef } from "react";
 import {
@@ -8,7 +8,7 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
-
+import { useTheme } from "@react-navigation/native";
 const { Popover } = renderers;
 export default function HeaderComponent({ keyword, setKeyword }) {
   // const [search, setSearch] = useState('')
@@ -29,6 +29,8 @@ export default function HeaderComponent({ keyword, setKeyword }) {
     setOpened(false);
   }
 
+  const { colors } = useTheme();
+
   return (
     <View
       style={{
@@ -38,7 +40,7 @@ export default function HeaderComponent({ keyword, setKeyword }) {
         flexDirection: "row",
         columnGap: 35,
         height: "10%",
-        paddingHorizontal:5
+        paddingHorizontal: 5,
       }}
     >
       <SearchBar
@@ -54,12 +56,12 @@ export default function HeaderComponent({ keyword, setKeyword }) {
         }}
         inputContainerStyle={{
           borderRadius: 50,
-          backgroundColor: "white",
+          backgroundColor: colors.text,
         }}
         inputStyle={{
           fontSize: 10,
           fontFamily: "Poppins_300Light",
-          color: "black",
+          color: colors.background,
         }}
       />
       <Menu
@@ -75,12 +77,12 @@ export default function HeaderComponent({ keyword, setKeyword }) {
             <Icon
               name={opened ? "chevron-up" : "chevron-down"}
               type="font-awesome"
-              color="#fff"
+              color={colors.text}
               iconStyle={{ fontSize: 12, marginBottom: 3 }}
             ></Icon>
             <Text
               style={{
-                color: "#fff",
+                color: colors.text,
                 fontSize: 12,
                 fontFamily: "Poppins_300Light",
               }}
@@ -101,10 +103,3 @@ export default function HeaderComponent({ keyword, setKeyword }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  searchBar: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 15,
-  },
-});
