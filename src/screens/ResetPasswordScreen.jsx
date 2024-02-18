@@ -1,47 +1,35 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
 
 export default function ResetPasswordScreen({ navigation }) {
-  useEffect(() => {
-    const getEmail = async () => {
-      const emailFound = await AsyncStorage.getItem("email");
-      setResetPasswordForm({ ...resetPasswordForm, email: emailFound });
-    };
-
-    getEmail();
-  }, []);
-
   const [resetPasswordForm, setResetPasswordForm] = useState({
     password: "",
     confirm_password: "",
   });
-
   const { colors } = useTheme();
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const { resetPassword } = useContext(UserContext);
 
-  async function resetPassword() {
+  const getEmail = async () => {
+    const emailFound = await AsyncStorage.getItem("email");
+    setResetPasswordForm((prev) => ({ ...prev, email: emailFound }));
+  };
+
+  const sendResetPassword = async () => {
     try {
       setLoading(true);
-      if (
-        resetPasswordForm.password !== "" &&
-        resetPasswordForm.confirm_password !== "" &&
-        resetPasswordForm.password === resetPasswordForm.confirm_password
-      ) {
-        await axios.post(
-          "https://expense-record-production.up.railway.app/api/auth/resetPassword",
-          resetPasswordForm
-        );
-        await AsyncStorage.removeItem("email");
+      const validation = validateForm();
+      if (validation) {
+        resetPassword(resetPasswordForm);
         setLoading(false);
         navigation.navigate("Login");
       }
@@ -53,11 +41,36 @@ export default function ResetPasswordScreen({ navigation }) {
         setErrorMessage(error.message);
       }
     }
-  }
+  };
+
+  const validateForm = () => {
+    if (!resetPasswordForm.password) {
+      setLoading(false);
+      setErrorMessage("A password must be provided");
+      return false;
+    }
+
+    if (!resetPasswordForm.confirm_password) {
+      setLoading(false);
+      setErrorMessage("Your password must be confirmed");
+      return false;
+    }
+
+    if (resetPasswordForm.password != resetPasswordForm.confirm_password) {
+      setLoading(false);
+      setErrorMessage("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
+  useEffect(() => {
+    getEmail();
+  }, []);
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -123,7 +136,7 @@ export default function ResetPasswordScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setResetPasswordForm({ ...resetPasswordForm, password: newText })
+            setResetPasswordForm((prev) => ({ ...prev, password: newText }))
           }
         />
         <Input
@@ -148,15 +161,15 @@ export default function ResetPasswordScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setResetPasswordForm({
-              ...resetPasswordForm,
+            setResetPasswordForm((prev) => ({
+              ...prev,
               confirm_password: newText,
-            })
+            }))
           }
         />
         <ButtonComponent
           label={"Reset"}
-          action={resetPassword}
+          action={sendResetPassword}
           loading={loading}
         />
       </View>

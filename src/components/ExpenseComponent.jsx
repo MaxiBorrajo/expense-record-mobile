@@ -13,10 +13,10 @@ export default function ExpenseComponent({ item, setReload }) {
   const swipeableRef = useRef(null);
   const { colors } = useTheme();
 
-  async function handleDelete() {
+  const handleDelete = async () => {
     swipeableRef.current.close();
     await deleteExpense();
-  }
+  };
 
   const deleteExpense = async () => {
     await deleteExpenseById(item._id);
@@ -37,6 +37,7 @@ export default function ExpenseComponent({ item, setReload }) {
       </TouchableOpacity>
     );
   };
+  
   return (
     <Swipeable
       ref={swipeableRef}
@@ -58,7 +59,7 @@ export default function ExpenseComponent({ item, setReload }) {
         onPress={() =>
           navigation.navigate({
             name: "Expense",
-            params: { id: item._id },
+            params: { id: item?._id },
           })
         }
       >

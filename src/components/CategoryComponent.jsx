@@ -16,10 +16,10 @@ export default function CategoryComponent({
   const { deleteCategoryById } = useContext(CategoryContext);
   const { colors } = useTheme();
 
-  async function handleDelete() {
+  const handleDelete = async () => {
     swipeableRef.current.close();
     await deleteCategory();
-  }
+  };
 
   const deleteCategory = async () => {
     await deleteCategoryById(item._id);
@@ -41,6 +41,20 @@ export default function CategoryComponent({
     );
   };
 
+  const handlePress = () => {
+    if (item.user_id) {
+      navigation.navigate({
+        name: "Category",
+        params: { id: item._id },
+      });
+    } else {
+      setErrorMessage((prev) => "You can only edit categories created by you");
+      setTimeout(() => {
+        setErrorMessage((prev) => null);
+      }, 3000);
+    }
+  };
+
   return (
     <Swipeable
       ref={swipeableRef}
@@ -59,19 +73,7 @@ export default function CategoryComponent({
           elevation: 5,
           borderRadius: 5,
         }}
-        onPress={() => {
-          if (item.user_id) {
-            navigation.navigate({
-              name: "Category",
-              params: { id: item._id },
-            });
-          } else {
-            setErrorMessage("You can only edit categories created by you");
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 3000);
-          }
-        }}
+        onPress={handlePress}
       >
         <View
           style={{
@@ -93,7 +95,7 @@ export default function CategoryComponent({
             }}
           >
             <Icon
-              name={item.icon_id.icon}
+              name={item?.icon_id?.icon}
               type="font-awesome-5"
               iconStyle={{ fontSize: 20, color: colors.text }}
             ></Icon>
@@ -105,7 +107,7 @@ export default function CategoryComponent({
               fontFamily: "Poppins_500Medium",
             }}
           >
-            {item.category_name}
+            {item?.category_name}
           </Text>
         </View>
       </TouchableOpacity>

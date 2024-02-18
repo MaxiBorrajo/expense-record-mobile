@@ -26,32 +26,25 @@ export default function ExpenseScreen({ route, navigation }) {
   const [loading, setLoading] = useState(false);
   const [expense, setExpense] = useState(null);
   const [categories, setCategories] = useState(null);
+  const [visible, setVisible] = useState(false);
+  const { colors } = useTheme();
+  const [errorMessage, setErrorMessage] = useState(null);
+
   const toggleDialog = () => {
     setVisible(!visible);
   };
-  const [visible, setVisible] = useState(false);
-  const { colors } = useTheme();
 
-  useEffect(() => {
-    getExpenseById(id).then((exp) => {
-      setExpense({
-        amount: exp.amount.toFixed(2),
-        category_id: exp.category_id,
-        title: exp.title,
-        description: exp.description,
-        createdAt: exp.createdAt,
-      });
-    });
-
-    getCategories().then((categories) => {
-      setCategories(categories);
-    });
-  }, []);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const handleChange = (e) => {
+    setExpense((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   const updateExpense = async () => {
     setLoading(true);
     const validation = validateExpense();
+
     if (validation) {
       await updateExpenseById(id, expense);
       setLoading(false);
@@ -82,9 +75,25 @@ export default function ExpenseScreen({ route, navigation }) {
     return true;
   };
 
+  useEffect(() => {
+    getExpenseById(id).then((exp) => {
+      setExpense({
+        amount: exp.amount.toFixed(2),
+        category_id: exp.category_id,
+        title: exp.title,
+        description: exp.description,
+        createdAt: exp.createdAt,
+      });
+    });
+
+    getCategories().then((categories) => {
+      setCategories(categories);
+    });
+  }, []);
+
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1, paddingTop:30 }}
     >
       <View
         style={{
@@ -223,12 +232,16 @@ export default function ExpenseScreen({ route, navigation }) {
               width: "100%",
               paddingRight: 15,
             }}
-            onChangeText={(text) => {
-              setExpense({ ...expense, title: text });
+            onChangeText={(value) => {
+              setExpense((prev) => ({
+                ...prev,
+                title: value,
+              }));
             }}
-            value={expense ? expense.title : ""}
+            value={expense?.title}
             placeholder="Write a title"
             placeholderTextColor={colors.text}
+            name="title"
           />
         </View>
         <View
@@ -274,17 +287,21 @@ export default function ExpenseScreen({ route, navigation }) {
                 width: "100%",
                 paddingRight: 25,
               }}
-              onChangeText={(text) => {
-                setExpense({ ...expense, amount: text });
+              onChangeText={(value) => {
+                setExpense((prev) => ({
+                  ...prev,
+                  amount: value,
+                }));
               }}
-              value={expense ? expense.amount.toString() : "0"}
+              value={expense?.amount.toString()}
               keyboardType="numeric"
+              name="amount"
             />
           </View>
           <IncomeOrLossComponent
-            amount={expense ? expense.amount : 0}
+            amount={expense?.amount}
             action={() =>
-              setExpense({ ...expense, amount: expense.amount * -1 })
+              setExpense((prev) => ({ ...prev, amount: expense.amount * -1 }))
             }
           />
         </View>
@@ -306,9 +323,15 @@ export default function ExpenseScreen({ route, navigation }) {
             borderStyle: "solid",
             textAlignVertical: "top",
           }}
-          onChangeText={(text) => setExpense({ ...expense, description: text })}
-          value={expense ? expense.description : ""}
+          onChangeText={(value) => {
+            setExpense((prev) => ({
+              ...prev,
+              description: value,
+            }));
+          }}
+          value={expense?.description}
           placeholder="Write a description (optional)"
+          name="description"
         />
         <View
           style={{
@@ -323,7 +346,10 @@ export default function ExpenseScreen({ route, navigation }) {
             <SelectDropdown
               data={categories}
               onSelect={(selectedItem) => {
-                setExpense({ ...expense, category_id: selectedItem._id });
+                setExpense((prev) => ({
+                  ...prev,
+                  category_id: selectedItem._id,
+                }));
               }}
               buttonTextAfterSelection={(selectedItem) => {
                 return selectedItem.category_name;
@@ -354,14 +380,7 @@ export default function ExpenseScreen({ route, navigation }) {
           <ButtonComponent
             label="Save"
             loading={loading}
-            action={() => {
-              setExpense({
-                ...expense,
-                amount: +expense.amount,
-                category_id: expense.category_id._id,
-              });
-              updateExpense();
-            }}
+            action={updateExpense}
           />
         </View>
       </View>

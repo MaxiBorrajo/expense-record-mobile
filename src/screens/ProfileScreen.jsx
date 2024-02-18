@@ -26,10 +26,10 @@ export default function ProfileScreen() {
   const { applyConversion } = useContext(ExpenseContext);
   const { deleteCurrentUser, updateCurrentUser, getCurrentUser } =
     useContext(UserContext);
-
   const toggleDialog = () => {
     setVisible(!visible);
   };
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
 
   useEffect(() => {
     getCurrentUser().then((user) => {
@@ -94,12 +94,8 @@ export default function ProfileScreen() {
     return true;
   };
 
-  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
-
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -161,7 +157,7 @@ export default function ProfileScreen() {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onPress={() => deleteAccount()}
+              onPress={deleteAccount}
             />
             <View style={{ width: 15 }}></View>
             <Button
@@ -214,7 +210,7 @@ export default function ProfileScreen() {
               paddingRight: 15,
             }}
             onChangeText={(text) => {
-              setUserForm({ ...userForm, firstName: text });
+              setUserForm((prev) => ({ ...prev, firstName: text }));
             }}
             value={userForm.firstName}
             placeholder="First Name"
@@ -244,7 +240,7 @@ export default function ProfileScreen() {
               paddingRight: 15,
             }}
             onChangeText={(text) => {
-              setUserForm({ ...userForm, lastName: text });
+              setUserForm((prev) => ({ ...prev, lastName: text }));
             }}
             value={userForm.lastName}
             placeholder="Last Name"
@@ -264,7 +260,7 @@ export default function ProfileScreen() {
             data={currencies}
             onSelect={(selectedItem) => {
               setOldCurrency(userForm.currency);
-              setUserForm({ ...userForm, currency: selectedItem });
+              setUserForm((prev) => ({ ...prev, currency: selectedItem }));
             }}
             buttonTextAfterSelection={(selectedItem) => {
               return selectedItem;

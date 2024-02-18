@@ -36,12 +36,30 @@ export default function ExpensesScreen() {
   const [reload, setReload] = useState(false);
   const [firstYear, setFirstYear] = useState(null);
   const bottomSheetParameters = useRef(null);
-
   const { colors } = useTheme();
-
   const [openedParameters, setOpenedParameters] = useState(false);
-
   const snapPoints = useMemo(() => ["50%", "50%"], []);
+  const sortSelect = useRef({});
+  const orderSelect = useRef({});
+  const yearSelect = useRef({});
+  const monthSelect = useRef({});
+  const daySelect = useRef({});
+  const typeSelect = useRef({});
+  const categorySelect = useRef({});
+  const dataTypeSelect = [
+    {
+      type: "None",
+      value: null,
+    },
+    {
+      type: "Income",
+      value: 1,
+    },
+    {
+      type: "Loss",
+      value: 0,
+    },
+  ];
 
   const openParameteres = () => {
     setOpenedParameters(!openedParameters);
@@ -53,13 +71,30 @@ export default function ExpensesScreen() {
     bottomSheetParameters.current.snapToIndex(1);
   };
 
-  const sortSelect = useRef({});
-  const orderSelect = useRef({});
-  const yearSelect = useRef({});
-  const monthSelect = useRef({});
-  const daySelect = useRef({});
-  const typeSelect = useRef({});
-  const categorySelect = useRef({});
+  const cancelSearch = () => {
+    if (searchBar.current) {
+      searchBar.current.blur();
+      setKeyword(null);
+    }
+  };
+
+  const resetParameters = () => {
+    yearSelect.current.reset();
+    monthSelect.current.reset();
+    daySelect.current.reset();
+    sortSelect.current.reset();
+    orderSelect.current.reset();
+    categorySelect.current.reset();
+    typeSelect.current.reset();
+    setCategory(null);
+    setDay(null);
+    setKeyword(null);
+    setYear(new Date().getFullYear());
+    setMonth(new Date().getMonth());
+    setSort(null);
+    setOrder(null);
+    setType(null);
+  };
 
   useEffect(() => {
     setReload(false);
@@ -104,34 +139,9 @@ export default function ExpensesScreen() {
     });
   }, [sort, order, category, keyword, year, month, day, type, reload]);
 
-  const cancelSearch = () => {
-    if (searchBar.current) {
-      searchBar.current.blur();
-      setKeyword(null);
-    }
-  };
-
-  const resetParameters = () => {
-    yearSelect.current.reset();
-    monthSelect.current.reset();
-    daySelect.current.reset();
-    sortSelect.current.reset();
-    orderSelect.current.reset();
-    categorySelect.current.reset();
-    typeSelect.current.reset();
-    setCategory(null);
-    setDay(null);
-    setKeyword(null);
-    setYear(new Date().getFullYear());
-    setMonth(new Date().getMonth());
-    setSort(null);
-    setOrder(null);
-    setType(null);
-  };
-
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1, paddingTop:30 }}
     >
       <View
         style={{
@@ -168,14 +178,14 @@ export default function ExpensesScreen() {
             name="sliders"
             type="font-awesome"
             color={colors.text}
-            onPress={() => openParameteres()}
+            onPress={openParameteres}
           />
         </View>
         <SearchBar
           ref={searchBar}
           placeholder="Search by title"
           onChangeText={(newValue) => setKeyword(newValue)}
-          onClear={() => cancelSearch()}
+          onClear={cancelSearch}
           value={keyword}
           containerStyle={{
             width: "100%",
@@ -252,7 +262,7 @@ export default function ExpensesScreen() {
                     justifyContent: "center",
                     columnGap: 10,
                   }}
-                  onPress={() => resetParameters()}
+                  onPress={resetParameters}
                 >
                   <Text
                     style={{
@@ -370,20 +380,7 @@ export default function ExpensesScreen() {
                 />
                 <SelectDropdown
                   ref={typeSelect}
-                  data={[
-                    {
-                      type: "None",
-                      value: null,
-                    },
-                    {
-                      type: "Income",
-                      value: 1,
-                    },
-                    {
-                      type: "Loss",
-                      value: 0,
-                    },
-                  ]}
+                  data={dataTypeSelect}
                   onSelect={(selectedItem) => {
                     setType(selectedItem.value);
                   }}

@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  SafeAreaView,
-  FlatList,
-} from "react-native";
+import { Text, View, Dimensions, SafeAreaView, FlatList } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
@@ -26,11 +19,21 @@ export default function StatisticsScreen() {
   const [firstYear, setFirstYear] = useState(null);
   const { colors } = useTheme();
 
-  function getTotal(amounts) {
+  const getTotal = (amounts) => {
     let total = 0;
     amounts.forEach((amount) => (total += amount));
     return total;
-  }
+  };
+
+  const chartConfig = {
+    backgroundColor: "#26872a",
+    backgroundGradientFrom: "#43a047",
+    backgroundGradientTo: "#66bb6a",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16,
+    },
+  };
 
   useEffect(() => {
     AsyncStorage.getItem("user").then((result) => {
@@ -59,20 +62,8 @@ export default function StatisticsScreen() {
     });
   }, [year, month, type]);
 
-  const chartConfig = {
-    backgroundColor: "#26872a",
-    backgroundGradientFrom: "#43a047",
-    backgroundGradientTo: "#66bb6a",
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    style: {
-      borderRadius: 16,
-    },
-  };
-
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 50 }}>
       <FlatList
         contentContainerStyle={[
           { backgroundColor: colors.background },

@@ -14,17 +14,11 @@ import { ExpenseContext } from "../context/ExpenseContext";
 import { useTheme } from "@react-navigation/native";
 
 export default function CreateExpenseScreen({ route, navigation }) {
-  useEffect(() => {
-    setFinishExpenseForm({
-      ...finishExpenseForm,
-      amount: +expenseForm.amount,
-    });
-  }, []);
   const { createExpense } = useContext(ExpenseContext);
   const { expenseForm } = route.params;
-
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [finishExpenseForm, setFinishExpenseForm] = useState(expenseForm);
-
   const { colors } = useTheme();
 
   const createNewExpense = async () => {
@@ -49,12 +43,16 @@ export default function CreateExpenseScreen({ route, navigation }) {
     return true;
   };
 
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  useEffect(() => {
+    setFinishExpenseForm((prev) => ({
+      ...prev,
+      amount: +expenseForm.amount,
+    }));
+  }, []);
 
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1, paddingTop:30 }}
     >
       <View
         style={{
@@ -94,9 +92,9 @@ export default function CreateExpenseScreen({ route, navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(text) =>
-            setFinishExpenseForm({ ...finishExpenseForm, title: text })
+            setFinishExpenseForm((prev) => ({ ...prev, title: text }))
           }
-          value={finishExpenseForm.title ? finishExpenseForm.title : ""}
+          value={finishExpenseForm?.title}
           placeholder="Write a title"
           placeholderTextColor={colors.text}
         />
@@ -119,10 +117,10 @@ export default function CreateExpenseScreen({ route, navigation }) {
             textAlignVertical: "top",
           }}
           onChangeText={(text) =>
-            setFinishExpenseForm({ ...finishExpenseForm, description: text })
+            setFinishExpenseForm((prev) => ({ ...prev, description: text }))
           }
           value={
-            finishExpenseForm.description ? finishExpenseForm.description : ""
+            finishExpenseForm?.description
           }
           placeholder="Write a description (optional)"
         />

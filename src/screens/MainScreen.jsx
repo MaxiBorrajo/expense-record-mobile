@@ -12,10 +12,10 @@ export default function MainScreen({ route, navigation }) {
   const { getCurrentUser } = useContext(UserContext);
   const [reload, setReload] = useState(false);
   const { colors } = useTheme();
+  const [user, setUser] = useState(null);
+  const [change, setChange] = useState(null);
 
-  useEffect(() => {
-    setReload(false);
-
+  const setUpMainScreen = () => {
     getChange().then((percentage) => {
       setChange(percentage);
     });
@@ -23,32 +23,25 @@ export default function MainScreen({ route, navigation }) {
     getCurrentUser().then((user) => {
       setUser(user);
     });
+  };
+
+  useEffect(() => {
+    setReload(false);
+    setUpMainScreen();
   }, [reload]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (route.params?.actionCompleted) {
-        getChange().then((percentage) => {
-          setChange(percentage);
-        });
-
-        getCurrentUser().then((user) => {
-          setUser(user);
-        });
+        setUpMainScreen();
       }
     });
 
     return unsubscribe;
   }, [navigation, route.params?.actionCompleted]);
 
-  const [user, setUser] = useState(null);
-
-  const [change, setChange] = useState(null);
-
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -59,20 +52,18 @@ export default function MainScreen({ route, navigation }) {
           minHeight: Dimensions.get("window").height,
         }}
       >
-        {user ? (
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
-              alignSelf: "flex-start",
-              paddingHorizontal: 20,
-              paddingTop: 10,
-            }}
-          >
-            Welcome, {user.firstName} {user.lastName}{" "}
-          </Text>
-        ) : null}
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: "Poppins_500Medium",
+            color: colors.text,
+            alignSelf: "flex-start",
+            paddingHorizontal: 20,
+            paddingTop: 10,
+          }}
+        >
+          Welcome, {user?.firstName} {user?.lastName}
+        </Text>
         <InfoComponent route={route} navigation={navigation} reload={reload} />
         <View
           style={{
@@ -101,7 +92,7 @@ export default function MainScreen({ route, navigation }) {
               change && change.percentage > 0 ? styles.profit : styles.loss,
             ]}
           >
-            {change && change.percentage ? change.percentage.toFixed(2) : 0} %
+            {change?.percentage?.toFixed(2)} %
           </Text>
           <Text
             style={{
@@ -110,8 +101,7 @@ export default function MainScreen({ route, navigation }) {
               color: colors.text,
             }}
           >
-            ($ {change && change.nominal ? change.nominal.toFixed(2) : 0})
-            compared to last month
+            ($ {change?.nominal?.toFixed(2)}) compared to last month
           </Text>
         </View>
         <ExpensesComponent

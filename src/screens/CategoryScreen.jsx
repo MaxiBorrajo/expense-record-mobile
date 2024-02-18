@@ -11,34 +11,18 @@ import { useTheme } from "@react-navigation/native";
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
   const { colors } = useTheme();
-
-  useEffect(() => {
-    getCategoryById(id).then((category) => {
-      setCategoryForm({
-        category_name: category.category_name,
-        icon_id: category.icon_id._id,
-      });
-
-      getIcons().then((icons) => {
-        setIcons(icons);
-
-        let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
-
-        setIndex(i);
-      });
-    });
-  }, []);
-
   const { getIcons, getCategoryById, updateCategoryById, deleteCategoryById } =
     useContext(CategoryContext);
-
   const [categoryForm, setCategoryForm] = useState({
     category_name: "",
     icon_id: "",
   });
-
   const [icons, setIcons] = useState(null);
   const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [actualIcon, setActualIcon] = useState(null);
 
   const editCategory = async () => {
     setErrorMessage(null);
@@ -68,50 +52,50 @@ export default function CategoryScreen({ route, navigation }) {
     return true;
   };
 
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
-
   const next = () => {
-    if (index + 1 >= icons.length) {
-      setIndex(0);
-      setCategoryForm((prevState) => ({
-        ...prevState,
-        icon_id: icons[0]._id,
-      }));
-    } else {
-      setIndex(index + 1);
-      setCategoryForm((prevState) => ({
-        ...prevState,
-        icon_id: icons[index + 1]._id,
-      }));
-    }
+    const i = index + 1 >= icons.length ? 0 : index + 1;
+    setIndex(i);
+    setActualIcon(icons[i].icon);
+    setCategoryForm((prev) => ({
+      ...prev,
+      icon_id: icons ? icons[i]._id : null,
+    }));
   };
 
   const prev = () => {
-    if (index - 1 < 0) {
-      setIndex(icons.length - 1);
-      setCategoryForm((prevState) => ({
-        ...prevState,
-        icon_id: icons[icons.length - 1]._id,
-      }));
-    } else {
-      setIndex(index - 1);
-      setCategoryForm((prevState) => ({
-        ...prevState,
-        icon_id: icons[index - 1]._id,
-      }));
-    }
+    const i = index - 1 < 0 ? icons.length - 1 : index - 1;
+    setIndex(i);
+    setActualIcon(icons[i].icon);
+    setCategoryForm((prev) => ({
+      ...prev,
+      icon_id: icons ? icons[i]._id : null,
+    }));
   };
 
   const toggleDialog = () => {
     setVisible(!visible);
   };
-  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    getCategoryById(id).then((category) => {
+      setCategoryForm({
+        category_name: category.category_name,
+        icon_id: category.icon_id._id,
+      });
+
+      getIcons().then((icons) => {
+        setIcons(icons);
+
+        let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
+
+        setIndex(i);
+        setActualIcon(icons[i].icon);
+      });
+    });
+  }, []);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -169,7 +153,7 @@ export default function CategoryScreen({ route, navigation }) {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              onPress={() => deleteCategory()}
+              onPress={deleteCategory}
             />
             <View style={{ width: 15 }}></View>
             <Button
@@ -215,12 +199,7 @@ export default function CategoryScreen({ route, navigation }) {
           />
         </View>
 
-        <IconCarouselComponent
-          icons={icons}
-          index={index}
-          next={next}
-          prev={prev}
-        />
+        <IconCarouselComponent icon={actualIcon} next={next} prev={prev} />
         <TextInput
           style={{
             width: "100%",
@@ -236,9 +215,9 @@ export default function CategoryScreen({ route, navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(text) =>
-            setCategoryForm({ ...categoryForm, category_name: text })
+            setCategoryForm((prev) => ({ ...prev, category_name: text }))
           }
-          value={categoryForm.category_name ? categoryForm.category_name : ""}
+          value={categoryForm?.category_name}
           placeholder="Write a category name"
           placeholderTextColor={colors.text}
         />

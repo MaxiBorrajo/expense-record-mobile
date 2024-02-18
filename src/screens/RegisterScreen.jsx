@@ -1,12 +1,13 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
 
 export default function RegisterScreen({ navigation }) {
   const [registerForm, setRegisterForm] = useState({
@@ -15,30 +16,18 @@ export default function RegisterScreen({ navigation }) {
     email: "",
     password: "",
   });
-
+  const { register } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
 
-  async function register() {
+  async function registerUser() {
     try {
       setLoading(true);
-      if (
-        registerForm.email !== "" &&
-        registerForm.password !== "" &&
-        registerForm.firstName !== "" &&
-        registerForm.lastName !== ""
-      ) {
-        const response = await axios.post(
-          "https://expense-record-production.up.railway.app/api/auth",
-          registerForm
-        );
-        await AsyncStorage.setItem("token", response.data.resource.token);
-        await AsyncStorage.setItem(
-          "user",
-          JSON.stringify(response.data.resource.user)
-        );
+      const validation = validateForm();
+      if (validation) {
+        await register(registerForm);
         setLoading(false);
         navigation.navigate("Home");
       }
@@ -51,10 +40,37 @@ export default function RegisterScreen({ navigation }) {
       }
     }
   }
+
+  function validateForm() {
+    if (!registerForm.firstName) {
+      setLoading(false);
+      setErrorMessage("Please enter a first name");
+      return false;
+    }
+
+    if (!registerForm.lastName) {
+      setLoading(false);
+      setErrorMessage("Please enter a last name");
+      return false;
+    }
+
+    if (!registerForm.email) {
+      setLoading(false);
+      setErrorMessage("Please enter an email");
+      return false;
+    }
+
+    if (!registerForm.password) {
+      setLoading(false);
+      setErrorMessage("Please enter a password");
+      return false;
+    }
+
+    return true;
+  }
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -100,7 +116,7 @@ export default function RegisterScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setRegisterForm({ ...registerForm, firstName: newText })
+            setRegisterForm((prev) => ({ ...prev, firstName: newText }))
           }
         />
         <Input
@@ -124,7 +140,7 @@ export default function RegisterScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setRegisterForm({ ...registerForm, lastName: newText })
+            setRegisterForm((prev) => ({ ...prev, lastName: newText }))
           }
         />
         <Input
@@ -148,7 +164,7 @@ export default function RegisterScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setRegisterForm({ ...registerForm, email: newText })
+            setRegisterForm((prev) => ({ ...prev, email: newText }))
           }
         />
         <Input
@@ -159,10 +175,10 @@ export default function RegisterScreen({ navigation }) {
               size={20}
               type="font-awesome-5"
               onPress={() => setShowPassword(!showPassword)}
-              iconStyle={{color:colors.text}}
+              iconStyle={{ color: colors.text }}
             />
           }
-          rightIconContainerStyle={{marginRight:10}}
+          rightIconContainerStyle={{ marginRight: 10 }}
           secureTextEntry={!showPassword}
           inputStyle={{
             color: colors.text,
@@ -183,7 +199,7 @@ export default function RegisterScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setRegisterForm({ ...registerForm, password: newText })
+            setRegisterForm((prev) => ({ ...prev, password: newText }))
           }
         />
         <Text
@@ -198,7 +214,7 @@ export default function RegisterScreen({ navigation }) {
         </Text>
         <ButtonComponent
           label={"Sign up"}
-          action={register}
+          action={registerUser}
           loading={loading}
         />
       </View>

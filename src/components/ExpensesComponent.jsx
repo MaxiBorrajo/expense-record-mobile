@@ -14,7 +14,9 @@ export default function ExpensesComponent({
 }) {
   const { getExpenses } = useContext(ExpenseContext);
   const [expenses, setExpenses] = useState(null);
-  useEffect(() => {
+  const { colors } = useTheme();
+
+  const getLastExpenses = async () => {
     const filters = [
       {
         filter: "year",
@@ -29,32 +31,21 @@ export default function ExpensesComponent({
     getExpenses(null, null, filters).then((expenses) => {
       setExpenses(expenses.splice(0, 3));
     });
+  };
+
+  useEffect(() => {
+    getLastExpenses();
   }, [reload]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (route.params?.actionCompleted) {
-        const filters = [
-          {
-            filter: "year",
-            value: new Date().getFullYear(),
-          },
-          {
-            filter: "month",
-            value: new Date().getMonth(),
-          },
-        ];
-
-        getExpenses(null, null, filters).then((expenses) => {
-          setExpenses(expenses.splice(0, 3));
-        });
+        getLastExpenses();
       }
     });
 
     return unsubscribe;
   }, [navigation, route.params?.actionCompleted]);
-
-  const { colors } = useTheme();
 
   return (
     <Card

@@ -1,39 +1,31 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState } from "react";
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useContext, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
 
 export default function LoginScreen({ navigation }) {
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
+  const { login } = useContext(UserContext);
 
-  async function login() {
+  const loginUser = async () => {
     try {
-      if (loginForm.email !== "" && loginForm.password !== "") {
-        setLoading(true);
-        const response = await axios.post(
-          "https://expense-record-production.up.railway.app/api/auth/login",
-          loginForm
-        );
-        await AsyncStorage.setItem("token", response.data.resource.token);
-        await AsyncStorage.setItem(
-          "user",
-          JSON.stringify(response.data.resource.user)
-        );
+      setLoading(true);
+      const validation = validateForm();
+      if (validation) {
+        await login(loginForm);
         setLoading(false);
-        navigation.navigate("Home");
+        navigation.navigate("Main");
       }
     } catch (error) {
       setLoading(false);
@@ -43,11 +35,27 @@ export default function LoginScreen({ navigation }) {
         setErrorMessage(error.message);
       }
     }
-  }
+  };
+
+  const validateForm = () => {
+    if (!loginForm.email) {
+      setLoading(false);
+      setErrorMessage("Please enter your email");
+      return false;
+    }
+
+    if (!loginForm.password) {
+      setLoading(false);
+      setErrorMessage("Please enter your password");
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1, paddingTop:30 }}
     >
       <View
         style={{
@@ -93,7 +101,7 @@ export default function LoginScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setLoginForm({ ...loginForm, email: newText })
+            setLoginForm((prev) => ({ ...prev, email: newText }))
           }
         />
         <Input
@@ -104,10 +112,10 @@ export default function LoginScreen({ navigation }) {
               size={20}
               type="font-awesome-5"
               onPress={() => setShowPassword(!showPassword)}
-              iconStyle={{color:colors.text}}
+              iconStyle={{ color: colors.text }}
             />
           }
-          rightIconContainerStyle={{marginRight:10}}
+          rightIconContainerStyle={{ marginRight: 10 }}
           secureTextEntry={!showPassword}
           inputStyle={{
             color: colors.text,
@@ -128,7 +136,7 @@ export default function LoginScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setLoginForm({ ...loginForm, password: newText })
+            setLoginForm((prev) => ({ ...prev, password: newText }))
           }
         />
         <View>
@@ -153,7 +161,11 @@ export default function LoginScreen({ navigation }) {
             No account? Register
           </Text>
         </View>
-        <ButtonComponent label={"Sign In"} action={login} loading={loading} />
+        <ButtonComponent
+          label={"Sign In"}
+          action={loginUser}
+          loading={loading}
+        />
       </View>
     </SafeAreaView>
   );

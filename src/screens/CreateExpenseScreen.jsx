@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Dimensions,
-} from "react-native";
+import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect, useRef } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -21,27 +15,11 @@ export default function CreateExpenseScreen() {
   const firstCharge = useRef(true);
   const navigation = useNavigation();
   const { colors } = useTheme();
-
-  useEffect(() => {
-    getCategories().then((categories) => {
-      setCategories(categories);
-    });
-  }, []);
-
   const [expenseForm, setExpenseForm] = useState({
-    amount: "100.00",
+    amount: 100,
   });
-
   const [icon, setIcon] = useState(null);
-  const [disabled, setDisabled] = useState(true);
-  useEffect(() => {
-    if (firstCharge.current) {
-      firstCharge.current = false;
-    } else {
-      setDisabled(validateAmount(expenseForm.amount));
-    }
-  }, [expenseForm.amount]);
-
+  const [disabled, setDisabled] = useState(false);
   const [categories, setCategories] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -59,10 +37,22 @@ export default function CreateExpenseScreen() {
     return false;
   };
 
+  useEffect(() => {
+    getCategories().then((categories) => {
+      setCategories(categories);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (firstCharge.current) {
+      firstCharge.current = false;
+    } else {
+      setDisabled(validateAmount(expenseForm.amount));
+    }
+  }, [expenseForm.amount]);
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -125,12 +115,12 @@ export default function CreateExpenseScreen() {
             }}
           >
             <IncomeOrLossComponent
-              amount={expenseForm ? +expenseForm.amount : 100}
+              amount={expenseForm?.amount}
               action={() => {
-                setExpenseForm({
-                  ...expenseForm,
-                  amount: expenseForm.amount * -1,
-                });
+                setExpenseForm((prev) => ({
+                  ...prev,
+                  amount: +prev.amount * -1,
+                }));
               }}
             />
             <View
@@ -138,7 +128,7 @@ export default function CreateExpenseScreen() {
                 flexDirection: "row",
                 width: "65%",
                 alignItems: "center",
-                columnGap: expenseForm.isIncome ? 10 : 3,
+                columnGap: 3,
                 backgroundColor: colors.card,
                 paddingVertical: 10,
                 paddingHorizontal: 20,
@@ -167,9 +157,9 @@ export default function CreateExpenseScreen() {
                   paddingRight: 15,
                 }}
                 onChangeText={(text) => {
-                  setExpenseForm({ ...expenseForm, amount: text });
+                  setExpenseForm((prev) => ({ ...prev, amount: +text }));
                 }}
-                value={expenseForm.amount.toString()}
+                value={expenseForm?.amount.toString()}
                 keyboardType="numeric"
               />
             </View>
@@ -188,10 +178,10 @@ export default function CreateExpenseScreen() {
               data={categories}
               onSelect={(selectedItem) => {
                 setIcon(selectedItem.icon_id.icon);
-                setExpenseForm({
-                  ...expenseForm,
+                setExpenseForm((prev) => ({
+                  ...prev,
                   category_id: selectedItem._id,
-                });
+                }));
               }}
               buttonTextAfterSelection={(selectedItem) => {
                 return selectedItem.category_name;
@@ -200,9 +190,7 @@ export default function CreateExpenseScreen() {
                 return item.category_name;
               }}
               defaultButtonText="Select a category"
-              defaultValue={
-                expenseForm.category_id ? expenseForm.category_id : null
-              }
+              defaultValue={expenseForm?.category_id}
               buttonStyle={{
                 borderRadius: 5,
                 alignSelf: "center",

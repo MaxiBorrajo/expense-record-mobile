@@ -3,12 +3,16 @@ import { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { Icon } from "@rneui/themed";
 import { getMonth } from "../utils/utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 
 export default function AmountComponent({ openYearMonth, year, month }) {
   const { getAmount, getProfitPercentage, getCurrentAmount } =
     useContext(ExpenseContext);
+
+  const [amount, setAmount] = useState(0);
+  const [currentAmount, setCurrentAmount] = useState(0);
+  const [profitPercentage, setProfitPercentage] = useState(0);
+  const { colors } = useTheme();
 
   useEffect(() => {
     getCurrentAmount().then((amount) => setCurrentAmount(amount));
@@ -16,16 +20,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
     getProfitPercentage(year, month).then((percentage) =>
       setProfitPercentage(percentage)
     );
-    AsyncStorage.getItem("user").then((item) => {
-      const user = JSON.parse(item);
-      setCurrency(user.currency);
-    });
   }, [year, month]);
-  const [amount, setAmount] = useState(0);
-  const [currentAmount, setCurrentAmount] = useState(0);
-  const [currency, setCurrency] = useState(null);
-  const [profitPercentage, setProfitPercentage] = useState(0);
-  const { colors } = useTheme();
 
   return (
     <View
@@ -66,7 +61,7 @@ export default function AmountComponent({ openYearMonth, year, month }) {
             color: colors.text,
           }}
         >
-          $ {currentAmount ? currentAmount.toFixed(2) : 0} {">"}
+          $ {currentAmount?.toFixed(2)} {">"}
         </Text>
 
         <Text
@@ -76,14 +71,14 @@ export default function AmountComponent({ openYearMonth, year, month }) {
             color: colors.text,
           }}
         >
-          ($ {amount ? amount.toFixed(2) : 0}) this month
+          $ {amount?.toFixed(2)} this month
         </Text>
       </View>
       <View style={{ flexDirection: "row" }}>
         <Icon
-          name={change > 0 ? "caret-up" : "caret-down"}
+          name={profitPercentage > 0 ? "caret-up" : "caret-down"}
           type="font-awesome"
-          iconStyle={change > 0 ? styles.profit : styles.loss}
+          iconStyle={profitPercentage > 0 ? styles.profit : styles.loss}
         ></Icon>
         <Text
           style={[
@@ -92,10 +87,10 @@ export default function AmountComponent({ openYearMonth, year, month }) {
               fontSize: 13,
               marginHorizontal: 5,
             },
-            change > 0 ? styles.profit : styles.loss,
+            profitPercentage > 0 ? styles.profit : styles.loss,
           ]}
         >
-          {change ? change.toFixed(2) : 0} %
+          {profitPercentage?.toFixed(2)} %
         </Text>
         <Text
           style={{

@@ -27,7 +27,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1 }}
     >
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen

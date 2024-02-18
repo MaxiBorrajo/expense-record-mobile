@@ -10,7 +10,7 @@ import { Button } from "@rneui/themed";
 
 export default function HeroScreen({ navigation }) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={require("../../assets/images/pexels-todd-trapani-1461996.jpg")}
         resizeMode="cover"

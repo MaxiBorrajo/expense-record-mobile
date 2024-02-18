@@ -34,51 +34,37 @@ export default function CategoriesScreen({ route, navigation }) {
   const [errorCreateMessage, setErrorCreateMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
+  const createBottomSheet = useRef(null);
+  const [openedCreate, setOpenedCreate] = useState(false);
+  const snapPoints = useMemo(() => ["60%", "65%"], []);
+  const [actualIcon, setActualIcon] = useState(null);
 
   const next = () => {
-    if (index + 1 >= icons.length) {
-      setIndex(0);
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons ? icons[0]._id : null,
-      });
-    } else {
-      setIndex(index + 1);
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons ? icons[index + 1]._id : null,
-      });
-    }
+    const i = index + 1 >= icons.length ? 0 : index + 1;
+    setIndex(i);
+    setActualIcon(icons[i].icon);
+    setNewCategory((prev) => ({
+      ...prev,
+      icon_id: icons ? icons[i]._id : null,
+    }));
   };
 
   const prev = () => {
-    if (index - 1 < 0) {
-      setIndex(icons.length - 1);
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons ? icons[icons.length - 1]._id : null,
-      });
-    } else {
-      setIndex(index - 1);
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons ? icons[index - 1]._id : null,
-      });
-    }
+    const i = index - 1 < 0 ? icons.length - 1 : index - 1;
+    setIndex(i);
+    setActualIcon(icons[i].icon);
+    setNewCategory((prev) => ({
+      ...prev,
+      icon_id: icons ? icons[i]._id : null,
+    }));
   };
 
-  const createBottomSheet = useRef(null);
-
-  const [openedCreate, setOpenedCreate] = useState(false);
-
-  const snapPoints = useMemo(() => ["60%", "65%"], []);
-
   const openCreateBottomSheet = () => {
-    setNewCategory({
-      ...newCategory,
+    setNewCategory((prev) => ({
+      ...prev,
       category_name: null,
       icon_id: icons[0]._id,
-    });
+    }));
 
     setOpenedCreate(!openedCreate);
 
@@ -88,41 +74,6 @@ export default function CategoriesScreen({ route, navigation }) {
 
     createBottomSheet.current.snapToIndex(1);
   };
-
-  useEffect(() => {
-    setReload(false);
-    getCategories(keyword).then((categories) => {
-      setCategories(categories);
-    });
-
-    getIcons().then((icons) => {
-      setIcons(icons);
-      setNewCategory({
-        ...newCategory,
-        icon_id: icons[0]._id,
-      });
-    });
-  }, [keyword, reload]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        getCategories(keyword).then((categories) => {
-          setCategories(categories);
-        });
-
-        getIcons().then((icons) => {
-          setIcons(icons);
-          setNewCategory({
-            ...newCategory,
-            icon_id: icons[0]._id,
-          });
-        });
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
 
   const cancelSearch = () => {
     if (searchBar.current) {
@@ -140,11 +91,11 @@ export default function CategoriesScreen({ route, navigation }) {
     if (validation) {
       await createCategory(newCategory);
 
-      setNewCategory({
-        ...newCategory,
+      setNewCategory((prev) => ({
+        ...prev,
         category_name: null,
         icon_id: null,
-      });
+      }));
 
       getCategories(keyword).then((categories) => {
         setCategories(categories);
@@ -165,10 +116,38 @@ export default function CategoriesScreen({ route, navigation }) {
     return true;
   };
 
+  const categoriesSetUp = () => {
+    getCategories(keyword).then((categories) => {
+      setCategories(categories);
+    });
+
+    getIcons().then((icons) => {
+      setIcons(icons);
+      setActualIcon(icons[0].icon);
+      setNewCategory((prev) => ({
+        ...prev,
+        icon_id: icons[0]._id,
+      }));
+    });
+  };
+
+  useEffect(() => {
+    setReload(false);
+    categoriesSetUp();
+  }, [keyword, reload]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (route.params?.actionCompleted) {
+        categoriesSetUp();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params?.actionCompleted]);
+
   return (
-    <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -207,7 +186,7 @@ export default function CategoriesScreen({ route, navigation }) {
           placeholder="Search by category name"
           placeholderTextColor={colors.text}
           onChangeText={(newValue) => setKeyword(newValue)}
-          onClear={() => cancelSearch()}
+          onClear={cancelSearch}
           value={keyword}
           containerStyle={{
             width: "100%",
@@ -223,7 +202,7 @@ export default function CategoriesScreen({ route, navigation }) {
             fontSize: 10,
             fontFamily: "Poppins_300Light",
             color: colors.text,
-            paddingHorizontal:5
+            paddingHorizontal: 5,
           }}
         />
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
@@ -268,12 +247,7 @@ export default function CategoriesScreen({ route, navigation }) {
             >
               Create new category
             </Text>
-            <IconCarouselComponent
-              icons={icons}
-              next={next}
-              prev={prev}
-              index={index}
-            />
+            <IconCarouselComponent icon={actualIcon} next={next} prev={prev} />
             <View
               style={{ flexDirection: "row", width: "100%", columnGap: 10 }}
             >
@@ -292,9 +266,9 @@ export default function CategoriesScreen({ route, navigation }) {
                   flexGrow: 1,
                 }}
                 onChangeText={(text) =>
-                  setNewCategory({ ...newCategory, category_name: text })
+                  setNewCategory((prev) => ({ ...prev, category_name: text }))
                 }
-                value={newCategory.category_name}
+                value={newCategory?.category_name}
                 placeholder="Write a category name"
                 placeholderTextColor={colors.text}
               />

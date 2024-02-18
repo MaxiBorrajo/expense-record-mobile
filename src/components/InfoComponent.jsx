@@ -5,8 +5,12 @@ import { ExpenseContext } from "../context/ExpenseContext";
 
 export default function InfoComponent({ route, navigation, reload }) {
   const { getBalance, getAmount } = useContext(ExpenseContext);
+  const [balance, setBalance] = useState(null);
+  const [monthBalance, setMonthBalance] = useState(null);
+  const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
+  const [monthLossBalance, setMonthLossBalance] = useState(null);
 
-  useEffect(() => {
+  const getMainInformation = async () => {
     getBalance().then((balance) => setBalance(balance));
 
     getAmount().then((amount) => {
@@ -20,34 +24,21 @@ export default function InfoComponent({ route, navigation, reload }) {
     getAmount(new Date().getMonth(), 0).then((amount) => {
       setMonthLossBalance(amount);
     });
+  };
+
+  useEffect(() => {
+    getMainInformation();
   }, [reload]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       if (route.params?.actionCompleted) {
-        getBalance().then((balance) => setBalance(balance));
-
-        getAmount().then((amount) => {
-          setMonthBalance(amount);
-        });
-
-        getAmount(new Date().getMonth(), 1).then((amount) => {
-          setMonthIncomeBalance(amount);
-        });
-
-        getAmount(new Date().getMonth(), 0).then((amount) => {
-          setMonthLossBalance(amount);
-        });
+        getMainInformation();
       }
     });
 
     return unsubscribe;
   }, [navigation, route.params?.actionCompleted]);
-
-  const [balance, setBalance] = useState(null);
-  const [monthBalance, setMonthBalance] = useState(null);
-  const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
-  const [monthLossBalance, setMonthLossBalance] = useState(null);
 
   return (
     <View
@@ -62,12 +53,12 @@ export default function InfoComponent({ route, navigation, reload }) {
       >
         <InfoCardComponent
           title="Total balance"
-          content={balance ? balance.toFixed(2) : 0}
+          content={balance?.toFixed(2)}
           width={"50%"}
         />
         <InfoCardComponent
           title="Month balance"
-          content={monthBalance ? monthBalance.toFixed(2) : 0}
+          content={monthBalance?.toFixed(2)}
           width={"50%"}
         />
       </View>
@@ -76,14 +67,14 @@ export default function InfoComponent({ route, navigation, reload }) {
       >
         <InfoCardComponent
           title="Total month income"
-          content={monthIncomeBalance ? monthIncomeBalance.toFixed(2) : 0}
+          content={monthIncomeBalance?.toFixed(2)}
           icon="arrow-up"
           iconColor="#58eb34"
           width={"50%"}
         />
         <InfoCardComponent
           title="Total month loss"
-          content={monthLossBalance ? monthLossBalance.toFixed(2) : 0}
+          content={monthLossBalance?.toFixed(2)}
           icon="arrow-down"
           iconColor="red"
           width={"50%"}

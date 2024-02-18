@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Icon } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
 
-export default function IconCarouselComponent({ icons, index, next, prev }) {
+export default function IconCarouselComponent({ icon, next, prev }) {
   const { colors } = useTheme();
   return (
     <View
@@ -31,7 +31,7 @@ export default function IconCarouselComponent({ icons, index, next, prev }) {
         }}
       >
         <Icon
-          name={icons ? icons[index].icon : "money-bill-wave"}
+          name={icon}
           type="font-awesome-5"
           iconStyle={{ fontSize: 20, color: colors.text }}
         />

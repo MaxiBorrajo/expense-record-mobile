@@ -17,13 +17,13 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
 
   const next = () => {
     if (index != monthsInfo.length - 1) {
-      setIndex(index + 1);
+      setIndex((prev) => prev + 1);
     }
   };
 
   const prev = () => {
     if (index != 0) {
-      setIndex(index - 1);
+      setIndex((prev) => prev - 1);
     }
   };
 

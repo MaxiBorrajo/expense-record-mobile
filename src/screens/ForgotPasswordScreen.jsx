@@ -1,32 +1,27 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input } from "@rneui/themed";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [forgotPasswordForm, setForgotPasswordForm] = useState({
     email: "",
-    password: "",
   });
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
+  const { forgotPassword } = useContext(UserContext);
 
-  async function forgotPassword() {
+  const sendForgotPassword = async () => {
     try {
       setLoading(true);
-      if (forgotPasswordForm.email !== "") {
-        const response = await axios.post(
-          "https://expense-record-production.up.railway.app/api/auth/forgotPassword",
-          forgotPasswordForm
-        );
-        await AsyncStorage.setItem("email", forgotPasswordForm.email);
+      const validation = validateForm();
+      if (validation) {
+        await forgotPassword(forgotPasswordForm);
         setLoading(false);
         navigation.navigate("VerifyCode");
       }
@@ -38,10 +33,20 @@ export default function ForgotPasswordScreen({ navigation }) {
         setErrorMessage(error.message);
       }
     }
-  }
+  };
+
+  const validateForm = () => {
+    if (!forgotPasswordForm.email) {
+      setErrorMessage("An email must be provided");
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <SafeAreaView
-      style={{ flex: 1, minHeight: Dimensions.get("window").height }}
+      style={{ flex: 1, paddingTop:30 }}
     >
       <View
         style={{
@@ -97,11 +102,11 @@ export default function ForgotPasswordScreen({ navigation }) {
             borderStyle: "solid",
           }}
           onChangeText={(newText) =>
-            setForgotPasswordForm({ ...forgotPasswordForm, email: newText })
+            setForgotPasswordForm((prev) => ({ ...prev, email: newText }))
           }
         />
         <Text
-          style={ {
+          style={{
             fontFamily: "Poppins_300Light",
             fontSize: 15,
             color: colors.text,
@@ -112,7 +117,7 @@ export default function ForgotPasswordScreen({ navigation }) {
         </Text>
         <ButtonComponent
           label={"Send"}
-          action={forgotPassword}
+          action={sendForgotPassword}
           loading={loading}
         />
       </View>
