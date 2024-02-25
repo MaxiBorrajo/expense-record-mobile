@@ -37,7 +37,7 @@ export default function ExpenseComponent({ item, setReload }) {
       </TouchableOpacity>
     );
   };
-  
+
   return (
     <Swipeable
       ref={swipeableRef}
@@ -97,11 +97,11 @@ export default function ExpenseComponent({ item, setReload }) {
               <Text
                 style={{
                   color: colors.text,
-                  fontSize: 15,
+                  fontSize: 12,
                   fontFamily: "Poppins_500Medium",
                 }}
               >
-                {item.title.length > 14
+                {item.title.length > 16
                   ? item.title.slice(0, 14) + "..."
                   : item.title}
               </Text>
@@ -112,29 +112,28 @@ export default function ExpenseComponent({ item, setReload }) {
                   fontFamily: "Poppins_300Light",
                 }}
               >
-                {item.category_id
-                  ? item.category_id.category_name
-                  : "Without category"}
+                {formatDate(item.createdAt)}
               </Text>
             </View>
-            <View style={{ alignItems: "flex-end" }}>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                flex: 1,
+              }}
+            >
               <Text
                 style={{
                   color: item.amount > 0 ? "#58eb34" : "red",
-                  fontSize: 13,
+                  fontSize: 12,
                   fontFamily: "Poppins_500Medium",
                 }}
               >
-                $ {item.amount.toFixed(2)}
-              </Text>
-              <Text
-                style={{
-                  color: colors.text,
-                  fontSize: 11,
-                  fontFamily: "Poppins_300Light",
-                }}
-              >
-                {formatDate(item.createdAt)}
+                {item.amount > 0
+                  ? `+ $${(item.amount / 1000).toFixed(2)}`
+                  : `- $${(item.amount / 1000).toFixed(2) * -1}`}
+                K
               </Text>
             </View>
           </View>

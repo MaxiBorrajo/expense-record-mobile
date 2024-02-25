@@ -29,7 +29,7 @@ export default function ExpensesComponent({
     ];
 
     getExpenses(null, null, filters).then((expenses) => {
-      setExpenses(expenses.splice(0, 3));
+      setExpenses(expenses.splice(0, 4));
     });
   };
 
@@ -55,11 +55,12 @@ export default function ExpensesComponent({
         backgroundColor: "transparent",
         elevation: 0,
         borderWidth: 0,
+        paddingBottom:50
       }}
     >
       <ExpensesHeaderComponent />
       <FlatList
-        style={{ height: "100%" }}
+        style={{ height: "100%"}}
         data={expenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
@@ -79,7 +80,7 @@ export default function ExpensesComponent({
           </Text>
         )}
         ItemSeparatorComponent={() => (
-          <View style={{ height: 20, width: "100%" }}></View>
+          <View style={{ height: 10, width: "100%" }}></View>
         )}
       />
     </Card>

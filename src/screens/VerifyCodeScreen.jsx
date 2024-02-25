@@ -7,22 +7,17 @@ import OTPTextInput from "react-native-otp-textinput";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
+import Foect from "foect";
 
 export default function VerifyCodeScreen({ navigation }) {
-  const [verifyCodeForm, setVerifyCodeForm] = useState({
-    code: "",
-  });
   const { colors } = useTheme();
   const [errorMessage, setErrorMessage] = useState(null);
   const { verifyCode } = useContext(UserContext);
 
-  const verify = async () => {
+  const verify = async (form) => {
     try {
-      const validation = validateForm();
-      if (validation) {
-        verifyCode(verifyCodeForm);
-        navigation.navigate("ResetPassword");
-      }
+      verifyCode(form);
+      navigation.navigate("ResetPassword");
     } catch (error) {
       if (error.response.data) {
         setErrorMessage(error.response.data.Error);
@@ -31,24 +26,6 @@ export default function VerifyCodeScreen({ navigation }) {
       }
     }
   };
-
-  const validateForm = () => {
-    if (!verifyCodeForm.code) {
-      setErrorMessage("A code must be provided");
-      return false;
-    }
-
-    return true;
-  };
-
-  const getEmail = async () => {
-    const emailFound = await AsyncStorage.getItem("email");
-    setVerifyCodeForm((prev) => ({ ...prev, email: emailFound }));
-  };
-
-  useEffect(() => {
-    getEmail();
-  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
@@ -60,7 +37,7 @@ export default function VerifyCodeScreen({ navigation }) {
           paddingHorizontal: 30,
           justifyContent: "center",
           position: "relative",
-          rowGap: 30,
+          rowGap: 20,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -84,38 +61,89 @@ export default function VerifyCodeScreen({ navigation }) {
           Enter the 6 digits of the code receive on your email.
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        <OTPTextInput
-          handleTextChange={(newText) =>
-            setVerifyCodeForm((prev) => ({ ...prev, code: newText }))
-          }
-          inputCount={6}
-          tintColor={colors.text}
-          offTintColor={colors.disabledColor}
-          textInputStyle={{
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            alignItems: "center",
-            backgroundColor: colors.card,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-            borderBottomWidth: 1,
-            paddingTop: 3,
+        <Foect.Form
+          onValidSubmit={async (model) => {
+            model.email = await AsyncStorage.getItem("email");
+            //await verify(model);
+            console.log(model);
           }}
-        />
-        <Text
-          style={{
-            fontFamily: "Poppins_300Light",
-            fontSize: 15,
-            color: colors.text,
-          }}
-          onPress={() => navigation.navigate("ForgotPassword")}
         >
-          Haven't receive the code? Try again
-        </Text>
-        <ButtonComponent label={"Verify"} action={verify} />
+          {(form) => (
+            <View>
+              <Foect.Control
+                name="code"
+                required
+                callback={(value, control) => {
+                  return value.toString().length === 6;
+                }}
+              >
+                {(control) => (
+                  <View>
+                    <OTPTextInput
+                      handleTextChange={(text) => control.onChange(text)}
+                      inputCount={6}
+                      tintColor={colors.text}
+                      offTintColor={colors.disabledColor}
+                      textInputStyle={{
+                        color: colors.text,
+                        fontFamily: "Poppins_300Light",
+                        alignItems: "center",
+                        backgroundColor: colors.card,
+                        borderRadius: 5,
+                        elevation: 5,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        borderStyle: "solid",
+                        borderBottomWidth: 1,
+                        paddingTop: 3,
+                      }}
+                    />
+                    {control.isInvalid && control.errors.required && (
+                      <Text
+                        style={{
+                          color: "red",
+                          fontSize: 12,
+                          fontFamily: "Poppins_500Medium",
+                          marginTop:10
+                        }}
+                      >
+                        A code is required.
+                      </Text>
+                    )}
+                    {control.isInvalid && control.errors.callback && (
+                      <Text
+                        style={{
+                          color: "red",
+                          fontSize: 12,
+                          fontFamily: "Poppins_500Medium",
+                          marginTop:10
+                        }}
+                      >
+                        The code must be six digits.
+                      </Text>
+                    )}
+                  </View>
+                )}
+              </Foect.Control>
+              <Text
+                style={{
+                  fontFamily: "Poppins_300Light",
+                  fontSize: 15,
+                  color: colors.text,
+                  paddingVertical: 20,
+                }}
+                onPress={() => navigation.navigate("ResetPassword")}
+              >
+                Haven't receive the code? Try again
+              </Text>
+              <ButtonComponent
+                label={"Verify"}
+                action={() => form.submit()}
+                disabled={form.isInvalid}
+              />
+            </View>
+          )}
+        </Foect.Form>
       </View>
     </SafeAreaView>
   );

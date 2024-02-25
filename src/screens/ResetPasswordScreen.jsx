@@ -7,6 +7,7 @@ import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
+import Foect from "foect";
 
 export default function ResetPasswordScreen({ navigation }) {
   const [resetPasswordForm, setResetPasswordForm] = useState({
@@ -104,74 +105,134 @@ export default function ResetPasswordScreen({ navigation }) {
           again.
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        <Input
-          placeholder="Password"
-          rightIcon={
-            <Icon
-              name={showPassword ? "eye-slash" : "eye"}
-              size={20}
-              type="font-awesome-5"
-              onPress={() => setShowPassword(!showPassword)}
-              iconStyle={{ color: colors.text }}
-            />
-          }
-          rightIconContainerStyle={{ marginRight: 10 }}
-          secureTextEntry={!showPassword}
-          inputStyle={{
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            width: "100%",
+        <Foect.Form
+          onValidSubmit={async (model) => {
+            model.email = await AsyncStorage.getItem("email");
+            //await verify(model);
+            console.log(model);
           }}
-          inputContainerStyle={{
-            width: "100%",
-            alignItems: "center",
-            backgroundColor: colors.card,
-            paddingVertical: 10,
-            paddingLeft: 20,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-          onChangeText={(newText) =>
-            setResetPasswordForm((prev) => ({ ...prev, password: newText }))
-          }
-        />
-        <Input
-          placeholder="Confirm password"
-          secureTextEntry={true}
-          inputStyle={{
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            width: "100%",
-          }}
-          inputContainerStyle={{
-            width: "100%",
-            alignItems: "center",
-            backgroundColor: colors.card,
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-          onChangeText={(newText) =>
-            setResetPasswordForm((prev) => ({
-              ...prev,
-              confirm_password: newText,
-            }))
-          }
-        />
-        <ButtonComponent
-          label={"Reset"}
-          action={sendResetPassword}
-          loading={loading}
-        />
+        >
+          {(form) => (
+            <View>
+              <Foect.Control
+                name="password"
+                required
+                pattern={
+                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                }
+              >
+                {(control) => (
+                  <Input
+                    placeholder="Password"
+                    rightIcon={
+                      <Icon
+                        name={showPassword ? "eye-slash" : "eye"}
+                        size={20}
+                        type="font-awesome-5"
+                        onPress={() => setShowPassword(!showPassword)}
+                        iconStyle={{ color: colors.text }}
+                      />
+                    }
+                    rightIconContainerStyle={{ marginRight: 10 }}
+                    secureTextEntry={!showPassword}
+                    inputStyle={{
+                      color: colors.text,
+                      fontFamily: "Poppins_300Light",
+                      fontSize: 12,
+                      width: "100%",
+                    }}
+                    inputContainerStyle={{
+                      width: "100%",
+                      alignItems: "center",
+                      backgroundColor: colors.card,
+                      paddingVertical: 10,
+                      paddingLeft: 20,
+                      borderRadius: 5,
+                      elevation: 5,
+                      borderColor: colors.border,
+                      borderWidth: 1,
+                      borderStyle: "solid",
+                    }}
+                    onBlur={control.markAsTouched}
+                    onChangeText={(text) => control.onChange(text)}
+                    value={control.value}
+                    errorMessage={
+                      control.isInvalid && control.errors.required
+                        ? "Please enter a password."
+                        : control.isInvalid && control.errors.pattern
+                        ? "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&), and be 8 characters or longer."
+                        : null
+                    }
+                    errorStyle={{
+                      color: "red",
+                      fontSize: 12,
+                      fontFamily: "Poppins_500Medium",
+                      marginTop: 10,
+                    }}
+                    renderErrorMessage={
+                      (control.isInvalid && control.errors.required) ||
+                      (control.isInvalid && control.errors.pattern)
+                    }
+                  />
+                )}
+              </Foect.Control>
+              <Foect.Control
+                name="confirm_password"
+                required
+                equalToControl={"password"}
+              >
+                <Input
+                  placeholder="Confirm password"
+                  secureTextEntry={true}
+                  inputStyle={{
+                    color: colors.text,
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 12,
+                    width: "100%",
+                  }}
+                  inputContainerStyle={{
+                    width: "100%",
+                    alignItems: "center",
+                    backgroundColor: colors.card,
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderRadius: 5,
+                    elevation: 5,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                  }}
+                  onBlur={control.markAsTouched}
+                  onChangeText={(text) => control.onChange(text)}
+                  value={control.value}
+                  errorMessage={
+                    control.isInvalid && control.errors.required
+                      ? "Please confirm your password."
+                      : control.isInvalid && control.errors.equalToControl
+                      ? "The passwords do not match."
+                      : null
+                  }
+                  errorStyle={{
+                    color: "red",
+                    fontSize: 12,
+                    fontFamily: "Poppins_500Medium",
+                    marginTop: 10,
+                  }}
+                  renderErrorMessage={
+                    (control.isInvalid && control.errors.required) ||
+                    (control.isInvalid && control.errors.equalToControl)
+                  }
+                />
+              </Foect.Control>
+              <ButtonComponent
+                label={"Reset"}
+                action={() => form.submit()}
+                loading={loading}
+                disabled={form.isInvalid}
+              />
+            </View>
+          )}
+        </Foect.Form>
       </View>
     </SafeAreaView>
   );

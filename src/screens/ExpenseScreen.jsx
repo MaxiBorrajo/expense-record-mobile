@@ -17,6 +17,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { Icon, Dialog, Button } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
 import { useTheme } from "@react-navigation/native";
+import Foect from "foect";
 
 export default function ExpenseScreen({ route, navigation }) {
   const { deleteExpenseById, getExpenseById, updateExpenseById } =
@@ -34,45 +35,16 @@ export default function ExpenseScreen({ route, navigation }) {
     setVisible(!visible);
   };
 
-  const handleChange = (e) => {
-    setExpense((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const updateExpense = async () => {
+  const updateExpense = async (updatedExpense) => {
     setLoading(true);
-    const validation = validateExpense();
-
-    if (validation) {
-      await updateExpenseById(id, expense);
-      setLoading(false);
-      navigation.navigate("Main", { actionCompleted: true });
-    }
-
+    await updateExpenseById(id, updatedExpense);
     setLoading(false);
+    navigation.navigate("Main", { actionCompleted: true });
   };
 
   const deleteExpense = async () => {
     await deleteExpenseById(id);
     navigation.navigate("Main", { actionCompleted: true });
-  };
-
-  const validateExpense = () => {
-    setErrorMessage(null);
-
-    if (!expense.title) {
-      setErrorMessage("A title must be provided");
-      return false;
-    }
-
-    if (!expense.amount || +expense.amount === 0) {
-      setErrorMessage("An amount must be provided");
-      return false;
-    }
-
-    return true;
   };
 
   useEffect(() => {
@@ -92,16 +64,14 @@ export default function ExpenseScreen({ route, navigation }) {
   }, []);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, paddingTop:30 }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
           paddingHorizontal: 30,
-          rowGap: 50,
+          rowGap: 30,
           justifyContent: "center",
           minHeight: Dimensions.get("window").height,
         }}
@@ -210,179 +180,266 @@ export default function ExpenseScreen({ route, navigation }) {
           ) : null}
         </View>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        <View
-          style={{
-            width: "100%",
-            alignItems: "center",
-            backgroundColor: colors.card,
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-        >
-          <TextInput
-            style={{
-              color: colors.text,
-              fontFamily: "Poppins_300Light",
-              fontSize: 12,
-              width: "100%",
-              paddingRight: 15,
+        {expense ? (
+          <Foect.Form
+            defaultValue={{
+              title: expense?.title,
+              amount: +expense?.amount,
+              description: expense?.description,
+              category_id: expense?.category_id,
             }}
-            onChangeText={(value) => {
-              setExpense((prev) => ({
-                ...prev,
-                title: value,
-              }));
-            }}
-            value={expense?.title}
-            placeholder="Write a title"
-            placeholderTextColor={colors.text}
-            name="title"
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingHorizontal: 50,
-            columnGap: 10,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              width: "90%",
-              alignItems: "center",
-              columnGap: 3,
-              backgroundColor: colors.card,
-              paddingVertical: 10,
-              paddingHorizontal: 20,
-              borderRadius: 5,
-              elevation: 5,
-              borderColor: colors.border,
-              borderWidth: 1,
-              borderStyle: "solid",
+            onValidSubmit={async (model) => {
+              model.category_id = model.category_id._id
+                ? model.category_id._id
+                : model.category_id;
+              await updateExpense(model);
             }}
           >
-            <Text
-              style={{
-                color: colors.text,
-                fontFamily: "Poppins_500Medium",
-                fontSize: 15,
-              }}
-            >
-              $
-            </Text>
-            <TextInput
-              style={{
-                color: colors.text,
-                fontFamily: "Poppins_300Light",
-                fontSize: 12,
-                width: "100%",
-                paddingRight: 25,
-              }}
-              onChangeText={(value) => {
-                setExpense((prev) => ({
-                  ...prev,
-                  amount: value,
-                }));
-              }}
-              value={expense?.amount.toString()}
-              keyboardType="numeric"
-              name="amount"
-            />
-          </View>
-          <IncomeOrLossComponent
-            amount={expense?.amount}
-            action={() =>
-              setExpense((prev) => ({ ...prev, amount: expense.amount * -1 }))
-            }
-          />
-        </View>
-        <TextInput
-          multiline
-          numberOfLines={5}
-          placeholderTextColor={colors.text}
-          style={{
-            width: "100%",
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            padding: 10,
-            backgroundColor: colors.card,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-            textAlignVertical: "top",
-          }}
-          onChangeText={(value) => {
-            setExpense((prev) => ({
-              ...prev,
-              description: value,
-            }));
-          }}
-          value={expense?.description}
-          placeholder="Write a description (optional)"
-          name="description"
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            columnGap: 10,
-            width: "100%",
-          }}
-        >
-          {expense ? (
-            <SelectDropdown
-              data={categories}
-              onSelect={(selectedItem) => {
-                setExpense((prev) => ({
-                  ...prev,
-                  category_id: selectedItem._id,
-                }));
-              }}
-              buttonTextAfterSelection={(selectedItem) => {
-                return selectedItem.category_name;
-              }}
-              rowTextForSelection={(item) => {
-                return item.category_name;
-              }}
-              defaultButtonText="Select a category"
-              defaultValue={expense.category_id}
-              buttonStyle={{
-                borderRadius: 5,
-                alignSelf: "center",
-                height: "100%",
-                backgroundColor: colors.card,
-                color: colors.text,
-                borderColor: colors.border,
-                borderWidth: 1,
-                borderStyle: "solid",
-                flexGrow: 1,
-              }}
-              buttonTextStyle={{
-                fontFamily: "Poppins_300Light",
-                color: colors.text,
-              }}
-              rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-            />
-          ) : null}
-          <ButtonComponent
-            label="Save"
-            loading={loading}
-            action={updateExpense}
-          />
-        </View>
+            {(form) => (
+              <View
+                style={{
+                  rowGap: 20,
+                }}
+              >
+                <Foect.Control name="title" required>
+                  {(control) => (
+                    <View
+                      style={{
+                        rowGap: 10,
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: "100%",
+                          alignItems: "center",
+                          backgroundColor: colors.card,
+                          paddingVertical: 10,
+                          paddingHorizontal: 20,
+                          borderRadius: 5,
+                          elevation: 5,
+                          borderColor: colors.border,
+                          borderWidth: 1,
+                          borderStyle: "solid",
+                        }}
+                      >
+                        <TextInput
+                          style={{
+                            color: colors.text,
+                            fontFamily: "Poppins_300Light",
+                            fontSize: 12,
+                            width: "100%",
+                            paddingRight: 15,
+                          }}
+                          onBlur={control.markAsTouched}
+                          onChangeText={(text) => control.onChange(text)}
+                          value={control.value}
+                          placeholder="Write a title"
+                          placeholderTextColor={colors.text}
+                          name="title"
+                        />
+                      </View>
+                      {control.isInvalid && control.errors.required && (
+                        <Text
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                          }}
+                        >
+                          Please enter a title.
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </Foect.Control>
+                <Foect.Control
+                  name="amount"
+                  required
+                  callback={(value, control) => {
+                    return +value != 0;
+                  }}
+                >
+                  {(control) => (
+                    <View
+                      style={{
+                        rowGap: 10,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          width: "100%",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          paddingHorizontal: 50,
+                          columnGap: 10,
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            width: "90%",
+                            alignItems: "center",
+                            columnGap: 3,
+                            backgroundColor: colors.card,
+                            paddingVertical: 10,
+                            paddingHorizontal: 20,
+                            borderRadius: 5,
+                            elevation: 5,
+                            borderColor: colors.border,
+                            borderWidth: 1,
+                            borderStyle: "solid",
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: colors.text,
+                              fontFamily: "Poppins_500Medium",
+                              fontSize: 15,
+                            }}
+                          >
+                            $
+                          </Text>
+                          <TextInput
+                            style={{
+                              color: colors.text,
+                              fontFamily: "Poppins_300Light",
+                              fontSize: 12,
+                              width: "100%",
+                              paddingRight: 25,
+                            }}
+                            onBlur={control.markAsTouched}
+                            onChangeText={(text) => control.onChange(+text)}
+                            value={control.value.toString()}
+                            keyboardType="numeric"
+                            name="amount"
+                          />
+                        </View>
+                        <IncomeOrLossComponent
+                          amount={control.value}
+                          action={() =>
+                            form.setValue("amount", control.value * -1)
+                          }
+                        />
+                      </View>
+                      {control.isInvalid && control.errors.required && (
+                        <Text
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                          }}
+                        >
+                          Please enter an amount.
+                        </Text>
+                      )}
+                      {control.isInvalid && control.errors.callback && (
+                        <Text
+                          style={{
+                            color: "red",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                          }}
+                        >
+                          The amount must be other than zero.
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </Foect.Control>
+                <Foect.Control name="description">
+                  {(control) => (
+                    <TextInput
+                      multiline
+                      numberOfLines={5}
+                      placeholderTextColor={colors.text}
+                      style={{
+                        width: "100%",
+                        color: colors.text,
+                        fontFamily: "Poppins_300Light",
+                        fontSize: 12,
+                        padding: 10,
+                        backgroundColor: colors.card,
+                        borderRadius: 5,
+                        elevation: 5,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        borderStyle: "solid",
+                        textAlignVertical: "top",
+                      }}
+                      onChangeText={(value) => {
+                        control.onChange(value);
+                      }}
+                      value={control.value}
+                      placeholder="Write a description (optional)"
+                      name="description"
+                    />
+                  )}
+                </Foect.Control>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    columnGap: 10,
+                    width: "100%",
+                  }}
+                >
+                  <Foect.Control name="category_id">
+                    {(control) => (
+                      <SelectDropdown
+                        data={categories}
+                        onSelect={(selectedItem) => {
+                          control.onChange(selectedItem._id);
+                        }}
+                        buttonTextAfterSelection={(selectedItem) => {
+                          return selectedItem.category_name;
+                        }}
+                        rowTextForSelection={(item) => {
+                          return item.category_name;
+                        }}
+                        defaultButtonText="Select a category"
+                        defaultValue={control.value}
+                        buttonStyle={{
+                          borderRadius: 5,
+                          alignSelf: "center",
+                          height: "100%",
+                          backgroundColor: colors.card,
+                          color: colors.text,
+                          borderColor: colors.border,
+                          borderWidth: 1,
+                          borderStyle: "solid",
+                        }}
+                        buttonTextStyle={{
+                          fontFamily: "Poppins_300Light",
+                          color: colors.text,
+                        }}
+                        rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+                      />
+                    )}
+                  </Foect.Control>
+                  <ButtonComponent
+                    label="Save"
+                    loading={loading}
+                    action={() => form.submit()}
+                    disabled={form.isInvalid}
+                  />
+                </View>
+              </View>
+            )}
+          </Foect.Form>
+        ) : (
+          <Text
+            style={{
+              fontSize: 30,
+              fontFamily: "Poppins_500Medium",
+              color: colors.text,
+              textAlign: "center",
+            }}
+          >
+            Loading ...
+          </Text>
+        )}
       </View>
     </SafeAreaView>
   );

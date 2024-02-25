@@ -6,25 +6,20 @@ import { Input } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
+import Foect from "foect";
 
 export default function ForgotPasswordScreen({ navigation }) {
-  const [forgotPasswordForm, setForgotPasswordForm] = useState({
-    email: "",
-  });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
   const { forgotPassword } = useContext(UserContext);
 
-  const sendForgotPassword = async () => {
+  const sendForgotPassword = async (form) => {
     try {
       setLoading(true);
-      const validation = validateForm();
-      if (validation) {
-        await forgotPassword(forgotPasswordForm);
-        setLoading(false);
-        navigation.navigate("VerifyCode");
-      }
+      await forgotPassword(form);
+      setLoading(false);
+      navigation.navigate("VerifyCode");
     } catch (error) {
       setLoading(false);
       if (error.response.data) {
@@ -35,19 +30,8 @@ export default function ForgotPasswordScreen({ navigation }) {
     }
   };
 
-  const validateForm = () => {
-    if (!forgotPasswordForm.email) {
-      setErrorMessage("An email must be provided");
-      return false;
-    }
-
-    return true;
-  };
-
   return (
-    <SafeAreaView
-      style={{ flex: 1, paddingTop:30 }}
-    >
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <View
         style={{
           flex: 1,
@@ -56,7 +40,7 @@ export default function ForgotPasswordScreen({ navigation }) {
           paddingHorizontal: 30,
           justifyContent: "center",
           position: "relative",
-          rowGap: 30,
+          rowGap: 20,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -81,45 +65,80 @@ export default function ForgotPasswordScreen({ navigation }) {
           digits code to your email address.
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        <Input
-          placeholder="Email"
-          inputStyle={{
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            width: "100%",
+        <Foect.Form
+          onValidSubmit={async (model) => {
+            await sendForgotPassword(model);
           }}
-          inputContainerStyle={{
-            width: "100%",
-            alignItems: "center",
-            backgroundColor: colors.card,
-            paddingVertical: 10,
-            paddingHorizontal: 20,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-          onChangeText={(newText) =>
-            setForgotPasswordForm((prev) => ({ ...prev, email: newText }))
-          }
-        />
-        <Text
-          style={{
-            fontFamily: "Poppins_300Light",
-            fontSize: 15,
-            color: colors.text,
-          }}
-          onPress={() => navigation.navigate("VerifyCode")}
         >
-          Have a code?
-        </Text>
-        <ButtonComponent
-          label={"Send"}
-          action={sendForgotPassword}
-          loading={loading}
-        />
+          {(form) => (
+            <View>
+              <Foect.Control name="email" required email>
+                {(control) => (
+                  <View>
+                    <Input
+                      placeholder="Email"
+                      inputStyle={{
+                        color: colors.text,
+                        fontFamily: "Poppins_300Light",
+                        fontSize: 12,
+                        width: "100%",
+                      }}
+                      inputContainerStyle={{
+                        width: "100%",
+                        alignItems: "center",
+                        backgroundColor: colors.card,
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        borderRadius: 5,
+                        elevation: 5,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        borderStyle: "solid",
+                      }}
+                      onBlur={control.markAsTouched}
+                      onChangeText={(text) => control.onChange(text)}
+                      value={control.value}
+                      errorMessage={
+                        control.isInvalid && control.errors.required
+                          ? "Please enter an email."
+                          : control.isInvalid && control.errors.email
+                          ? "Please enter a valid email."
+                          : null
+                      }
+                      errorStyle={{
+                        color: "red",
+                        fontSize: 12,
+                        fontFamily: "Poppins_500Medium",
+                        marginTop: 10,
+                      }}
+                      renderErrorMessage={
+                        (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.email)
+                      }
+                    />
+                  </View>
+                )}
+              </Foect.Control>
+              <Text
+                style={{
+                  fontFamily: "Poppins_300Light",
+                  fontSize: 15,
+                  color: colors.text,
+                  paddingBottom:20
+                }}
+                onPress={() => navigation.navigate("VerifyCode")}
+              >
+                Have a code?
+              </Text>
+              <ButtonComponent
+                label={"Send"}
+                action={() => form.submit()}
+                loading={loading}
+                disabled={form.isInvalid}
+              />
+            </View>
+          )}
+        </Foect.Form>
       </View>
     </SafeAreaView>
   );

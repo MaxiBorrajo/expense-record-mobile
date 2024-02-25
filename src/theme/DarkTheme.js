@@ -9,7 +9,7 @@ const DarkTheme = {
     card: "#1c1917",
     softCard: "#363433",
     text: "#ffffff",
-    disabledBackground: "#d4d4d4",
+    disabledBackground: "#999999",
     disabledColor: "#262626",
   },
 };

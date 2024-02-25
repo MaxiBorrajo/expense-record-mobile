@@ -28,8 +28,8 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
       }}
       disabled={disabled}
       disabledStyle={{
-        backgroundColor: colors.disabledBackground,
-        color: colors.disabledColor,
+        backgroundColor: colors.disabledColor,
+        color: colors.disabledBackground,
       }}
     />
   );
