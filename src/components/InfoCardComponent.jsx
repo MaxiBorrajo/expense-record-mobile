@@ -20,9 +20,7 @@ export default function InfoCardComponent({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: colors.card,
-        elevation: 5,
         borderRadius: 5,
-        padding: 10,
         rowGap: 10,
       }}
     >

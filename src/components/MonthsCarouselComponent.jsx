@@ -133,7 +133,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
           </Text>
           <Icon
             name="arrow-down"
-            color="red"
+            color="#ed2139"
             type="font-awesome-5"
             iconStyle={{ fontSize: 12, paddingHorizontal: 5 }}
           />
@@ -141,7 +141,7 @@ export default function MonthsCarouselComponent({ monthsInfo, months }) {
             style={{
               fontSize: 12,
               fontFamily: "Poppins_300Light",
-              color: "red",
+              color: "#ed2139",
             }}
           >
             ${monthsInfo[index].totalLoss.toFixed(2)}

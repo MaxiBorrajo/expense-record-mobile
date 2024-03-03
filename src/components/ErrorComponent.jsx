@@ -11,7 +11,7 @@ export default function ErrorComponent({ errorMessage }) {
 
 const styles = StyleSheet.create({
   error: {
-    color: "red",
+    color: "#ed2139",
     fontFamily: "Poppins_500Medium",
     fontSize: 15,
   },

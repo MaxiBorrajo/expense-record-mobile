@@ -12,7 +12,7 @@ export default function ToggleThemeComponent({ isDarkTheme, setIsDarkTheme }) {
       }}
       style={{
         position: "absolute",
-        top: 20,
+        top: 50,
         right: 20,
       }}
     >

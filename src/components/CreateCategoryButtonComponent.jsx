@@ -14,7 +14,7 @@ const CreateCategoryButtonComponent = ({ action }) => {
         width: 55,
         height: 55,
         position: "absolute",
-        bottom: 80,
+        bottom: 100,
         right: 15,
         zIndex: 1,
         alignContent: "center",

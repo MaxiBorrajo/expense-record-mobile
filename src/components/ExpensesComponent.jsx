@@ -55,12 +55,20 @@ export default function ExpensesComponent({
         backgroundColor: "transparent",
         elevation: 0,
         borderWidth: 0,
-        paddingBottom:50
+        paddingBottom: 30,
+        paddingTop: 20,
+        marginTop: 0,
       }}
     >
       <ExpensesHeaderComponent />
       <FlatList
-        style={{ height: "100%"}}
+        style={{
+          height: "100%",
+        }}
+        contentContainerStyle={{
+          alignItems: "center",
+          justifyContent: "center",
+        }}
         data={expenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (

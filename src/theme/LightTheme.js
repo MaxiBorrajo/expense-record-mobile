@@ -9,7 +9,7 @@ const LightTheme = {
     card: "#f5f7fa",
     softCard: "#e3e4e6",
     text: "#000000",
-    disabledBackground: "#242424",
+    disabledBackground: "#636262",
     disabledColor: "#c9c9c9",
   },
 };

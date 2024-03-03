@@ -88,11 +88,12 @@ export default function RegisterScreen({ navigation }) {
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
                     value={control.value}
-                    errorMessage="Please enter a first name."
+                    errorMessage={control.isInvalid && control.errors.required ? "Please enter a first name." : null}
                     errorStyle={{
-                      color: "red",
+                      color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
+                      marginTop: control.isInvalid && control.errors.required ? 5 : 20,
                     }}
                     renderErrorMessage={
                       control.isInvalid && control.errors.required
@@ -123,13 +124,14 @@ export default function RegisterScreen({ navigation }) {
                       borderStyle: "solid",
                     }}
                     onBlur={control.markAsTouched}
-                    onChangeText={(text) => control.onChange(text)}
                     value={control.value}
-                    errorMessage="Please enter a last name."
+                    onChangeText={(text) => control.onChange(text)}
+                    errorMessage={control.isInvalid && control.errors.required ? "Please enter a last name." : null}
                     errorStyle={{
-                      color: "red",
+                      color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
+                      marginTop: control.isInvalid && control.errors.required ? 5 : 20,
                     }}
                     renderErrorMessage={
                       control.isInvalid && control.errors.required
@@ -171,9 +173,11 @@ export default function RegisterScreen({ navigation }) {
                           : null
                       }
                       errorStyle={{
-                        color: "red",
+                        color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
+                        marginTop: (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.email) ? 5 : 20,
                       }}
                       renderErrorMessage={
                         (control.isInvalid && control.errors.required) ||
@@ -233,9 +237,11 @@ export default function RegisterScreen({ navigation }) {
                         : null
                     }
                     errorStyle={{
-                      color: "red",
+                      color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
+                      marginTop: (control.isInvalid && control.errors.required) ||
+                      (control.isInvalid && control.errors.pattern) ? 5 : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -249,7 +255,7 @@ export default function RegisterScreen({ navigation }) {
                   fontFamily: "Poppins_300Light",
                   fontSize: 15,
                   color: colors.text,
-                  paddingBottom:20
+                  paddingBottom: 20,
                 }}
                 onPress={() => navigation.navigate("Login")}
               >

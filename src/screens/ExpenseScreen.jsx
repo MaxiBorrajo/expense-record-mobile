@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   View,
   TextInput,
@@ -64,7 +63,7 @@ export default function ExpenseScreen({ route, navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -163,7 +162,7 @@ export default function ExpenseScreen({ route, navigation }) {
             <Icon
               name="trash-alt"
               type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: "red", paddingBottom: 9 }}
+              iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 9 }}
               onPress={toggleDialog}
             />
           </View>
@@ -198,7 +197,7 @@ export default function ExpenseScreen({ route, navigation }) {
             {(form) => (
               <View
                 style={{
-                  rowGap: 20,
+                  rowGap: form.isInvalid ? 10 : 20,
                 }}
               >
                 <Foect.Control name="title" required>
@@ -241,7 +240,7 @@ export default function ExpenseScreen({ route, navigation }) {
                       {control.isInvalid && control.errors.required && (
                         <Text
                           style={{
-                            color: "red",
+                            color: "#ed2139",
                             fontSize: 12,
                             fontFamily: "Poppins_500Medium",
                           }}
@@ -325,7 +324,7 @@ export default function ExpenseScreen({ route, navigation }) {
                       {control.isInvalid && control.errors.required && (
                         <Text
                           style={{
-                            color: "red",
+                            color: "#ed2139",
                             fontSize: 12,
                             fontFamily: "Poppins_500Medium",
                           }}
@@ -336,7 +335,7 @@ export default function ExpenseScreen({ route, navigation }) {
                       {control.isInvalid && control.errors.callback && (
                         <Text
                           style={{
-                            color: "red",
+                            color: "#ed2139",
                             fontSize: 12,
                             fontFamily: "Poppins_500Medium",
                           }}
@@ -409,12 +408,15 @@ export default function ExpenseScreen({ route, navigation }) {
                           borderColor: colors.border,
                           borderWidth: 1,
                           borderStyle: "solid",
+                          fontSize:12,
+                          flexGrow:1
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
+                          fontSize:12
                         }}
-                        rowTextStyle={{ fontFamily: "Poppins_300Light" }}
+                        rowTextStyle={{ fontFamily: "Poppins_300Light", fontSize:12 }}
                       />
                     )}
                   </Foect.Control>

@@ -53,7 +53,6 @@ export default function ExpenseComponent({ item, setReload }) {
           alignItems: "center",
           backgroundColor: colors.card,
           width: "100%",
-          elevation: 5,
           borderRadius: 5,
         }}
         onPress={() =>
@@ -125,7 +124,7 @@ export default function ExpenseComponent({ item, setReload }) {
             >
               <Text
                 style={{
-                  color: item.amount > 0 ? "#58eb34" : "red",
+                  color: item.amount > 0 ? "#47bf2a" : "#ed2139",
                   fontSize: 12,
                   fontFamily: "Poppins_500Medium",
                 }}
@@ -145,7 +144,7 @@ export default function ExpenseComponent({ item, setReload }) {
 
 const styles = StyleSheet.create({
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#ed2139",
     justifyContent: "center",
     alignItems: "center",
     borderTopRightRadius: 5,
@@ -160,6 +159,6 @@ const styles = StyleSheet.create({
     left: -50,
     width: 50,
     height: "100%",
-    backgroundColor: "red",
+    backgroundColor: "#ed2139",
   },
 });

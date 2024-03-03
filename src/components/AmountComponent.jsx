@@ -111,6 +111,6 @@ const styles = StyleSheet.create({
     color: "green",
   },
   loss: {
-    color: "red",
+    color: "#ed2139",
   },
 });

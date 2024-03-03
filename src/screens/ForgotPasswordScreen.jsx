@@ -106,7 +106,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                           : null
                       }
                       errorStyle={{
-                        color: "red",
+                        color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
                         marginTop: 10,

@@ -1,119 +1,32 @@
-import {
-  Text,
-  View,
-  FlatList,
-  TextInput,
-  SafeAreaView,
-  Dimensions,
-} from "react-native";
-import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { Text, View, FlatList, SafeAreaView, Dimensions } from "react-native";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { SearchBar } from "@rneui/themed";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { CategoryContext } from "../context/CategoryContext";
 import CategoryComponent from "../components/CategoryComponent";
 import CreateCategoryButtonComponent from "../components/CreateCategoryButtonComponent";
-import ButtonComponent from "../components/ButtonComponent";
-import IconCarouselComponent from "../components/IconCarouselComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 
 export default function CategoriesScreen({ route, navigation }) {
   const { colors } = useTheme();
-  const { getCategories, createCategory, getIcons } =
-    useContext(CategoryContext);
+  const { getCategories, getIcons } = useContext(CategoryContext);
   const searchBar = useRef(null);
   const [keyword, setKeyword] = useState(null);
   const [categories, setCategories] = useState(null);
   const [icons, setIcons] = useState(null);
-  const [index, setIndex] = useState(0);
   const [newCategory, setNewCategory] = useState({
     icon_id: null,
     category_name: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const [errorCreateMessage, setErrorCreateMessage] = useState("");
-  const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
-  const createBottomSheet = useRef(null);
-  const [openedCreate, setOpenedCreate] = useState(false);
-  const snapPoints = useMemo(() => ["60%", "65%"], []);
   const [actualIcon, setActualIcon] = useState(null);
-
-  const next = () => {
-    const i = index + 1 >= icons.length ? 0 : index + 1;
-    setIndex(i);
-    setActualIcon(icons[i].icon);
-    setNewCategory((prev) => ({
-      ...prev,
-      icon_id: icons ? icons[i]._id : null,
-    }));
-  };
-
-  const prev = () => {
-    const i = index - 1 < 0 ? icons.length - 1 : index - 1;
-    setIndex(i);
-    setActualIcon(icons[i].icon);
-    setNewCategory((prev) => ({
-      ...prev,
-      icon_id: icons ? icons[i]._id : null,
-    }));
-  };
-
-  const openCreateBottomSheet = () => {
-    setNewCategory((prev) => ({
-      ...prev,
-      category_name: null,
-      icon_id: icons[0]._id,
-    }));
-
-    setOpenedCreate(!openedCreate);
-
-    if (openedCreate) {
-      createBottomSheet.current.close();
-    }
-
-    createBottomSheet.current.snapToIndex(1);
-  };
 
   const cancelSearch = () => {
     if (searchBar.current) {
       searchBar.current.blur();
       setKeyword(null);
     }
-  };
-
-  const createNewCategory = async () => {
-    setLoading(true);
-    setErrorCreateMessage(null);
-
-    const validation = validateNewCategory();
-
-    if (validation) {
-      await createCategory(newCategory);
-
-      setNewCategory((prev) => ({
-        ...prev,
-        category_name: null,
-        icon_id: null,
-      }));
-
-      getCategories(keyword).then((categories) => {
-        setCategories(categories);
-        openCreateBottomSheet();
-        setLoading(false);
-      });
-    }
-
-    setLoading(false);
-  };
-
-  const validateNewCategory = () => {
-    if (!newCategory.category_name) {
-      setErrorCreateMessage("A category name is required");
-      return false;
-    }
-
-    return true;
   };
 
   const categoriesSetUp = () => {
@@ -147,22 +60,22 @@ export default function CategoriesScreen({ route, navigation }) {
   }, [navigation, route.params?.actionCompleted]);
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
-          rowGap: 20,
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingBottom: 60,
-          paddingTop: 20,
+          paddingVertical: 40,
           minHeight: Dimensions.get("window").height,
         }}
       >
-        <CreateCategoryButtonComponent action={openCreateBottomSheet} />
+        <CreateCategoryButtonComponent
+          action={() => navigation.navigate("CreateCategory")}
+        />
         <View
           style={{
             flexDirection: "row",
@@ -193,6 +106,8 @@ export default function CategoriesScreen({ route, navigation }) {
             borderRadius: 50,
             backgroundColor: "transparent",
             borderColor: "transparent",
+            paddingTop: 20,
+            paddingBottom: 30,
           }}
           inputContainerStyle={{
             borderRadius: 50,
@@ -208,6 +123,7 @@ export default function CategoriesScreen({ route, navigation }) {
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <FlatList
           style={{ height: "100%" }}
+          contentContainerStyle={{ paddingBottom: 50 }}
           data={categories}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -221,68 +137,6 @@ export default function CategoriesScreen({ route, navigation }) {
             <View style={{ height: 20, width: "100%" }}></View>
           )}
         />
-        <BottomSheet
-          ref={createBottomSheet}
-          index={-1}
-          snapPoints={snapPoints}
-          enablePanDownToClose
-          animateOnMount
-          backgroundStyle={{ backgroundColor: colors.card, borderRadius: 30 }}
-        >
-          <View
-            style={{
-              flex: 1,
-              paddingBottom: 30,
-              rowGap: 50,
-              paddingTop: 20,
-              paddingHorizontal: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: colors.text,
-                fontSize: 17,
-                fontFamily: "Poppins_500Medium",
-              }}
-            >
-              Create new category
-            </Text>
-            <IconCarouselComponent icon={actualIcon} next={next} prev={prev} />
-            <View
-              style={{ flexDirection: "row", width: "100%", columnGap: 10 }}
-            >
-              <TextInput
-                style={{
-                  color: colors.text,
-                  fontFamily: "Poppins_300Light",
-                  fontSize: 12,
-                  padding: 10,
-                  backgroundColor: colors.card,
-                  borderRadius: 5,
-                  elevation: 5,
-                  borderColor: colors.border,
-                  borderWidth: 1,
-                  borderStyle: "solid",
-                  flexGrow: 1,
-                }}
-                onChangeText={(text) =>
-                  setNewCategory((prev) => ({ ...prev, category_name: text }))
-                }
-                value={newCategory?.category_name}
-                placeholder="Write a category name"
-                placeholderTextColor={colors.text}
-              />
-            </View>
-            {errorCreateMessage ? (
-              <ErrorComponent errorMessage={errorCreateMessage} />
-            ) : null}
-            <ButtonComponent
-              label="Create"
-              action={createNewCategory}
-              loading={loading}
-            />
-          </View>
-        </BottomSheet>
       </View>
     </SafeAreaView>
   );

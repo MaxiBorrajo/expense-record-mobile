@@ -10,30 +10,18 @@ import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 
 export default function ResetPasswordScreen({ navigation }) {
-  const [resetPasswordForm, setResetPasswordForm] = useState({
-    password: "",
-    confirm_password: "",
-  });
   const { colors } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { resetPassword } = useContext(UserContext);
 
-  const getEmail = async () => {
-    const emailFound = await AsyncStorage.getItem("email");
-    setResetPasswordForm((prev) => ({ ...prev, email: emailFound }));
-  };
-
-  const sendResetPassword = async () => {
+  const sendResetPassword = async (form) => {
     try {
       setLoading(true);
-      const validation = validateForm();
-      if (validation) {
-        resetPassword(resetPasswordForm);
-        setLoading(false);
-        navigation.navigate("Login");
-      }
+      await resetPassword(form);
+      setLoading(false);
+      navigation.navigate("Login");
     } catch (error) {
       setLoading(false);
       if (error.response.data) {
@@ -43,32 +31,6 @@ export default function ResetPasswordScreen({ navigation }) {
       }
     }
   };
-
-  const validateForm = () => {
-    if (!resetPasswordForm.password) {
-      setLoading(false);
-      setErrorMessage("A password must be provided");
-      return false;
-    }
-
-    if (!resetPasswordForm.confirm_password) {
-      setLoading(false);
-      setErrorMessage("Your password must be confirmed");
-      return false;
-    }
-
-    if (resetPasswordForm.password != resetPasswordForm.confirm_password) {
-      setLoading(false);
-      setErrorMessage("Passwords do not match");
-      return false;
-    }
-
-    return true;
-  };
-
-  useEffect(() => {
-    getEmail();
-  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
@@ -80,7 +42,7 @@ export default function ResetPasswordScreen({ navigation }) {
           paddingHorizontal: 30,
           justifyContent: "center",
           position: "relative",
-          rowGap: 30,
+          rowGap: 20,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -108,8 +70,7 @@ export default function ResetPasswordScreen({ navigation }) {
         <Foect.Form
           onValidSubmit={async (model) => {
             model.email = await AsyncStorage.getItem("email");
-            //await verify(model);
-            console.log(model);
+            await sendResetPassword(model);
           }}
         >
           {(form) => (
@@ -164,10 +125,14 @@ export default function ResetPasswordScreen({ navigation }) {
                         : null
                     }
                     errorStyle={{
-                      color: "red",
+                      color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop: 10,
+                      marginTop:
+                        (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.pattern)
+                          ? 5
+                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -181,48 +146,54 @@ export default function ResetPasswordScreen({ navigation }) {
                 required
                 equalToControl={"password"}
               >
-                <Input
-                  placeholder="Confirm password"
-                  secureTextEntry={true}
-                  inputStyle={{
-                    color: colors.text,
-                    fontFamily: "Poppins_300Light",
-                    fontSize: 12,
-                    width: "100%",
-                  }}
-                  inputContainerStyle={{
-                    width: "100%",
-                    alignItems: "center",
-                    backgroundColor: colors.card,
-                    paddingVertical: 10,
-                    paddingHorizontal: 20,
-                    borderRadius: 5,
-                    elevation: 5,
-                    borderColor: colors.border,
-                    borderWidth: 1,
-                    borderStyle: "solid",
-                  }}
-                  onBlur={control.markAsTouched}
-                  onChangeText={(text) => control.onChange(text)}
-                  value={control.value}
-                  errorMessage={
-                    control.isInvalid && control.errors.required
-                      ? "Please confirm your password."
-                      : control.isInvalid && control.errors.equalToControl
-                      ? "The passwords do not match."
-                      : null
-                  }
-                  errorStyle={{
-                    color: "red",
-                    fontSize: 12,
-                    fontFamily: "Poppins_500Medium",
-                    marginTop: 10,
-                  }}
-                  renderErrorMessage={
-                    (control.isInvalid && control.errors.required) ||
-                    (control.isInvalid && control.errors.equalToControl)
-                  }
-                />
+                {(control) => (
+                  <Input
+                    placeholder="Confirm password"
+                    secureTextEntry={true}
+                    inputStyle={{
+                      color: colors.text,
+                      fontFamily: "Poppins_300Light",
+                      fontSize: 12,
+                      width: "100%",
+                    }}
+                    inputContainerStyle={{
+                      width: "100%",
+                      alignItems: "center",
+                      backgroundColor: colors.card,
+                      paddingVertical: 10,
+                      paddingHorizontal: 20,
+                      borderRadius: 5,
+                      elevation: 5,
+                      borderColor: colors.border,
+                      borderWidth: 1,
+                      borderStyle: "solid",
+                    }}
+                    onBlur={control.markAsTouched}
+                    onChangeText={(text) => control.onChange(text)}
+                    value={control.value}
+                    errorMessage={
+                      control.isInvalid && control.errors.required
+                        ? "Please confirm your password."
+                        : control.isInvalid && control.errors.equalToControl
+                        ? "The passwords do not match."
+                        : null
+                    }
+                    errorStyle={{
+                      color: "#ed2139",
+                      fontSize: 12,
+                      fontFamily: "Poppins_500Medium",
+                      marginTop:
+                        (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.equalToControl)
+                          ? 5
+                          : 20,
+                    }}
+                    renderErrorMessage={
+                      (control.isInvalid && control.errors.required) ||
+                      (control.isInvalid && control.errors.equalToControl)
+                    }
+                  />
+                )}
               </Foect.Control>
               <ButtonComponent
                 label={"Reset"}

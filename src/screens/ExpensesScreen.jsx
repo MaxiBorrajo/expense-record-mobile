@@ -140,19 +140,16 @@ export default function ExpensesScreen() {
   }, [sort, order, category, keyword, year, month, day, type, reload]);
 
   return (
-    <SafeAreaView
-      style={{ flex: 1, paddingTop:30 }}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
-          rowGap: 20,
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingTop: 60,
+          paddingTop:80,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -192,6 +189,8 @@ export default function ExpensesScreen() {
             borderRadius: 50,
             backgroundColor: "transparent",
             borderColor: "transparent",
+            paddingTop:15,
+            paddingBottom:20
           }}
           inputContainerStyle={{
             borderRadius: 50,
@@ -204,7 +203,14 @@ export default function ExpensesScreen() {
           }}
         />
         <FlatList
-          style={{ height: "100%" }}
+          style={{
+            height: "100%",
+          }}
+          contentContainerStyle={{
+            alignItems: "center",
+            justifyContent: "center",
+            paddingBottom: 30,
+          }}
           data={expenses}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (

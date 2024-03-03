@@ -1,82 +1,23 @@
-import { View, Text, StyleSheet } from "react-native";
-import { useState, useEffect, useContext } from "react";
-import { ExpenseContext } from "../context/ExpenseContext";
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 import { useTheme } from "@react-navigation/native";
-import { UserContext } from "../context/UserContext";
 import { Icon } from "@rneui/themed";
 
-export default function InfoComponent({ route, navigation, reload }) {
-  const { getBalance, getAmount, getChange } = useContext(ExpenseContext);
-  const [balance, setBalance] = useState(null);
-  const [monthBalance, setMonthBalance] = useState(null);
-  const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
-  const [monthLossBalance, setMonthLossBalance] = useState(null);
+export default function AnnualBalanceComponent({ balance, income, loss }) {
   const { colors } = useTheme();
-  const { getCurrentUser } = useContext(UserContext);
-  const [user, setUser] = useState(null);
-  const [change, setChange] = useState(null);
-
-  const getMainInformation = async () => {
-    getChange().then((percentage) => {
-      setChange(percentage);
-    });
-
-    getCurrentUser().then((user) => {
-      setUser(user);
-    });
-
-    getBalance().then((balance) => setBalance(balance));
-
-    getAmount().then((amount) => {
-      setMonthBalance(amount);
-    });
-
-    getAmount(new Date().getMonth(), 1).then((amount) => {
-      setMonthIncomeBalance(amount);
-    });
-
-    getAmount(new Date().getMonth(), 0).then((amount) => {
-      setMonthLossBalance(amount);
-    });
-  };
-
-  useEffect(() => {
-    getMainInformation();
-  }, [reload]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        getMainInformation();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
-
   return (
     <View
       style={{
         paddingVertical: 40,
         paddingHorizontal: 30,
-        height: "40%",
         width: "100%",
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
         justifyContent: "space-between",
+        gap: 10,
       }}
     >
-      <Text
-        style={{
-          fontSize: 15,
-          fontFamily: "Poppins_300Light",
-          color: colors.text,
-          alignSelf: "flex-start",
-        }}
-      >
-        Welcome, {user?.firstName} {user?.lastName}
-      </Text>
       <View
         style={{
           width: "100%",
@@ -129,7 +70,7 @@ export default function InfoComponent({ route, navigation, reload }) {
               color: colors.text,
             }}
           >
-            Income of the month
+            Total Income
           </Text>
           <View
             style={{
@@ -151,9 +92,9 @@ export default function InfoComponent({ route, navigation, reload }) {
                 color: colors.text,
               }}
             >
-              {monthIncomeBalance >= 0
-                ? `$${monthIncomeBalance?.toFixed(2)}`
-                : `-$${monthIncomeBalance?.toFixed(2) * -1}`}
+              {income > 0
+                ? `$${income?.toFixed(2)}`
+                : `-$${income?.toFixed(2) * -1}`}
             </Text>
           </View>
         </View>
@@ -171,7 +112,7 @@ export default function InfoComponent({ route, navigation, reload }) {
               color: colors.text,
             }}
           >
-            Losses of the month
+            Total loss
           </Text>
           <View
             style={{
@@ -193,47 +134,10 @@ export default function InfoComponent({ route, navigation, reload }) {
                 color: colors.text,
               }}
             >
-              {monthLossBalance > 0
-                ? `$${monthLossBalance?.toFixed(2)}`
-                : `-$${monthLossBalance?.toFixed(2) * -1}`}
+              {loss > 0 ? `$${loss?.toFixed(2)}` : `-$${loss?.toFixed(2) * -1}`}
             </Text>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <Icon
-          name={change && change.percentage > 0 ? "caret-up" : "caret-down"}
-          type="font-awesome"
-          iconStyle={change?.percentage > 0 ? styles.profit : styles.loss}
-        ></Icon>
-        <Text
-          style={[
-            {
-              fontFamily: "Poppins_300Light",
-              fontSize: 13,
-              marginHorizontal: 5,
-            },
-            change?.percentage > 0 ? styles.profit : styles.loss,
-          ]}
-        >
-          {change?.percentage?.toFixed(2)} %
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Poppins_300Light",
-            fontSize: 13,
-            color: colors.text,
-          }}
-        >
-          ($ {change?.nominal.toFixed(2)}) compared to last month
-        </Text>
       </View>
     </View>
   );

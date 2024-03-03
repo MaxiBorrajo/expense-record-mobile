@@ -1,6 +1,6 @@
 import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OTPTextInput from "react-native-otp-textinput";
@@ -16,7 +16,7 @@ export default function VerifyCodeScreen({ navigation }) {
 
   const verify = async (form) => {
     try {
-      verifyCode(form);
+      await verifyCode(form);
       navigation.navigate("ResetPassword");
     } catch (error) {
       if (error.response.data) {
@@ -64,8 +64,7 @@ export default function VerifyCodeScreen({ navigation }) {
         <Foect.Form
           onValidSubmit={async (model) => {
             model.email = await AsyncStorage.getItem("email");
-            //await verify(model);
-            console.log(model);
+            await verify(model);
           }}
         >
           {(form) => (
@@ -101,7 +100,7 @@ export default function VerifyCodeScreen({ navigation }) {
                     {control.isInvalid && control.errors.required && (
                       <Text
                         style={{
-                          color: "red",
+                          color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
                           marginTop:10
@@ -113,7 +112,7 @@ export default function VerifyCodeScreen({ navigation }) {
                     {control.isInvalid && control.errors.callback && (
                       <Text
                         style={{
-                          color: "red",
+                          color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
                           marginTop:10

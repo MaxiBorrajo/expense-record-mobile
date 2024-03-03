@@ -7,6 +7,7 @@ import { CategoryContext } from "../context/CategoryContext";
 import IconCarouselComponent from "../components/IconCarouselComponent";
 import { Icon, Dialog, Button } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
+import Foect from "foect";
 
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
@@ -24,32 +25,17 @@ export default function CategoryScreen({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [actualIcon, setActualIcon] = useState(null);
 
-  const editCategory = async () => {
+  const editCategory = async (form) => {
     setErrorMessage(null);
     setLoading(true);
-
-    const validation = validateCategoryForm();
-
-    if (validation) {
-      await updateCategoryById(id, categoryForm);
-      navigation.navigate("Categories", { actionCompleted: true });
-    }
-
+    await updateCategoryById(id, form);
     setLoading(false);
+    navigation.navigate("Categories", { actionCompleted: true });
   };
 
   const deleteCategory = async () => {
     await deleteCategoryById(id);
     navigation.navigate("Categories", { actionCompleted: true });
-  };
-
-  const validateCategoryForm = () => {
-    if (!categoryForm.category_name) {
-      setErrorMessage("A category name is required");
-      return false;
-    }
-
-    return true;
   };
 
   const next = () => {
@@ -95,7 +81,7 @@ export default function CategoryScreen({ route, navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -194,40 +180,88 @@ export default function CategoryScreen({ route, navigation }) {
           <Icon
             name="trash-alt"
             type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: "red", paddingBottom: 7 }}
+            iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 7 }}
             onPress={toggleDialog}
           />
         </View>
+        {categoryForm.category_name ? (
+          <Foect.Form
+            defaultValue={{
+              category_name: categoryForm?.category_name,
+            }}
+            onValidSubmit={async (model) => {
+              model.icon_id = categoryForm.icon_id;
+              await editCategory(model);
+            }}
+          >
+            {(form) => (
+              <View style={{ rowGap: 20 }}>
+                <IconCarouselComponent
+                  icon={actualIcon}
+                  next={next}
+                  prev={prev}
+                />
+                <Foect.Control name="category_name" required>
+                  {(control) => (
+                    <View style={{ rowGap: 10, marginTop: 10 }}>
+                      <TextInput
+                        style={{
+                          width: "100%",
+                          color: colors.text,
+                          fontFamily: "Poppins_300Light",
+                          fontSize: 12,
+                          padding: 10,
+                          backgroundColor: colors.card,
+                          borderRadius: 5,
+                          elevation: 5,
+                          borderColor: colors.border,
+                          borderWidth: 1,
+                          borderStyle: "solid",
+                        }}
+                        onBlur={control.markAsTouched}
+                        onChangeText={(text) => control.onChange(text)}
+                        value={control.value}
+                        placeholder="Write a category name"
+                        placeholderTextColor={colors.text}
+                      />
+                      {control.isInvalid && control.errors.required && (
+                        <Text
+                          style={{
+                            color: "#ed2139",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                          }}
+                        >
+                          Please enter a category name.
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </Foect.Control>
 
-        <IconCarouselComponent icon={actualIcon} next={next} prev={prev} />
-        <TextInput
-          style={{
-            width: "100%",
-            color: colors.text,
-            fontFamily: "Poppins_300Light",
-            fontSize: 12,
-            padding: 10,
-            backgroundColor: colors.card,
-            borderRadius: 5,
-            elevation: 5,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-          onChangeText={(text) =>
-            setCategoryForm((prev) => ({ ...prev, category_name: text }))
-          }
-          value={categoryForm?.category_name}
-          placeholder="Write a category name"
-          placeholderTextColor={colors.text}
-        />
-
-        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        <ButtonComponent
-          label={"Edit"}
-          action={editCategory}
-          loading={loading}
-        />
+                {errorMessage ? (
+                  <ErrorComponent errorMessage={errorMessage} />
+                ) : null}
+                <ButtonComponent
+                  label={"Edit"}
+                  action={() => form.submit()}
+                  loading={loading}
+                />
+              </View>
+            )}
+          </Foect.Form>
+        ) : (
+          <Text
+            style={{
+              fontSize: 30,
+              fontFamily: "Poppins_500Medium",
+              color: colors.text,
+              textAlign: "center",
+            }}
+          >
+            Loading ...
+          </Text>
+        )}
       </View>
     </SafeAreaView>
   );

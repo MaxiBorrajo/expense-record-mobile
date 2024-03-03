@@ -10,8 +10,8 @@ import VerifyCodeScreen from "./src/screens/VerifyCodeScreen"; //✓
 import ResetPasswordScreen from "./src/screens/ResetPasswordScreen"; //✓
 import ExpensesScreen from "./src/screens/ExpensesScreen"; //✓
 import ExpenseScreen from "./src/screens/ExpenseScreen"; //✓
-import FinishCreateExpenseScreen from "./src/screens/FinishCreateExpenseScreen"; //
 import CategoryScreen from "./src/screens/CategoryScreen"; //
+import CreateCategoryScreen from "./src/screens/CreateCategoryScreen"; //
 import {
   Poppins_900Black,
   Poppins_400Regular,
@@ -105,12 +105,12 @@ export default function App() {
                       />
                       <Stack.Screen name="Expense" component={ExpenseScreen} />
                       <Stack.Screen
-                        name="FinishCreateExpense"
-                        component={FinishCreateExpenseScreen}
-                      />
-                      <Stack.Screen
                         name="Category"
                         component={CategoryScreen}
+                      />
+                      <Stack.Screen
+                        name="CreateCategory"
+                        component={CreateCategoryScreen}
                       />
                     </Stack.Navigator>
                   </AppContext.Provider>

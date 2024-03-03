@@ -70,7 +70,6 @@ export default function CategoryComponent({
           alignItems: "center",
           backgroundColor: colors.card,
           width: "100%",
-          elevation: 5,
           borderRadius: 5,
         }}
         onPress={handlePress}
@@ -117,7 +116,7 @@ export default function CategoryComponent({
 
 const styles = StyleSheet.create({
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#ed2139",
     justifyContent: "center",
     alignItems: "center",
     borderTopRightRadius: 5,
@@ -132,6 +131,6 @@ const styles = StyleSheet.create({
     left: -50,
     width: 50,
     height: "100%",
-    backgroundColor: "red",
+    backgroundColor: "#ed2139",
   },
 });

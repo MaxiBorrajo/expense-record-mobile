@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
       setLoading(true);
       await login(form);
       setLoading(false);
-      navigation.navigate("Main");
+      navigation.navigate("Home");
     } catch (error) {
       setLoading(false);
       if (error.response.data) {
@@ -97,10 +97,14 @@ export default function LoginScreen({ navigation }) {
                           : null
                       }
                       errorStyle={{
-                        color: "red",
+                        color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
-                        marginTop: 10,
+                        marginTop:
+                          (control.isInvalid && control.errors.required) ||
+                          (control.isInvalid && control.errors.email)
+                            ? 5
+                            : 20,
                       }}
                       renderErrorMessage={
                         (control.isInvalid && control.errors.required) ||
@@ -160,10 +164,14 @@ export default function LoginScreen({ navigation }) {
                         : null
                     }
                     errorStyle={{
-                      color: "red",
+                      color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop: 10,
+                      marginTop:
+                        (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.pattern)
+                          ? 5
+                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
