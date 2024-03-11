@@ -33,7 +33,7 @@ export default function RegisterScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,

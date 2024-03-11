@@ -49,7 +49,13 @@ export default function MainScreen({ route, navigation }) {
   const translate = async (newLanguage) => {
     i18n.locale = newLanguage;
     setLanguage(newLanguage);
-    AsyncStorage.setItem("language", newLanguage);
+    await AsyncStorage.setItem("language", newLanguage);
+  };
+
+  const handleHideBalance = async (value) => {
+    console.log(value);
+    setHideBalance(value);
+    await AsyncStorage.setItem("hideBalance", `${value}`);
   };
 
   useEffect(() => {
@@ -58,6 +64,7 @@ export default function MainScreen({ route, navigation }) {
     });
 
     AsyncStorage.getItem("hideBalance", (value) => {
+      console.log(value);
       setHideBalance(Boolean(value));
     });
 
@@ -128,7 +135,7 @@ export default function MainScreen({ route, navigation }) {
         <BottomSheet
           ref={bottomSheetRef}
           snapPoints={snapPoints}
-          index={0}
+          index={-1}
           enablePanDownToClose
           animateOnMount
           handleStyle={{
@@ -216,14 +223,8 @@ export default function MainScreen({ route, navigation }) {
                 backgroundActive={"gray"}
                 backgroundInactive={"gray"}
                 value={hideBalance}
-                onValueChange={() => {
-                  AsyncStorage.setItem(
-                    "hideBalance",
-                    (!hideBalance).toString(),
-                    () => {
-                      setHideBalance(!hideBalance);
-                    }
-                  );
+                onValueChange={(value) => {
+                  handleHideBalance(value);
                 }}
               />
             </View>
@@ -406,7 +407,7 @@ export default function MainScreen({ route, navigation }) {
                   style={{
                     fontSize: 15,
                     fontFamily: "Poppins_300Light",
-                    color: "#eb1717",
+                    color: isDarkTheme ? '#f53333' : "#eb1717",
                   }}
                 >
                   {i18n.t("deleteAccount")}
@@ -415,7 +416,7 @@ export default function MainScreen({ route, navigation }) {
                   name="trash-alt"
                   type="font-awesome-5"
                   iconStyle={{
-                    color: "#eb1717",
+                    color: isDarkTheme ? '#f53333' : "#eb1717",
                     fontSize: 20,
                     paddingBottom: 5,
                     paddingRight: 20,
