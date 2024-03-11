@@ -8,6 +8,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function ResetPasswordScreen({ navigation }) {
   const { colors } = useTheme();
@@ -54,7 +55,7 @@ export default function ResetPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Reset password
+          {i18n.t('resetPassword')}
         </Text>
         <Text
           style={{
@@ -63,8 +64,7 @@ export default function ResetPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Set your new password so you can login and access to your account
-          again.
+          {i18n.t('resetPasswordDescription')}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -84,7 +84,7 @@ export default function ResetPasswordScreen({ navigation }) {
               >
                 {(control) => (
                   <Input
-                    placeholder="Password"
+                    placeholder={i18n.t('password')}
                     rightIcon={
                       <Icon
                         name={showPassword ? "eye-slash" : "eye"}
@@ -119,9 +119,9 @@ export default function ResetPasswordScreen({ navigation }) {
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? "Please enter a password."
+                        ? i18n.t('passwordError')
                         : control.isInvalid && control.errors.pattern
-                        ? "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&), and be 8 characters or longer."
+                        ? i18n.t('passwordValidError')
                         : null
                     }
                     errorStyle={{
@@ -148,7 +148,7 @@ export default function ResetPasswordScreen({ navigation }) {
               >
                 {(control) => (
                   <Input
-                    placeholder="Confirm password"
+                    placeholder={i18n.t('confirmPassword')}
                     secureTextEntry={true}
                     inputStyle={{
                       color: colors.text,
@@ -173,9 +173,9 @@ export default function ResetPasswordScreen({ navigation }) {
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? "Please confirm your password."
+                        ? i18n.t('confirmPasswordError')
                         : control.isInvalid && control.errors.equalToControl
-                        ? "The passwords do not match."
+                        ? i18n.t('passwordsNotMatch')
                         : null
                     }
                     errorStyle={{
@@ -196,7 +196,7 @@ export default function ResetPasswordScreen({ navigation }) {
                 )}
               </Foect.Control>
               <ButtonComponent
-                label={"Reset"}
+                label={i18n.t('reset')}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

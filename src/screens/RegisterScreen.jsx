@@ -7,6 +7,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function RegisterScreen({ navigation }) {
   const { register } = useContext(UserContext);
@@ -53,7 +54,7 @@ export default function RegisterScreen({ navigation }) {
             paddingBottom: 10,
           }}
         >
-          Sign up
+          {i18n.t("signUp")}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -66,7 +67,7 @@ export default function RegisterScreen({ navigation }) {
               <Foect.Control name="firstName" required>
                 {(control) => (
                   <Input
-                    placeholder="First name"
+                    placeholder={i18n.t("firstName")}
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
@@ -88,12 +89,17 @@ export default function RegisterScreen({ navigation }) {
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
                     value={control.value}
-                    errorMessage={control.isInvalid && control.errors.required ? "Please enter a first name." : null}
+                    errorMessage={
+                      control.isInvalid && control.errors.required
+                        ? i18n.t("firstNameError")
+                        : null
+                    }
                     errorStyle={{
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop: control.isInvalid && control.errors.required ? 5 : 20,
+                      marginTop:
+                        control.isInvalid && control.errors.required ? 5 : 20,
                     }}
                     renderErrorMessage={
                       control.isInvalid && control.errors.required
@@ -104,7 +110,7 @@ export default function RegisterScreen({ navigation }) {
               <Foect.Control name="lastName" required>
                 {(control) => (
                   <Input
-                    placeholder="Last name"
+                    placeholder={i18n.t("lastName")}
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
@@ -126,12 +132,17 @@ export default function RegisterScreen({ navigation }) {
                     onBlur={control.markAsTouched}
                     value={control.value}
                     onChangeText={(text) => control.onChange(text)}
-                    errorMessage={control.isInvalid && control.errors.required ? "Please enter a last name." : null}
+                    errorMessage={
+                      control.isInvalid && control.errors.required
+                        ? i18n.t("lastNameError")
+                        : null
+                    }
                     errorStyle={{
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop: control.isInvalid && control.errors.required ? 5 : 20,
+                      marginTop:
+                        control.isInvalid && control.errors.required ? 5 : 20,
                     }}
                     renderErrorMessage={
                       control.isInvalid && control.errors.required
@@ -167,17 +178,20 @@ export default function RegisterScreen({ navigation }) {
                       value={control.value}
                       errorMessage={
                         control.isInvalid && control.errors.required
-                          ? "Please enter an email."
+                          ? i18n.t("emailError")
                           : control.isInvalid && control.errors.email
-                          ? "Please enter a valid email."
+                          ? i18n.t("emailValidError")
                           : null
                       }
                       errorStyle={{
                         color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
-                        marginTop: (control.isInvalid && control.errors.required) ||
-                        (control.isInvalid && control.errors.email) ? 5 : 20,
+                        marginTop:
+                          (control.isInvalid && control.errors.required) ||
+                          (control.isInvalid && control.errors.email)
+                            ? 5
+                            : 20,
                       }}
                       renderErrorMessage={
                         (control.isInvalid && control.errors.required) ||
@@ -196,7 +210,7 @@ export default function RegisterScreen({ navigation }) {
               >
                 {(control) => (
                   <Input
-                    placeholder="Password"
+                    placeholder={i18n.t("password")}
                     rightIcon={
                       <Icon
                         name={showPassword ? "eye-slash" : "eye"}
@@ -231,17 +245,20 @@ export default function RegisterScreen({ navigation }) {
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? "Please enter a password."
+                        ? i18n.t("passwordError")
                         : control.isInvalid && control.errors.pattern
-                        ? "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&), and be 8 characters or longer."
+                        ? i18n.t("passwordValidError")
                         : null
                     }
                     errorStyle={{
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop: (control.isInvalid && control.errors.required) ||
-                      (control.isInvalid && control.errors.pattern) ? 5 : 20,
+                      marginTop:
+                        (control.isInvalid && control.errors.required) ||
+                        (control.isInvalid && control.errors.pattern)
+                          ? 5
+                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -259,10 +276,10 @@ export default function RegisterScreen({ navigation }) {
                 }}
                 onPress={() => navigation.navigate("Login")}
               >
-                Have account?
+                {i18n.t("haveAccount")}
               </Text>
               <ButtonComponent
-                label={"Sign up"}
+                label={i18n.t("signUp")}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

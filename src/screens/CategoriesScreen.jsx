@@ -6,6 +6,9 @@ import CategoryComponent from "../components/CategoryComponent";
 import CreateCategoryButtonComponent from "../components/CreateCategoryButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
+import { Skeleton } from "moti/skeleton";
+import { AppContext } from "../context/AppContext";
+import i18n from "../utils/i18n";
 
 export default function CategoriesScreen({ route, navigation }) {
   const { colors } = useTheme();
@@ -21,6 +24,7 @@ export default function CategoriesScreen({ route, navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [reload, setReload] = useState(false);
   const [actualIcon, setActualIcon] = useState(null);
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
 
   const cancelSearch = () => {
     if (searchBar.current) {
@@ -91,12 +95,12 @@ export default function CategoriesScreen({ route, navigation }) {
               fontFamily: "Poppins_500Medium",
             }}
           >
-            All categories
+            {i18n.t("allCategories")}
           </Text>
         </View>
         <SearchBar
           ref={searchBar}
-          placeholder="Search by category name"
+          placeholder={i18n.t("searchCategory")}
           placeholderTextColor={colors.text}
           onChangeText={(newValue) => setKeyword(newValue)}
           onClear={cancelSearch}
@@ -123,7 +127,10 @@ export default function CategoriesScreen({ route, navigation }) {
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <FlatList
           style={{ height: "100%" }}
-          contentContainerStyle={{ paddingBottom: 50 }}
+          contentContainerStyle={{
+            paddingBottom: 50,
+            paddingTop: errorMessage ? 30 : 0,
+          }}
           data={categories}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -132,6 +139,125 @@ export default function CategoriesScreen({ route, navigation }) {
               setErrorMessage={setErrorMessage}
               setReload={setReload}
             />
+          )}
+          ListEmptyComponent={() => (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                paddingBottom: 30,
+                rowGap: 20,
+                width: "100%",
+                paddingRight: 10,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!categories}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                    direction: "left",
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!categories}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!categories}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!categories}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!categories}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!categories}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+            </View>
           )}
           ItemSeparatorComponent={() => (
             <View style={{ height: 20, width: "100%" }}></View>

@@ -1,17 +1,18 @@
 import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HeroScreen from "./src/screens/HeroScreen"; //✓
-import HomeScreen from "./src/screens/HomeScreen"; //✓
-import LoginScreen from "./src/screens/LoginScreen"; //✓
-import RegisterScreen from "./src/screens/RegisterScreen"; //✓
-import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen"; //✓
-import VerifyCodeScreen from "./src/screens/VerifyCodeScreen"; //✓
-import ResetPasswordScreen from "./src/screens/ResetPasswordScreen"; //✓
-import ExpensesScreen from "./src/screens/ExpensesScreen"; //✓
-import ExpenseScreen from "./src/screens/ExpenseScreen"; //✓
-import CategoryScreen from "./src/screens/CategoryScreen"; //
-import CreateCategoryScreen from "./src/screens/CreateCategoryScreen"; //
+import HeroScreen from "./src/screens/HeroScreen";
+import HomeScreen from "./src/screens/HomeScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import RegisterScreen from "./src/screens/RegisterScreen";
+import ForgotPasswordScreen from "./src/screens/ForgotPasswordScreen";
+import VerifyCodeScreen from "./src/screens/VerifyCodeScreen";
+import ResetPasswordScreen from "./src/screens/ResetPasswordScreen";
+import ExpensesScreen from "./src/screens/ExpensesScreen";
+import ExpenseScreen from "./src/screens/ExpenseScreen";
+import CategoryScreen from "./src/screens/CategoryScreen";
+import CreateCategoryScreen from "./src/screens/CreateCategoryScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
 import {
   Poppins_900Black,
   Poppins_400Regular,
@@ -32,6 +33,8 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DarkTheme from "./src/theme/DarkTheme";
 import LightTheme from "./src/theme/LightTheme";
 import { AppContext } from "./src/context/AppContext";
+import "react-native-reanimated";
+import "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
@@ -112,6 +115,7 @@ export default function App() {
                         name="CreateCategory"
                         component={CreateCategoryScreen}
                       />
+                      <Stack.Screen name="Profile" component={ProfileScreen} />
                     </Stack.Navigator>
                   </AppContext.Provider>
                 </NavigationContainer>
@@ -123,12 +127,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

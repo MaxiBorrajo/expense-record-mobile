@@ -1,5 +1,10 @@
 import { format } from "date-fns";
 
+export const languages = [
+  "EN",
+  "ES",
+];
+
 export const months = [
   "January",
   "February",

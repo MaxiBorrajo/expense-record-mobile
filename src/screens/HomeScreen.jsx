@@ -4,14 +4,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CreateExpenseScreen from "./CreateExpenseScreen";
 import StatisticsScreen from "./StatisticsScreen";
 import CategoriesScreen from "./CategoriesScreen";
-import ProfileScreen from "./ProfileScreen";
 import MainScreen from "./MainScreen";
+import LoadingScreen from "./LoadingScreen";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
+import React, { useContext } from "react";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {
   const { colors } = useTheme();
+  const { loading } = useContext(UserContext);
 
   const screenOptions = {
     tabBarShowLabel: false,
@@ -29,6 +32,7 @@ export default function HomeScreen() {
     <SafeAreaView
       style={{ flex: 1 }}
     >
+      {loading ? <LoadingScreen /> : null}
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen
           name="Main"
@@ -36,8 +40,7 @@ export default function HomeScreen() {
           options={{
             tabBarIcon: ({ focused }) => {
               return <TabBarIcon focused={focused} icon="home" />;
-            },
-            unmountOnBlur: true,
+            }
           }}
         />
         <Tab.Screen
@@ -46,8 +49,7 @@ export default function HomeScreen() {
           options={{
             tabBarIcon: ({ focused }) => {
               return <TabBarIcon focused={focused} icon="list-ul" />;
-            },
-            unmountOnBlur: true,
+            }
           }}
         />
         <Tab.Screen
@@ -56,8 +58,7 @@ export default function HomeScreen() {
           options={{
             tabBarIcon: ({ focused }) => {
               return <TabBarIcon focused={focused} icon="plus" />;
-            },
-            unmountOnBlur: true,
+            }
           }}
         />
         <Tab.Screen
@@ -66,18 +67,7 @@ export default function HomeScreen() {
           options={{
             tabBarIcon: ({ focused }) => {
               return <TabBarIcon focused={focused} icon="chart-pie" />;
-            },
-            unmountOnBlur: true,
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            tabBarIcon: ({ focused }) => {
-              return <TabBarIcon focused={focused} icon="user" />;
-            },
-            unmountOnBlur: true,
+            }
           }}
         />
       </Tab.Navigator>

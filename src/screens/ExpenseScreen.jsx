@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Dimensions,
-} from "react-native";
+import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { CategoryContext } from "../context/CategoryContext";
@@ -17,6 +11,8 @@ import { Icon, Dialog, Button } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
+import LoadingScreen from "./LoadingScreen";
+import i18n from "../utils/i18n";
 
 export default function ExpenseScreen({ route, navigation }) {
   const { deleteExpenseById, getExpenseById, updateExpenseById } =
@@ -64,122 +60,123 @@ export default function ExpenseScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-          color: colors.text,
-          paddingHorizontal: 30,
-          rowGap: 30,
-          justifyContent: "center",
-          minHeight: Dimensions.get("window").height,
-        }}
-      >
-        <Dialog
-          isVisible={visible}
-          onBackdropPress={toggleDialog}
-          overlayStyle={{
-            borderRadius: 5,
-            elevation: 5,
+      {!expense || !categories ? (
+        <LoadingScreen />
+      ) : (
+        <View
+          style={{
+            flex: 1,
             backgroundColor: colors.background,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
+            color: colors.text,
+            paddingHorizontal: 30,
+            rowGap: 30,
+            justifyContent: "center",
+            minHeight: Dimensions.get("window").height,
           }}
         >
-          <Text
-            style={{
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
-              fontSize: 20,
-            }}
-          >
-            Delete expense
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-              fontSize: 12,
-            }}
-          >
-            Are you sure you want to delete this expense? All information will
-            be deleted and cannot be recovered
-          </Text>
-          <Dialog.Actions>
-            <Button
-              title="Delete"
-              titleStyle={{
-                color: "#fff",
-                fontSize: 12,
-                fontFamily: "Poppins_500Medium",
-              }}
-              buttonStyle={{
-                backgroundColor: "#eb1717",
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => deleteExpense()}
-            />
-            <View style={{ width: 15 }}></View>
-            <Button
-              title="Cancel"
-              titleStyle={{
-                color: colors.background,
-                fontSize: 12,
-                fontFamily: "Poppins_500Medium",
-              }}
-              buttonStyle={{
-                backgroundColor: colors.text,
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => setVisible(false)}
-            />
-          </Dialog.Actions>
-        </Dialog>
-        <GoBackButtonComponent />
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              width: "100%",
-              alignItems: "center",
-              justifyContent: "space-between",
+          <Dialog
+            isVisible={visible}
+            onBackdropPress={toggleDialog}
+            overlayStyle={{
+              borderRadius: 5,
+              elevation: 5,
+              backgroundColor: colors.background,
+              borderColor: colors.border,
+              borderWidth: 1,
+              borderStyle: "solid",
             }}
           >
             <Text
               style={{
+                fontFamily: "Poppins_500Medium",
+                color: colors.text,
                 fontSize: 20,
-                fontFamily: "Poppins_500Medium",
-                color: colors.text,
               }}
             >
-              Details
+              {i18n.t("deleteExpense")}
             </Text>
-            <Icon
-              name="trash-alt"
-              type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 9 }}
-              onPress={toggleDialog}
-            />
-          </View>
-          {expense ? (
             <Text
               style={{
-                color: colors.text,
-                fontSize: 10,
                 fontFamily: "Poppins_300Light",
+                color: colors.text,
+                fontSize: 12,
               }}
             >
-              {formatDate(expense.createdAt)}
+              {i18n.t("deleteWarning")}
             </Text>
-          ) : null}
-        </View>
-        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
-        {expense ? (
+            <Dialog.Actions>
+              <Button
+                title={i18n.t("delete")}
+                titleStyle={{
+                  color: "#fff",
+                  fontSize: 12,
+                  fontFamily: "Poppins_500Medium",
+                }}
+                buttonStyle={{
+                  backgroundColor: "#eb1717",
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => deleteExpense()}
+              />
+              <View style={{ width: 15 }}></View>
+              <Button
+                title={i18n.t("cancel")}
+                titleStyle={{
+                  color: colors.background,
+                  fontSize: 12,
+                  fontFamily: "Poppins_500Medium",
+                }}
+                buttonStyle={{
+                  backgroundColor: colors.text,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => setVisible(false)}
+              />
+            </Dialog.Actions>
+          </Dialog>
+          <GoBackButtonComponent />
+          <View>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: "Poppins_500Medium",
+                  color: colors.text,
+                }}
+              >
+                {i18n.t("details")}
+              </Text>
+              <Icon
+                name="trash-alt"
+                type="font-awesome-5"
+                iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 9 }}
+                onPress={toggleDialog}
+              />
+            </View>
+            {expense ? (
+              <Text
+                style={{
+                  color: colors.text,
+                  fontSize: 10,
+                  fontFamily: "Poppins_300Light",
+                }}
+              >
+                {formatDate(expense.createdAt)}
+              </Text>
+            ) : null}
+          </View>
+          {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
           <Foect.Form
             defaultValue={{
               title: expense?.title,
@@ -197,10 +194,10 @@ export default function ExpenseScreen({ route, navigation }) {
             {(form) => (
               <View
                 style={{
-                  rowGap: form.isInvalid ? 10 : 20,
+                  rowGap: form.isInvalid ? 10 : 30,
                 }}
               >
-                <Foect.Control name="title" required>
+                <Foect.Control name={"title"} required>
                   {(control) => (
                     <View
                       style={{
@@ -232,7 +229,7 @@ export default function ExpenseScreen({ route, navigation }) {
                           onBlur={control.markAsTouched}
                           onChangeText={(text) => control.onChange(text)}
                           value={control.value}
-                          placeholder="Write a title"
+                          placeholder={i18n.t("writeExpenseTitle")}
                           placeholderTextColor={colors.text}
                           name="title"
                         />
@@ -245,7 +242,7 @@ export default function ExpenseScreen({ route, navigation }) {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          Please enter a title.
+                          {i18n.t("expenseTitleError")}
                         </Text>
                       )}
                     </View>
@@ -329,7 +326,7 @@ export default function ExpenseScreen({ route, navigation }) {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          Please enter an amount.
+                          {i18n.t("expenseAmountError")}
                         </Text>
                       )}
                       {control.isInvalid && control.errors.callback && (
@@ -340,7 +337,7 @@ export default function ExpenseScreen({ route, navigation }) {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          The amount must be other than zero.
+                          {i18n.t("expenseZeroError")}
                         </Text>
                       )}
                     </View>
@@ -370,7 +367,7 @@ export default function ExpenseScreen({ route, navigation }) {
                         control.onChange(value);
                       }}
                       value={control.value}
-                      placeholder="Write a description (optional)"
+                      placeholder={i18n.t("descriptionExpense")}
                       name="description"
                     />
                   )}
@@ -392,12 +389,16 @@ export default function ExpenseScreen({ route, navigation }) {
                           control.onChange(selectedItem._id);
                         }}
                         buttonTextAfterSelection={(selectedItem) => {
-                          return selectedItem.category_name;
+                          return selectedItem?.user_id
+                            ? selectedItem?.category_name
+                            : i18n.t(selectedItem?.category_name);
                         }}
                         rowTextForSelection={(item) => {
-                          return item.category_name;
+                          return item?.user_id
+                            ? item?.category_name
+                            : i18n.t(item?.category_name);
                         }}
-                        defaultButtonText="Select a category"
+                        defaultButtonText={i18n.t("selectCategory")}
                         defaultValue={control.value}
                         buttonStyle={{
                           borderRadius: 5,
@@ -408,20 +409,23 @@ export default function ExpenseScreen({ route, navigation }) {
                           borderColor: colors.border,
                           borderWidth: 1,
                           borderStyle: "solid",
-                          fontSize:12,
-                          flexGrow:1
+                          fontSize: 12,
+                          flexGrow: 1,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
-                          fontSize:12
+                          fontSize: 12,
                         }}
-                        rowTextStyle={{ fontFamily: "Poppins_300Light", fontSize:12 }}
+                        rowTextStyle={{
+                          fontFamily: "Poppins_300Light",
+                          fontSize: 12,
+                        }}
                       />
                     )}
                   </Foect.Control>
                   <ButtonComponent
-                    label="Save"
+                    label={i18n.t("save")}
                     loading={loading}
                     action={() => form.submit()}
                     disabled={form.isInvalid}
@@ -430,19 +434,8 @@ export default function ExpenseScreen({ route, navigation }) {
               </View>
             )}
           </Foect.Form>
-        ) : (
-          <Text
-            style={{
-              fontSize: 30,
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
-              textAlign: "center",
-            }}
-          >
-            Loading ...
-          </Text>
-        )}
-      </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

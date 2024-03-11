@@ -1,23 +1,23 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  Dimensions,
-} from "react-native";
+import { Text, View, FlatList, SafeAreaView, Dimensions } from "react-native";
 import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Icon, SearchBar } from "@rneui/themed";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { CategoryContext } from "../context/CategoryContext";
 import ExpenseComponent from "../components/ExpenseComponent";
-import BottomSheet from "@gorhom/bottom-sheet";
 import SelectDropdown from "react-native-select-dropdown";
 import { months, generateYearList, getDaysOfTheMonth } from "../utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
+import { AppContext } from "../context/AppContext";
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from "react-native-popup-menu";
+import { Skeleton } from "moti/skeleton";
+import i18n from "../utils/i18n";
 
 export default function ExpensesScreen() {
   const { getExpenses } = useContext(ExpenseContext);
@@ -60,6 +60,7 @@ export default function ExpensesScreen() {
       value: 0,
     },
   ];
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
 
   const openParameteres = () => {
     setOpenedParameters(!openedParameters);
@@ -97,6 +98,7 @@ export default function ExpensesScreen() {
   };
 
   useEffect(() => {
+    setExpenses((prev) => null);
     setReload(false);
     AsyncStorage.getItem("user").then((result) => {
       const createdAt = JSON.parse(result).createdAt;
@@ -149,7 +151,7 @@ export default function ExpensesScreen() {
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingTop:80,
+          paddingTop: 80,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -169,18 +171,410 @@ export default function ExpensesScreen() {
               fontFamily: "Poppins_500Medium",
             }}
           >
-            All expenses
+            {i18n.t("allExpenses")}
           </Text>
-          <Icon
-            name="sliders"
-            type="font-awesome"
-            color={colors.text}
-            onPress={openParameteres}
-          />
+
+          <Menu>
+            <MenuTrigger>
+              <Icon name="sliders" type="font-awesome" color={colors.text} />
+            </MenuTrigger>
+            <MenuOptions
+              style={{ backgroundColor: colors.card, padding: 20, rowGap: 10 }}
+            >
+              {sort || order || type || category || year || month || day ? (
+                <MenuOption
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    columnGap: 10,
+                    width: "100%",
+                    padding: 10,
+                    borderColor: colors.border,
+                    borderStyle: "solid",
+                    borderWidth: 1,
+                    borderRadius: 5,
+                  }}
+                  onSelect={resetParameters}
+                >
+                  <Text
+                    style={{
+                      color: colors.text,
+                      fontFamily: "Poppins_300Light",
+                      fontSize: 15,
+                    }}
+                  >
+                    {i18n.t("reset")}
+                  </Text>
+                  <Icon
+                    name="times"
+                    color={colors.text}
+                    type="font-awesome-5"
+                    iconStyle={{ fontSize: 15 }}
+                  />
+                </MenuOption>
+              ) : null}
+              <Text
+                style={{
+                  color: colors.text,
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 17,
+                  paddingTop: 5,
+                }}
+              >
+                {i18n.t("filterByDate")}
+              </Text>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  ref={yearSelect}
+                  data={generateYearList(firstYear)}
+                  onSelect={(selectedItem) => {
+                    setYear(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item;
+                  }}
+                  defaultButtonText={i18n.t("selectYear")}
+                  defaultValue={year}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                />
+              </MenuOption>
+
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  ref={monthSelect}
+                  data={["None", ...months]}
+                  onSelect={(selectedItem, index) => {
+                    selectedItem === "None"
+                      ? setMonth(null)
+                      : setMonth(index - 1);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return i18n.t(selectedItem);
+                  }}
+                  rowTextForSelection={(item) => {
+                    return i18n.t(item);
+                  }}
+                  defaultButtonText={i18n.t("selectMonth")}
+                  defaultValue={i18n.t(months[month])}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                />
+              </MenuOption>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  ref={daySelect}
+                  data={getDaysOfTheMonth(year, month)}
+                  onSelect={(selectedItem) => {
+                    setDay(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem;
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item;
+                  }}
+                  defaultButtonText={i18n.t("selectDate")}
+                  defaultValue={day}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                />
+              </MenuOption>
+              <Text
+                style={{
+                  color: colors.text,
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 17,
+                  paddingTop: 5,
+                }}
+              >
+                {i18n.t("filterByCategory")}
+              </Text>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  ref={categorySelect}
+                  data={categories}
+                  onSelect={(selectedItem) => {
+                    setCategory(selectedItem._id);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem?.user_id
+                      ? selectedItem?.category_name
+                      : i18n.t(selectedItem?.category_name);
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item?.user_id
+                      ? item?.category_name
+                      : i18n.t(item?.category_name);
+                  }}
+                  defaultButtonText={i18n.t("selectCategory")}
+                  defaultValue={category}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                />
+              </MenuOption>
+              <Text
+                style={{
+                  color: colors.text,
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 17,
+                  paddingTop: 5,
+                }}
+              >
+                {i18n.t("filterByType")}
+              </Text>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  ref={typeSelect}
+                  data={dataTypeSelect}
+                  onSelect={(selectedItem) => {
+                    setType(selectedItem.value);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return i18n.t(selectedItem.type);
+                  }}
+                  rowTextForSelection={(item) => {
+                    return i18n.t(item.type);
+                  }}
+                  defaultButtonText={i18n.t("selectAType")}
+                  defaultValue={type}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                />
+              </MenuOption>
+              <Text
+                style={{
+                  color: colors.text,
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 17,
+                  paddingTop: 5,
+                }}
+              >
+                {i18n.t("sortBy")}
+              </Text>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  data={[
+                    { sort: i18n.t("creationDate"), value: "createdAt" },
+                    { sort: i18n.t("title"), value: "title" },
+                    { sort: i18n.t("amount"), value: "amount" },
+                  ]}
+                  onSelect={(selectedItem) => {
+                    setSort(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem.sort;
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item.sort;
+                  }}
+                  defaultButtonText={i18n.t("sortBy")}
+                  defaultValue={sort}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                  ref={sortSelect}
+                />
+              </MenuOption>
+              <MenuOption
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <SelectDropdown
+                  data={[
+                    { order: i18n.t("upward"), value: "asc" },
+                    { order: i18n.t("downward"), value: "desc" },
+                  ]}
+                  onSelect={(selectedItem, index) => {
+                    setOrder(selectedItem);
+                  }}
+                  buttonTextAfterSelection={(selectedItem) => {
+                    return selectedItem.order;
+                  }}
+                  rowTextForSelection={(item) => {
+                    return item.order;
+                  }}
+                  defaultButtonText={i18n.t("orderBy")}
+                  defaultValue={order}
+                  buttonStyle={{
+                    borderRadius: 5,
+                    alignSelf: "center",
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    borderStyle: "solid",
+                    fontSize: 15,
+                    width: "105%",
+                  }}
+                  buttonTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    color: colors.text,
+                    fontSize: 15,
+                  }}
+                  rowTextStyle={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                  }}
+                  ref={orderSelect}
+                />
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
         <SearchBar
           ref={searchBar}
-          placeholder="Search by title"
+          placeholder={i18n.t("searchTitle")}
           onChangeText={(newValue) => setKeyword(newValue)}
           onClear={cancelSearch}
           value={keyword}
@@ -189,8 +583,8 @@ export default function ExpensesScreen() {
             borderRadius: 50,
             backgroundColor: "transparent",
             borderColor: "transparent",
-            paddingTop:15,
-            paddingBottom:20
+            paddingTop: 15,
+            paddingBottom: 20,
           }}
           inputContainerStyle={{
             borderRadius: 50,
@@ -217,260 +611,128 @@ export default function ExpensesScreen() {
             <ExpenseComponent item={item} setReload={setReload} />
           )}
           ListEmptyComponent={() => (
-            <Text
+            <View
               style={{
-                color: colors.text,
-                fontSize: 25,
-                fontFamily: "Poppins_700Bold",
-                textAlign: "center",
-                padding: 20,
+                alignItems: "center",
+                justifyContent: "center",
+                paddingBottom: 30,
+                rowGap: 20,
+                width: "100%",
+                paddingRight: 10,
               }}
             >
-              Nothing added yet
-            </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!expenses}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                    direction: "left",
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!expenses}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!expenses}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!expenses}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  padding: 20,
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: colors.card,
+                  borderRadius: 5,
+                  columnGap: 15,
+                  width: "100%",
+                }}
+              >
+                <Skeleton
+                  show={!expenses}
+                  width={60}
+                  height={60}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+                <Skeleton
+                  show={!expenses}
+                  width={"80%"}
+                  height={40}
+                  colorMode={isDarkTheme ? "dark" : "light"}
+                  radius={5}
+                  transition={{
+                    type: "timing",
+                    duration: 2000,
+                  }}
+                ></Skeleton>
+              </View>
+            </View>
           )}
           ItemSeparatorComponent={() => (
             <View style={{ height: 20, width: "100%" }}></View>
           )}
         />
-        <BottomSheet
-          ref={bottomSheetParameters}
-          index={-1}
-          snapPoints={snapPoints}
-          enablePanDownToClose
-          animateOnMount
-          backgroundStyle={{ backgroundColor: colors.card, borderRadius: 30 }}
-        >
-          <View style={{ flex: 1, paddingBottom: 30, rowGap: 20 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingTop: 20,
-                paddingHorizontal: 20,
-              }}
-            >
-              <Text
-                style={{
-                  color: colors.text,
-                  fontSize: 17,
-                  fontFamily: "Poppins_500Medium",
-                }}
-              >
-                Configure parameters
-              </Text>
-              {sort || order || type || category || year || month || day ? (
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    columnGap: 10,
-                  }}
-                  onPress={resetParameters}
-                >
-                  <Text
-                    style={{
-                      color: colors.text,
-                      fontFamily: "Poppins_300Light",
-                      fontSize: 12,
-                    }}
-                  >
-                    Reset
-                  </Text>
-                  <Icon
-                    name="times"
-                    color={colors.text}
-                    type="font-awesome-5"
-                    iconStyle={{ fontSize: 12 }}
-                  />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-            <View
-              style={{
-                width: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-                rowGap: 20,
-              }}
-            >
-              <Text
-                style={{
-                  color: colors.text,
-                  fontSize: 15,
-                  fontFamily: "Poppins_300Light",
-                  alignSelf: "flex-start",
-                  paddingHorizontal: 20,
-                }}
-              >
-                Filter by
-              </Text>
-              <View style={{ flexDirection: "row", columnGap: 20 }}>
-                <SelectDropdown
-                  ref={yearSelect}
-                  data={generateYearList(firstYear)}
-                  onSelect={(selectedItem) => {
-                    setYear(selectedItem);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item;
-                  }}
-                  defaultButtonText="Select a year"
-                  defaultValue={year}
-                  buttonStyle={{ borderRadius: 5, width: 100 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                />
-                <SelectDropdown
-                  ref={monthSelect}
-                  data={["None", ...months]}
-                  onSelect={(selectedItem, index) => {
-                    selectedItem === "None"
-                      ? setMonth(null)
-                      : setMonth(index - 1);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item;
-                  }}
-                  defaultButtonText="Select month"
-                  defaultValue={months[month]}
-                  buttonStyle={{ borderRadius: 5, width: 100 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                />
-                <SelectDropdown
-                  ref={daySelect}
-                  data={getDaysOfTheMonth(year, month)}
-                  onSelect={(selectedItem) => {
-                    setDay(selectedItem);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item;
-                  }}
-                  defaultButtonText="Select date"
-                  defaultValue={day}
-                  buttonStyle={{ borderRadius: 5, width: 100 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                />
-              </View>
-              <View style={{ flexDirection: "row", columnGap: 20 }}>
-                <SelectDropdown
-                  ref={categorySelect}
-                  data={categories}
-                  onSelect={(selectedItem) => {
-                    setCategory(selectedItem._id);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem.category_name;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item.category_name;
-                  }}
-                  defaultButtonText="Select a category"
-                  defaultValue={category}
-                  buttonStyle={{ borderRadius: 5, width: 200 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                />
-                <SelectDropdown
-                  ref={typeSelect}
-                  data={dataTypeSelect}
-                  onSelect={(selectedItem) => {
-                    setType(selectedItem.value);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem.type;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item.type;
-                  }}
-                  defaultButtonText="Select a type"
-                  defaultValue={type}
-                  buttonStyle={{ borderRadius: 5, width: 170 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                />
-              </View>
-            </View>
-            <View
-              style={{
-                width: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-                rowGap: 20,
-              }}
-            >
-              <Text
-                style={{
-                  color: colors.text,
-                  fontSize: 15,
-                  fontFamily: "Poppins_300Light",
-                  alignSelf: "flex-start",
-                  paddingHorizontal: 20,
-                }}
-              >
-                Sort by
-              </Text>
-              <View style={{ flexDirection: "row", columnGap: 20 }}>
-                <SelectDropdown
-                  data={[
-                    { sort: "Creation date", value: "createdAt" },
-                    { sort: "Title", value: "title" },
-                    { sort: "Amount", value: "amount" },
-                  ]}
-                  onSelect={(selectedItem) => {
-                    setSort(selectedItem);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem.sort;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item.sort;
-                  }}
-                  defaultButtonText="Sort by"
-                  defaultValue={sort}
-                  buttonStyle={{ borderRadius: 5, width: 170 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  ref={sortSelect}
-                />
-                <SelectDropdown
-                  data={[
-                    { order: "Upward", value: "asc" },
-                    { order: "Downward", value: "desc" },
-                  ]}
-                  onSelect={(selectedItem, index) => {
-                    setOrder(selectedItem);
-                  }}
-                  buttonTextAfterSelection={(selectedItem) => {
-                    return selectedItem.order;
-                  }}
-                  rowTextForSelection={(item) => {
-                    return item.order;
-                  }}
-                  defaultButtonText="Order by"
-                  defaultValue={order}
-                  buttonStyle={{ borderRadius: 5, width: 170 }}
-                  buttonTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  rowTextStyle={{ fontFamily: "Poppins_300Light" }}
-                  ref={orderSelect}
-                />
-              </View>
-            </View>
-          </View>
-        </BottomSheet>
       </View>
     </SafeAreaView>
   );

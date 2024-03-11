@@ -1,5 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import i18n from "../utils/i18n";
+
 export default function GoBackButtonComponent() {
   const navigation = useNavigation();
   const { colors } = useTheme();
@@ -15,7 +17,7 @@ export default function GoBackButtonComponent() {
           fontFamily: "Poppins_300Light",
         }}
       >
-        {"< Go back"}
+        {`< ${i18n.t("goBack")}`}
       </Text>
     </TouchableOpacity>
   );

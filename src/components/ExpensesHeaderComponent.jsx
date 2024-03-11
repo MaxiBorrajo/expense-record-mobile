@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Icon } from "@rneui/themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import i18n from "../utils/i18n";
 
 export default function ExpensesHeaderComponent() {
   const navigation = useNavigation();
@@ -24,7 +25,7 @@ export default function ExpensesHeaderComponent() {
           color: colors.text,
         }}
       >
-        Recent expenses
+        {i18n.t("recentExpenses")}
       </Text>
       <TouchableOpacity
         onPress={() => navigation.navigate("Expenses")}
@@ -42,7 +43,7 @@ export default function ExpensesHeaderComponent() {
             color: colors.text,
           }}
         >
-          See all
+          {i18n.t("seeAll")}
         </Text>
         <Icon
           name="arrow-right"

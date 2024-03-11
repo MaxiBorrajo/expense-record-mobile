@@ -7,6 +7,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +54,7 @@ export default function LoginScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Sign in
+          {i18n.t("signIn")}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -91,9 +92,9 @@ export default function LoginScreen({ navigation }) {
                       value={control.value}
                       errorMessage={
                         control.isInvalid && control.errors.required
-                          ? "Please enter an email."
+                          ? i18n.t("emailError")
                           : control.isInvalid && control.errors.email
-                          ? "Please enter a valid email."
+                          ? i18n.t("emailValidError")
                           : null
                       }
                       errorStyle={{
@@ -158,9 +159,9 @@ export default function LoginScreen({ navigation }) {
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? "Please enter a password."
+                        ? i18n.t("passwordError")
                         : control.isInvalid && control.errors.pattern
-                        ? "The value of 'password' attribute must have at least one lowercase letter, one uppercase letter, one digit, one special character (@$!%*?&), and be 8 characters or longer."
+                        ? i18n.t("passwordValidError")
                         : null
                     }
                     errorStyle={{
@@ -189,7 +190,7 @@ export default function LoginScreen({ navigation }) {
                   }}
                   onPress={() => navigation.navigate("ForgotPassword")}
                 >
-                  Forgot password?
+                  {i18n.t("forgotPassword")}
                 </Text>
                 <Text
                   style={{
@@ -199,11 +200,11 @@ export default function LoginScreen({ navigation }) {
                   }}
                   onPress={() => navigation.navigate("Register")}
                 >
-                  No account? Register
+                  {i18n.t("noAccount")}
                 </Text>
               </View>
               <ButtonComponent
-                label={"Sign In"}
+                label={i18n.t("signIn")}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

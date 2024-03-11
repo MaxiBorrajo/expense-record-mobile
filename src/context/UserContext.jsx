@@ -1,10 +1,20 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 export const UserContext = createContext();
 
 export function UserContextProvider(props) {
+  const [loading, setLoading] = useState(true);
+
+  function initLoading() {
+    setLoading((prev) => true);
+  }
+
+  function endLoading() {
+    setLoading((prev) => false);
+  }
+
   async function verifyCode(data) {
     await axios.post(
       "https://expense-record-production.up.railway.app/api/auth/verify",
@@ -101,7 +111,10 @@ export function UserContextProvider(props) {
         login,
         register,
         resetPassword,
-        verifyCode
+        verifyCode,
+        loading,
+        initLoading,
+        endLoading,
       }}
     >
       {props.children}

@@ -6,7 +6,7 @@ const DarkTheme = {
     ...DefaultTheme.colors,
     background: "#000000",
     border: "#ffffff",
-    card: "#1c1917",
+    card: "#242424",
     softCard: "#363433",
     text: "#ffffff",
     disabledBackground: "#999999",

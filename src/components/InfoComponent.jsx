@@ -4,40 +4,39 @@ import { ExpenseContext } from "../context/ExpenseContext";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import { Icon } from "@rneui/themed";
+import i18n from "../utils/i18n";
 
-export default function InfoComponent({ route, navigation, reload }) {
+export default function InfoComponent({
+  route,
+  navigation,
+  reload,
+  openBottomSheet,
+  hideBalance,
+}) {
   const { getBalance, getAmount, getChange } = useContext(ExpenseContext);
   const [balance, setBalance] = useState(null);
   const [monthBalance, setMonthBalance] = useState(null);
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { getCurrentUser } = useContext(UserContext);
+  const { getCurrentUser, endLoading } = useContext(UserContext);
   const [user, setUser] = useState(null);
   const [change, setChange] = useState(null);
 
   const getMainInformation = async () => {
-    getChange().then((percentage) => {
-      setChange(percentage);
-    });
-
-    getCurrentUser().then((user) => {
-      setUser(user);
-    });
-
-    getBalance().then((balance) => setBalance(balance));
-
-    getAmount().then((amount) => {
-      setMonthBalance(amount);
-    });
-
-    getAmount(new Date().getMonth(), 1).then((amount) => {
-      setMonthIncomeBalance(amount);
-    });
-
-    getAmount(new Date().getMonth(), 0).then((amount) => {
-      setMonthLossBalance(amount);
-    });
+    await Promise.all([
+      getChange().then((percentage) => setChange(percentage)),
+      getCurrentUser().then((user) => setUser(user)),
+      getBalance().then((balance) => setBalance(balance)),
+      getAmount().then((amount) => setMonthBalance(amount)),
+      getAmount(new Date().getMonth(), 1).then((amount) =>
+        setMonthIncomeBalance(amount)
+      ),
+      getAmount(new Date().getMonth(), 0).then((amount) =>
+        setMonthLossBalance(amount)
+      ),
+    ]);
+    endLoading();
   };
 
   useEffect(() => {
@@ -67,16 +66,30 @@ export default function InfoComponent({ route, navigation, reload }) {
         justifyContent: "space-between",
       }}
     >
-      <Text
+      <View
         style={{
-          fontSize: 15,
-          fontFamily: "Poppins_300Light",
-          color: colors.text,
-          alignSelf: "flex-start",
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
-        Welcome, {user?.firstName} {user?.lastName}
-      </Text>
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: "Poppins_300Light",
+            color: colors.text,
+          }}
+        >
+          {i18n.t("welcome")}, {user?.firstName} {user?.lastName}
+        </Text>
+        <Icon
+          name="gear"
+          type="font-awesome"
+          iconStyle={{ color: colors.text, fontSize: 20, paddingBottom: 3 }}
+          onPress={openBottomSheet}
+        ></Icon>
+      </View>
       <View
         style={{
           width: "100%",
@@ -91,7 +104,7 @@ export default function InfoComponent({ route, navigation, reload }) {
             color: colors.text,
           }}
         >
-          Total balance
+          {i18n.t("totalBalance")}
         </Text>
         <Text
           style={{
@@ -100,7 +113,9 @@ export default function InfoComponent({ route, navigation, reload }) {
             color: colors.text,
           }}
         >
-          {balance >= 0
+          {hideBalance
+            ? "******"
+            : balance >= 0
             ? balance?.toFixed(2) >= 0.01
               ? `$${balance?.toFixed(2)}`
               : "$0.00"
@@ -129,7 +144,7 @@ export default function InfoComponent({ route, navigation, reload }) {
               color: colors.text,
             }}
           >
-            Income of the month
+            {i18n.t("incomeOfMonth")}
           </Text>
           <View
             style={{
@@ -151,7 +166,9 @@ export default function InfoComponent({ route, navigation, reload }) {
                 color: colors.text,
               }}
             >
-              {monthIncomeBalance >= 0
+              {hideBalance
+                ? "******"
+                : monthIncomeBalance >= 0
                 ? `$${monthIncomeBalance?.toFixed(2)}`
                 : `-$${monthIncomeBalance?.toFixed(2) * -1}`}
             </Text>
@@ -171,7 +188,7 @@ export default function InfoComponent({ route, navigation, reload }) {
               color: colors.text,
             }}
           >
-            Losses of the month
+            {i18n.t("lossOfMonth")}
           </Text>
           <View
             style={{
@@ -193,7 +210,9 @@ export default function InfoComponent({ route, navigation, reload }) {
                 color: colors.text,
               }}
             >
-              {monthLossBalance > 0
+              {hideBalance
+                ? "******"
+                : monthLossBalance > 0
                 ? `$${monthLossBalance?.toFixed(2)}`
                 : `-$${monthLossBalance?.toFixed(2) * -1}`}
             </Text>
@@ -232,7 +251,7 @@ export default function InfoComponent({ route, navigation, reload }) {
             color: colors.text,
           }}
         >
-          ($ {change?.nominal.toFixed(2)}) compared to last month
+          ($ {change?.nominal.toFixed(2)}) {i18n.t("compared")}
         </Text>
       </View>
     </View>

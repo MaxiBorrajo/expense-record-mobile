@@ -7,6 +7,7 @@ import { CategoryContext } from "../context/CategoryContext";
 import IconCarouselComponent from "../components/IconCarouselComponent";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function CreateCategoryScreen({ navigation }) {
   const { colors } = useTheme();
@@ -78,7 +79,7 @@ export default function CreateCategoryScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Create category
+          {i18n.t("createCategory")}
         </Text>
         <Foect.Form
           onValidSubmit={async (model) => {
@@ -113,7 +114,7 @@ export default function CreateCategoryScreen({ navigation }) {
                       onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
                       value={control.value}
-                      placeholder="Write a category name"
+                      placeholder={i18n.t("writeCategoryTitle")}
                       placeholderTextColor={colors.text}
                     />
                     {control.isInvalid && control.errors.required && (
@@ -124,7 +125,7 @@ export default function CreateCategoryScreen({ navigation }) {
                           fontFamily: "Poppins_500Medium",
                         }}
                       >
-                        Please enter a category name.
+                        {i18n.t("expenseCategoryError")}
                       </Text>
                     )}
                   </View>
@@ -135,7 +136,7 @@ export default function CreateCategoryScreen({ navigation }) {
                 <ErrorComponent errorMessage={errorMessage} />
               ) : null}
               <ButtonComponent
-                label={"Create"}
+                label={i18n.t("create")}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

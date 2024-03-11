@@ -7,6 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Button } from "@rneui/themed";
+import i18n from "../utils/i18n";
 
 export default function HeroScreen({ navigation }) {
   return (
@@ -20,10 +21,10 @@ export default function HeroScreen({ navigation }) {
           <Text style={styles.title}>Expense Record</Text>
           <View>
             <Text style={styles.subtitle}>
-              Record your everyday expenses and earnings
+              {i18n.t('phrase')}
             </Text>
             <Button
-              title="Get Started"
+              title={i18n.t('getStarted')}
               buttonStyle={{
                 backgroundColor: "white",
                 paddingVertical: 10,

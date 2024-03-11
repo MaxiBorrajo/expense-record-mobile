@@ -8,6 +8,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function VerifyCodeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -49,7 +50,7 @@ export default function VerifyCodeScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Verify code
+          {i18n.t("verifyCode")}
         </Text>
         <Text
           style={{
@@ -58,7 +59,7 @@ export default function VerifyCodeScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Enter the 6 digits of the code receive on your email.
+          {i18n.t("verifyCodeDescription")}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -103,10 +104,10 @@ export default function VerifyCodeScreen({ navigation }) {
                           color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
-                          marginTop:10
+                          marginTop: 10,
                         }}
                       >
-                        A code is required.
+                        {i18n.t("codeError")}
                       </Text>
                     )}
                     {control.isInvalid && control.errors.callback && (
@@ -115,10 +116,10 @@ export default function VerifyCodeScreen({ navigation }) {
                           color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
-                          marginTop:10
+                          marginTop: 10,
                         }}
                       >
-                        The code must be six digits.
+                        {i18n.t("codeValidError")}
                       </Text>
                     )}
                   </View>
@@ -131,12 +132,12 @@ export default function VerifyCodeScreen({ navigation }) {
                   color: colors.text,
                   paddingVertical: 20,
                 }}
-                onPress={() => navigation.navigate("ResetPassword")}
+                onPress={() => navigation.navigate("ForgotPassword")}
               >
-                Haven't receive the code? Try again
+                {i18n.t("noCode")}
               </Text>
               <ButtonComponent
-                label={"Verify"}
+                label={i18n.t("verify")}
                 action={() => form.submit()}
                 disabled={form.isInvalid}
               />

@@ -1,45 +1,22 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useRef, useContext } from "react";
+import { Text, TouchableOpacity, View, Animated } from "react-native";
+import React, { useEffect, useState } from "react";
 import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
-import Swipeable from "react-native-gesture-handler/Swipeable";
-import { CategoryContext } from "../context/CategoryContext";
 import { useTheme } from "@react-navigation/native";
+import i18n from "../utils/i18n";
 
-export default function CategoryComponent({
-  item,
-  setErrorMessage,
-  setReload,
-}) {
+export default function CategoryComponent({ item, setErrorMessage }) {
   const navigation = useNavigation();
-  const swipeableRef = useRef(null);
-  const { deleteCategoryById } = useContext(CategoryContext);
   const { colors } = useTheme();
+  const [fadeAnim] = useState(new Animated.Value(0));
 
-  const handleDelete = async () => {
-    swipeableRef.current.close();
-    await deleteCategory();
-  };
-
-  const deleteCategory = async () => {
-    await deleteCategoryById(item._id);
-    setReload(true);
-  };
-
-  const renderRightActions = (progress, dragX) => {
-    return (
-      <TouchableOpacity onPress={handleDelete}>
-        <View style={styles.deleteButton}>
-          <View style={styles.beforeComponent}></View>
-          <Icon
-            name="trash-alt"
-            type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: "white" }}
-          />
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const handlePress = () => {
     if (item.user_id) {
@@ -56,81 +33,54 @@ export default function CategoryComponent({
   };
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      friction={1}
-      renderRightActions={renderRightActions}
-      overshootRight={false}
+    <TouchableOpacity
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding: 20,
+        alignItems: "center",
+        backgroundColor: colors.card,
+        width: "100%",
+        borderRadius: 5,
+      }}
+      onPress={handlePress}
     >
-      <TouchableOpacity
+      <Animated.View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 20,
           alignItems: "center",
-          backgroundColor: colors.card,
           width: "100%",
-          borderRadius: 5,
+          columnGap: 20,
+          opacity: fadeAnim,
         }}
-        onPress={handlePress}
       >
         <View
           style={{
-            flexDirection: "row",
+            borderRadius: 5,
+            backgroundColor: colors.softCard,
             alignItems: "center",
-            width: "100%",
-            columnGap: 20,
+            justifyContent: "center",
+            textAlign: "center",
+            width: 60,
+            height: 60,
           }}
         >
-          <View
-            style={{
-              borderRadius: 5,
-              backgroundColor: colors.softCard,
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              width: 60,
-              height: 60,
-            }}
-          >
-            <Icon
-              name={item?.icon_id?.icon}
-              type="font-awesome-5"
-              iconStyle={{ fontSize: 20, color: colors.text }}
-            ></Icon>
-          </View>
-          <Text
-            style={{
-              color: colors.text,
-              fontSize: 15,
-              fontFamily: "Poppins_500Medium",
-            }}
-          >
-            {item?.category_name}
-          </Text>
+          <Icon
+            name={item?.icon_id?.icon}
+            type="font-awesome-5"
+            iconStyle={{ fontSize: 20, color: colors.text }}
+          ></Icon>
         </View>
-      </TouchableOpacity>
-    </Swipeable>
+        <Text
+          style={{
+            color: colors.text,
+            fontSize: 15,
+            fontFamily: "Poppins_500Medium",
+          }}
+        >
+          {item?.user_id ? item?.category_name : i18n.t(item?.category_name)}
+        </Text>
+      </Animated.View>
+    </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  deleteButton: {
-    backgroundColor: "#ed2139",
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    position: "relative",
-    height: "100%",
-    width: 50,
-  },
-  beforeComponent: {
-    position: "absolute",
-    top: 0,
-    left: -50,
-    width: 50,
-    height: "100%",
-    backgroundColor: "#ed2139",
-  },
-});

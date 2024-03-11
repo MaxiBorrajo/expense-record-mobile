@@ -8,6 +8,8 @@ import IconCarouselComponent from "../components/IconCarouselComponent";
 import { Icon, Dialog, Button } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
+import LoadingScreen from "./LoadingScreen";
+import i18n from "../utils/i18n";
 
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
@@ -82,109 +84,110 @@ export default function CategoryScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-          color: colors.text,
-          paddingHorizontal: 30,
-          justifyContent: "center",
-          position: "relative",
-          rowGap: 50,
-          minHeight: Dimensions.get("window").height,
-        }}
-      >
-        <Dialog
-          isVisible={visible}
-          onBackdropPress={toggleDialog}
-          overlayStyle={{
-            borderRadius: 5,
-            elevation: 5,
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: "solid",
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
-              fontSize: 20,
-            }}
-          >
-            Delete category
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-              fontSize: 12,
-            }}
-          >
-            Are you sure you want to delete this category? All information will
-            be deleted and cannot be recovered
-          </Text>
-          <Dialog.Actions>
-            <Button
-              title="Delete"
-              titleStyle={{
-                color: "#fff",
-                fontSize: 12,
-                fontFamily: "Poppins_500Medium",
-              }}
-              buttonStyle={{
-                backgroundColor: "#eb1717",
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={deleteCategory}
-            />
-            <View style={{ width: 15 }}></View>
-            <Button
-              title="Cancel"
-              titleStyle={{
-                color: colors.text,
-                fontSize: 12,
-                fontFamily: "Poppins_500Medium",
-              }}
-              buttonStyle={{
-                backgroundColor: colors.background,
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              onPress={() => setVisible(false)}
-            />
-          </Dialog.Actions>
-        </Dialog>
-        <GoBackButtonComponent />
+      {!categoryForm || !icons ? (
+        <LoadingScreen />
+      ) : (
         <View
           style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            justifyContent: "space-between",
+            flex: 1,
+            backgroundColor: colors.background,
+            color: colors.text,
+            paddingHorizontal: 30,
+            justifyContent: "center",
+            position: "relative",
+            rowGap: 50,
+            minHeight: Dimensions.get("window").height,
           }}
         >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
+          <Dialog
+            isVisible={visible}
+            onBackdropPress={toggleDialog}
+            overlayStyle={{
+              borderRadius: 5,
+              elevation: 5,
+              backgroundColor: colors.card,
+              borderColor: colors.border,
+              borderWidth: 1,
+              borderStyle: "solid",
             }}
           >
-            Edit category
-          </Text>
-          <Icon
-            name="trash-alt"
-            type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 7 }}
-            onPress={toggleDialog}
-          />
-        </View>
-        {categoryForm.category_name ? (
+            <Text
+              style={{
+                fontFamily: "Poppins_500Medium",
+                color: colors.text,
+                fontSize: 20,
+              }}
+            >
+              {i18n.t('deleteCategory')}
+            </Text>
+            <Text
+              style={{
+                fontFamily: "Poppins_300Light",
+                color: colors.text,
+                fontSize: 12,
+              }}
+            >
+              {i18n.t('deleteCategoryWarning')}
+            </Text>
+            <Dialog.Actions>
+              <Button
+                title={i18n.t('delete')}
+                titleStyle={{
+                  color: "#fff",
+                  fontSize: 12,
+                  fontFamily: "Poppins_500Medium",
+                }}
+                buttonStyle={{
+                  backgroundColor: "#eb1717",
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={deleteCategory}
+              />
+              <View style={{ width: 15 }}></View>
+              <Button
+                title={i18n.t('cancel')}
+                titleStyle={{
+                  color: colors.background,
+                  fontSize: 12,
+                  fontFamily: "Poppins_500Medium",
+                }}
+                buttonStyle={{
+                  backgroundColor: colors.text,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => setVisible(false)}
+              />
+            </Dialog.Actions>
+          </Dialog>
+          <GoBackButtonComponent />
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "Poppins_500Medium",
+                color: colors.text,
+              }}
+            >
+              {i18n.t('editCategory')}
+            </Text>
+            <Icon
+              name="trash-alt"
+              type="font-awesome-5"
+              iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 7 }}
+              onPress={toggleDialog}
+            />
+          </View>
           <Foect.Form
             defaultValue={{
               category_name: categoryForm?.category_name,
@@ -221,7 +224,7 @@ export default function CategoryScreen({ route, navigation }) {
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
                         value={control.value}
-                        placeholder="Write a category name"
+                        placeholder={i18n.t('writeCategoryTitle')}
                         placeholderTextColor={colors.text}
                       />
                       {control.isInvalid && control.errors.required && (
@@ -232,7 +235,7 @@ export default function CategoryScreen({ route, navigation }) {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          Please enter a category name.
+                          {i18n.t('expenseCategoryError')}
                         </Text>
                       )}
                     </View>
@@ -243,26 +246,16 @@ export default function CategoryScreen({ route, navigation }) {
                   <ErrorComponent errorMessage={errorMessage} />
                 ) : null}
                 <ButtonComponent
-                  label={"Edit"}
+                  label={i18n.t('save')}
                   action={() => form.submit()}
                   loading={loading}
+                  disabled={form.isInvalid}
                 />
               </View>
             )}
           </Foect.Form>
-        ) : (
-          <Text
-            style={{
-              fontSize: 30,
-              fontFamily: "Poppins_500Medium",
-              color: colors.text,
-              textAlign: "center",
-            }}
-          >
-            Loading ...
-          </Text>
-        )}
-      </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

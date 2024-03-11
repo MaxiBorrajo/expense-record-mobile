@@ -7,6 +7,7 @@ import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
+import i18n from "../utils/i18n";
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
@@ -52,7 +53,7 @@ export default function ForgotPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Forgot password?
+          {i18n.t("forgotPassword")}
         </Text>
         <Text
           style={{
@@ -61,8 +62,7 @@ export default function ForgotPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          Enter your email for the verification process. It will be send a 6
-          digits code to your email address.
+          {i18n.t("forgotPasswordDescription")}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -100,9 +100,9 @@ export default function ForgotPasswordScreen({ navigation }) {
                       value={control.value}
                       errorMessage={
                         control.isInvalid && control.errors.required
-                          ? "Please enter an email."
+                          ? i18n.t("emailError")
                           : control.isInvalid && control.errors.email
-                          ? "Please enter a valid email."
+                          ? i18n.t("emailValidError")
                           : null
                       }
                       errorStyle={{
@@ -124,14 +124,14 @@ export default function ForgotPasswordScreen({ navigation }) {
                   fontFamily: "Poppins_300Light",
                   fontSize: 15,
                   color: colors.text,
-                  paddingBottom:20
+                  paddingBottom: 20,
                 }}
                 onPress={() => navigation.navigate("VerifyCode")}
               >
-                Have a code?
+                {i18n.t("haveCode")}
               </Text>
               <ButtonComponent
-                label={"Send"}
+                label={i18n.t("send")}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

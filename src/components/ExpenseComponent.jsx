@@ -1,50 +1,23 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useContext, useRef } from "react";
+import { StyleSheet, Text, View, Animated } from "react-native";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import Swipeable from "react-native-gesture-handler/Swipeable";
-import { ExpenseContext } from "../context/ExpenseContext";
 
-export default function ExpenseComponent({ item, setReload }) {
-  const { deleteExpenseById } = useContext(ExpenseContext);
+export default function ExpenseComponent({ item }) {
   const navigation = useNavigation();
-  const swipeableRef = useRef(null);
   const { colors } = useTheme();
-
-  const handleDelete = async () => {
-    swipeableRef.current.close();
-    await deleteExpense();
-  };
-
-  const deleteExpense = async () => {
-    await deleteExpenseById(item._id);
-    setReload(true);
-  };
-
-  const renderRightActions = (progress, dragX) => {
-    return (
-      <TouchableOpacity onPress={handleDelete}>
-        <View style={styles.deleteButton}>
-          <View style={styles.beforeComponent}></View>
-          <Icon
-            name="trash-alt"
-            type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: "white" }}
-          />
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const [fadeAnim] = useState(new Animated.Value(0));
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   return (
-    <Swipeable
-      ref={swipeableRef}
-      friction={1}
-      renderRightActions={renderRightActions}
-      overshootRight={false}
-    >
       <TouchableOpacity
         style={{
           flexDirection: "row",
@@ -62,8 +35,8 @@ export default function ExpenseComponent({ item, setReload }) {
           })
         }
       >
-        <View
-          style={{ columnGap: 15, flexDirection: "row", alignItems: "center" }}
+        <Animated.View
+          style={{ columnGap: 15, flexDirection: "row", alignItems: "center", opacity: fadeAnim, }}
         >
           <View
             style={{
@@ -136,9 +109,8 @@ export default function ExpenseComponent({ item, setReload }) {
               </Text>
             </View>
           </View>
-        </View>
+        </Animated.View>
       </TouchableOpacity>
-    </Swipeable>
   );
 }
 

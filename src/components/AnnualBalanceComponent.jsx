@@ -1,10 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
+import i18n from "../utils/i18n";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AnnualBalanceComponent({ balance, income, loss }) {
   const { colors } = useTheme();
+  const [hideBalance, setHideBalance] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem("hideBalance", (value) => {
+      setHideBalance(Boolean(value));
+    });
+  }, []);
+
   return (
     <View
       style={{
@@ -12,8 +22,7 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
         paddingHorizontal: 30,
         width: "100%",
         backgroundColor: colors.card,
-        borderBottomStartRadius: 50,
-        borderBottomEndRadius: 50,
+        borderRadius: 20,
         justifyContent: "space-between",
         gap: 10,
       }}
@@ -32,7 +41,7 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
             color: colors.text,
           }}
         >
-          Total balance
+          {i18n.t("totalBalance")}
         </Text>
         <Text
           style={{
@@ -41,7 +50,9 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
             color: colors.text,
           }}
         >
-          {balance >= 0
+          {hideBalance
+            ? "******"
+            : balance >= 0
             ? balance?.toFixed(2) >= 0.01
               ? `$${balance?.toFixed(2)}`
               : "$0.00"
@@ -70,7 +81,7 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
               color: colors.text,
             }}
           >
-            Total Income
+            {i18n.t("totalIncome")}
           </Text>
           <View
             style={{
@@ -92,9 +103,11 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
                 color: colors.text,
               }}
             >
-              {income > 0
-                ? `$${income?.toFixed(2)}`
-                : `-$${income?.toFixed(2) * -1}`}
+              {hideBalance
+                ? "******"
+                : income > 0
+                ? `$${(income / 1000)?.toFixed(2)}K`
+                : `-$${(income / 1000)?.toFixed(2) * -1}K`}
             </Text>
           </View>
         </View>
@@ -112,7 +125,7 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
               color: colors.text,
             }}
           >
-            Total loss
+            {i18n.t("totalLoss")}
           </Text>
           <View
             style={{
@@ -134,7 +147,11 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
                 color: colors.text,
               }}
             >
-              {loss > 0 ? `$${loss?.toFixed(2)}` : `-$${loss?.toFixed(2) * -1}`}
+              {hideBalance
+                ? "******"
+                : loss > 0
+                ? `$${(loss / 1000)?.toFixed(2)}K`
+                : `-$${(loss / 1000)?.toFixed(2) * -1}K`}
             </Text>
           </View>
         </View>

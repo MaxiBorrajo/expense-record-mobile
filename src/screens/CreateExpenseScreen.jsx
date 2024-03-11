@@ -11,6 +11,7 @@ import IncomeOrLossComponent from "../components/IncomeOrLossComponent";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
 import { ExpenseContext } from "../context/ExpenseContext";
+import i18n from "../utils/i18n";
 
 export default function CreateExpenseScreen() {
   const { getCategories } = useContext(CategoryContext);
@@ -50,11 +51,11 @@ export default function CreateExpenseScreen() {
           paddingHorizontal: 50,
           position: "relative",
           minHeight: Dimensions.get("window").height,
-          alignItems:'center',
-          justifyContent:'center'
+          alignItems: "center",
+          justifyContent: "center",
+          paddingBottom: 50,
         }}
       >
-        <GoBackButtonComponent />
         <View
           style={{
             flex: 1,
@@ -69,7 +70,7 @@ export default function CreateExpenseScreen() {
               color: colors.text,
             }}
           >
-            Create new expense
+            {i18n.t("createExpense")}
           </Text>
           {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
           {expenseForm.category_id ? (
@@ -145,22 +146,24 @@ export default function CreateExpenseScreen() {
                           onBlur={control.markAsTouched}
                           onChangeText={(text) => control.onChange(text)}
                           value={control.value}
-                          placeholder="Write a title"
+                          placeholder={i18n.t("writeExpenseTitle")}
                           placeholderTextColor={colors.text}
                           name="title"
                         />
                       </View>
-                      {control.isInvalid && control.isTouched && control.errors.required && (
-                        <Text
-                          style={{
-                            color: "#ed2139",
-                            fontSize: 12,
-                            fontFamily: "Poppins_500Medium",
-                          }}
-                        >
-                          Please enter a title.
-                        </Text>
-                      )}
+                      {control.isInvalid &&
+                        control.isTouched &&
+                        control.errors.required && (
+                          <Text
+                            style={{
+                              color: "#ed2139",
+                              fontSize: 12,
+                              fontFamily: "Poppins_500Medium",
+                            }}
+                          >
+                            {i18n.t("expenseTitleError")}
+                          </Text>
+                        )}
                     </View>
                   )}
                 </Foect.Control>
@@ -242,7 +245,7 @@ export default function CreateExpenseScreen() {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          Please enter an amount.
+                          {i18n.t("expenseAmountError")}
                         </Text>
                       )}
                       {control.isInvalid && control.errors.callback && (
@@ -253,7 +256,7 @@ export default function CreateExpenseScreen() {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          The amount must be other than zero.
+                          {i18n.t("expenseZeroError")}
                         </Text>
                       )}
                     </View>
@@ -283,7 +286,7 @@ export default function CreateExpenseScreen() {
                         control.onChange(value);
                       }}
                       value={control.value}
-                      placeholder="Write a description (optional)"
+                      placeholder={i18n.t("descriptionExpense")}
                       name="description"
                     />
                   )}
@@ -310,12 +313,16 @@ export default function CreateExpenseScreen() {
                           control.onChange(selectedItem._id);
                         }}
                         buttonTextAfterSelection={(selectedItem) => {
-                          return selectedItem.category_name;
+                          return selectedItem?.user_id
+                            ? selectedItem?.category_name
+                            : i18n.t(selectedItem?.category_name);
                         }}
                         rowTextForSelection={(item) => {
-                          return item.category_name;
+                          return item?.user_id
+                            ? item?.category_name
+                            : i18n.t(item?.category_name);
                         }}
-                        defaultButtonText="Select a category"
+                        defaultButtonText={i18n.t('selectCategory')}
                         defaultValue={control.value}
                         buttonStyle={{
                           borderRadius: 5,
@@ -342,7 +349,7 @@ export default function CreateExpenseScreen() {
                     )}
                   </Foect.Control>
                   <ButtonComponent
-                    label="Create"
+                    label={i18n.t('create')}
                     loading={loading}
                     action={() => form.submit()}
                     disabled={form.isInvalid}

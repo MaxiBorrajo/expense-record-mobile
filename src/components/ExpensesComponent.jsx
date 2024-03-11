@@ -5,6 +5,9 @@ import { Card } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
+import { UserContext } from "../context/UserContext";
+import { Skeleton } from "moti/skeleton";
+import { AppContext } from "../context/AppContext";
 
 export default function ExpensesComponent({
   route,
@@ -13,8 +16,10 @@ export default function ExpensesComponent({
   reload,
 }) {
   const { getExpenses } = useContext(ExpenseContext);
+  const { loading } = useContext(UserContext);
   const [expenses, setExpenses] = useState(null);
   const { colors } = useTheme();
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
 
   const getLastExpenses = async () => {
     const filters = [
@@ -72,20 +77,130 @@ export default function ExpensesComponent({
         data={expenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <ExpenseComponent item={item} setReload={setReload} />
+          <ExpenseComponent
+            item={item}
+            setReload={setReload}
+            loading={loading}
+          />
         )}
         ListEmptyComponent={() => (
-          <Text
+          <View
             style={{
-              color: colors.text,
-              fontSize: 25,
-              fontFamily: "Poppins_700Bold",
-              textAlign: "center",
-              padding: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingBottom: 30,
+              rowGap: 20,
+              width: "100%",
+              paddingRight: 10,
             }}
           >
-            Nothing added yet
-          </Text>
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 20,
+                alignItems: "center",
+                justifyContent: "flex-start",
+                backgroundColor: colors.card,
+                borderRadius: 5,
+                columnGap: 15,
+                width: "100%",
+              }}
+            >
+              <Skeleton
+                show={!expenses}
+                width={60}
+                height={60}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                  direction: "left",
+                }}
+              ></Skeleton>
+              <Skeleton
+                show={!expenses}
+                width={"80%"}
+                height={40}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                }}
+              ></Skeleton>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 20,
+                alignItems: "center",
+                justifyContent: "flex-start",
+                backgroundColor: colors.card,
+                borderRadius: 5,
+                columnGap: 15,
+                width: "100%",
+              }}
+            >
+              <Skeleton
+                show={!expenses}
+                width={60}
+                height={60}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                }}
+              ></Skeleton>
+              <Skeleton
+                show={!expenses}
+                width={"80%"}
+                height={40}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                }}
+              ></Skeleton>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 20,
+                alignItems: "center",
+                justifyContent: "flex-start",
+                backgroundColor: colors.card,
+                borderRadius: 5,
+                columnGap: 15,
+                width: "100%",
+              }}
+            >
+              <Skeleton
+                show={!expenses}
+                width={60}
+                height={60}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                }}
+              ></Skeleton>
+              <Skeleton
+                show={!expenses}
+                width={"80%"}
+                height={40}
+                colorMode={isDarkTheme ? "dark" : "light"}
+                radius={5}
+                transition={{
+                  type: "timing",
+                  duration: 2000,
+                }}
+              ></Skeleton>
+            </View>
+          </View>
         )}
         ItemSeparatorComponent={() => (
           <View style={{ height: 10, width: "100%" }}></View>
