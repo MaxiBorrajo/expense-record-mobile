@@ -8,13 +8,9 @@ export default function IncomeOrLossComponent({ amount, action }) {
   return (
     <View
       style={{
-        height: 54.5,
+        height: 53,
         width: 115,
         flexDirection: "row",
-        borderRadius: 5,
-        borderWidth: 2,
-        borderStyle: "solid",
-        borderColor: colors.border,
       }}
     >
       <TouchableOpacity
@@ -24,6 +20,8 @@ export default function IncomeOrLossComponent({ amount, action }) {
           backgroundColor: amount > 0 ? "#22c55e" : "#012b03",
           alignItems: "center",
           justifyContent: "center",
+          borderTopStartRadius:5,
+          borderBottomStartRadius:5
         }}
         onPress={action}
       >
@@ -40,6 +38,8 @@ export default function IncomeOrLossComponent({ amount, action }) {
           backgroundColor: amount < 0 ? "#ff0019" : "#450007",
           alignItems: "center",
           justifyContent: "center",
+          borderTopEndRadius:5,
+          borderBottomEndRadius:5
         }}
         onPress={action}
       >

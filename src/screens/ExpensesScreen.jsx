@@ -151,7 +151,7 @@ export default function ExpensesScreen() {
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingTop: 80,
+          paddingTop: 70,
           minHeight: Dimensions.get("window").height,
         }}
       >

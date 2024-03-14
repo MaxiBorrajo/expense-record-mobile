@@ -25,7 +25,7 @@ export default function CategoryComponent({ item, setErrorMessage }) {
         params: { id: item._id },
       });
     } else {
-      setErrorMessage((prev) => "You can only edit categories created by you");
+      setErrorMessage((prev) => i18n.t('categoryError'));
       setTimeout(() => {
         setErrorMessage((prev) => null);
       }, 3000);

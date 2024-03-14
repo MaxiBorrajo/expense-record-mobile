@@ -5,11 +5,12 @@ import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import IconCarouselComponent from "../components/IconCarouselComponent";
-import { Icon, Dialog, Button } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
+import WarningDialogComponent from "../components/WarningDialogComponent";
 
 export default function CategoryScreen({ route, navigation }) {
   const { id } = route.params;
@@ -99,70 +100,6 @@ export default function CategoryScreen({ route, navigation }) {
             minHeight: Dimensions.get("window").height,
           }}
         >
-          <Dialog
-            isVisible={visible}
-            onBackdropPress={toggleDialog}
-            overlayStyle={{
-              borderRadius: 5,
-              elevation: 5,
-              backgroundColor: colors.card,
-              borderColor: colors.border,
-              borderWidth: 1,
-              borderStyle: "solid",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins_500Medium",
-                color: colors.text,
-                fontSize: 20,
-              }}
-            >
-              {i18n.t('deleteCategory')}
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Poppins_300Light",
-                color: colors.text,
-                fontSize: 12,
-              }}
-            >
-              {i18n.t('deleteCategoryWarning')}
-            </Text>
-            <Dialog.Actions>
-              <Button
-                title={i18n.t('delete')}
-                titleStyle={{
-                  color: "#fff",
-                  fontSize: 12,
-                  fontFamily: "Poppins_500Medium",
-                }}
-                buttonStyle={{
-                  backgroundColor: "#eb1717",
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={deleteCategory}
-              />
-              <View style={{ width: 15 }}></View>
-              <Button
-                title={i18n.t('cancel')}
-                titleStyle={{
-                  color: colors.background,
-                  fontSize: 12,
-                  fontFamily: "Poppins_500Medium",
-                }}
-                buttonStyle={{
-                  backgroundColor: colors.text,
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => setVisible(false)}
-              />
-            </Dialog.Actions>
-          </Dialog>
           <GoBackButtonComponent />
           <View
             style={{
@@ -179,7 +116,7 @@ export default function CategoryScreen({ route, navigation }) {
                 color: colors.text,
               }}
             >
-              {i18n.t('editCategory')}
+              {i18n.t("editCategory")}
             </Text>
             <Icon
               name="trash-alt"
@@ -224,7 +161,7 @@ export default function CategoryScreen({ route, navigation }) {
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
                         value={control.value}
-                        placeholder={i18n.t('writeCategoryTitle')}
+                        placeholder={i18n.t("writeCategoryTitle")}
                         placeholderTextColor={colors.text}
                       />
                       {control.isInvalid && control.errors.required && (
@@ -235,7 +172,7 @@ export default function CategoryScreen({ route, navigation }) {
                             fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          {i18n.t('expenseCategoryError')}
+                          {i18n.t("expenseCategoryError")}
                         </Text>
                       )}
                     </View>
@@ -246,7 +183,7 @@ export default function CategoryScreen({ route, navigation }) {
                   <ErrorComponent errorMessage={errorMessage} />
                 ) : null}
                 <ButtonComponent
-                  label={i18n.t('save')}
+                  label={i18n.t("save")}
                   action={() => form.submit()}
                   loading={loading}
                   disabled={form.isInvalid}
@@ -256,6 +193,16 @@ export default function CategoryScreen({ route, navigation }) {
           </Foect.Form>
         </View>
       )}
+      <WarningDialogComponent
+        dialogObject={{
+          isVisible: visible,
+          toggleDialog: () => toggleDialog(),
+          title: i18n.t("deleteCategory"),
+          description: i18n.t("deleteCategoryWarning"),
+          cancel: () => setVisible(false),
+          action: () => deleteCategory(),
+        }}
+      />
     </SafeAreaView>
   );
 }

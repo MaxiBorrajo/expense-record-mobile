@@ -125,19 +125,6 @@ export function ExpenseContextProvider(props) {
     return result.data.resource;
   }
 
-  async function getChange() {
-    const result = await axios.get(
-      `https://expense-record-production.up.railway.app/api/expenses/change`,
-      {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        },
-      }
-    );
-
-    return result.data.resource;
-  }
-
   async function getExpenseById(id) {
     const result = await axios.get(
       `https://expense-record-production.up.railway.app/api/expenses/${id}`,
@@ -215,7 +202,6 @@ export function ExpenseContextProvider(props) {
         getExpenseById,
         getExpenses,
         getAmount,
-        getChange,
         getStatistics,
         getStatisticsByCategory,
         updateExpenseById,

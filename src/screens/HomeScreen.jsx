@@ -3,12 +3,12 @@ import TabBarIcon from "../components/TabBarIcon";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CreateExpenseScreen from "./CreateExpenseScreen";
 import StatisticsScreen from "./StatisticsScreen";
-import CategoriesScreen from "./CategoriesScreen";
 import MainScreen from "./MainScreen";
 import LoadingScreen from "./LoadingScreen";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import React, { useContext } from "react";
+import i18n from "../utils/i18n";
 
 const Tab = createBottomTabNavigator();
 
@@ -21,17 +21,19 @@ export default function HomeScreen() {
     headerShown: false,
     tabBarStyle: {
       position: "absolute",
-      bottom: 0,
-      elevation: 0,
       height: 60,
-      backgroundColor: colors.text,
+      backgroundColor: colors.softCard,
+      width: 200,
+      borderRadius: 20,
+      borderTopWidth: 0,
+      left: (Dimensions.get('window').width / 2) - 100,
+      bottom:20,
+      elevation:5
     },
   };
 
   return (
-    <SafeAreaView
-      style={{ flex: 1 }}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
       {loading ? <LoadingScreen /> : null}
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
         <Tab.Screen
@@ -39,17 +41,14 @@ export default function HomeScreen() {
           component={MainScreen}
           options={{
             tabBarIcon: ({ focused }) => {
-              return <TabBarIcon focused={focused} icon="home" />;
-            }
-          }}
-        />
-        <Tab.Screen
-          name="Categories"
-          component={CategoriesScreen}
-          options={{
-            tabBarIcon: ({ focused }) => {
-              return <TabBarIcon focused={focused} icon="list-ul" />;
-            }
+              return (
+                <TabBarIcon
+                  focused={focused}
+                  icon="home"
+                  name={i18n.t("Home")}
+                />
+              );
+            },
           }}
         />
         <Tab.Screen
@@ -57,8 +56,14 @@ export default function HomeScreen() {
           component={CreateExpenseScreen}
           options={{
             tabBarIcon: ({ focused }) => {
-              return <TabBarIcon focused={focused} icon="plus" />;
-            }
+              return (
+                <TabBarIcon
+                  focused={focused}
+                  icon="plus"
+                  name={i18n.t("create")}
+                />
+              );
+            },
           }}
         />
         <Tab.Screen
@@ -66,8 +71,14 @@ export default function HomeScreen() {
           component={StatisticsScreen}
           options={{
             tabBarIcon: ({ focused }) => {
-              return <TabBarIcon focused={focused} icon="chart-pie" />;
-            }
+              return (
+                <TabBarIcon
+                  focused={focused}
+                  icon="chart-pie"
+                  name={i18n.t("statistics")}
+                />
+              );
+            },
           }}
         />
       </Tab.Navigator>

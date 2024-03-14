@@ -13,6 +13,7 @@ import ExpenseScreen from "./src/screens/ExpenseScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
 import CreateCategoryScreen from "./src/screens/CreateCategoryScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
+import CategoriesScreen from "./src/screens/CategoriesScreen";
 import {
   Poppins_900Black,
   Poppins_400Regular,
@@ -116,6 +117,7 @@ export default function App() {
                         component={CreateCategoryScreen}
                       />
                       <Stack.Screen name="Profile" component={ProfileScreen} />
+                      <Stack.Screen name="Categories" component={CategoriesScreen} />
                     </Stack.Navigator>
                   </AppContext.Provider>
                 </NavigationContainer>

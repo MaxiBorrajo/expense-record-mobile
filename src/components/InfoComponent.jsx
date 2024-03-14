@@ -13,22 +13,18 @@ export default function InfoComponent({
   openBottomSheet,
   hideBalance,
 }) {
-  const { getBalance, getAmount, getChange } = useContext(ExpenseContext);
+  const { getBalance, getAmount } = useContext(ExpenseContext);
   const [balance, setBalance] = useState(null);
-  const [monthBalance, setMonthBalance] = useState(null);
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
   const { getCurrentUser, endLoading } = useContext(UserContext);
   const [user, setUser] = useState(null);
-  const [change, setChange] = useState(null);
 
   const getMainInformation = async () => {
     await Promise.all([
-      getChange().then((percentage) => setChange(percentage)),
       getCurrentUser().then((user) => setUser(user)),
       getBalance().then((balance) => setBalance(balance)),
-      getAmount().then((amount) => setMonthBalance(amount)),
       getAmount(new Date().getMonth(), 1).then((amount) =>
         setMonthIncomeBalance(amount)
       ),
@@ -56,14 +52,13 @@ export default function InfoComponent({
   return (
     <View
       style={{
-        paddingVertical: 40,
+        paddingVertical: 50,
         paddingHorizontal: 30,
-        height: "40%",
         width: "100%",
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
-        justifyContent: "space-between",
+        rowGap:40
       }}
     >
       <View
@@ -168,9 +163,7 @@ export default function InfoComponent({
             >
               {hideBalance
                 ? "******"
-                : monthIncomeBalance >= 0
-                ? `$${monthIncomeBalance?.toFixed(2)}`
-                : `-$${monthIncomeBalance?.toFixed(2) * -1}`}
+                : `$${monthIncomeBalance?.toFixed(2)}`}
             </Text>
           </View>
         </View>
@@ -212,47 +205,10 @@ export default function InfoComponent({
             >
               {hideBalance
                 ? "******"
-                : monthLossBalance > 0
-                ? `$${monthLossBalance?.toFixed(2)}`
-                : `-$${monthLossBalance?.toFixed(2) * -1}`}
+                : `$${monthLossBalance?.toFixed(2)}`}
             </Text>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}
-      >
-        <Icon
-          name={change && change.percentage > 0 ? "caret-up" : "caret-down"}
-          type="font-awesome"
-          iconStyle={change?.percentage > 0 ? styles.profit : styles.loss}
-        ></Icon>
-        <Text
-          style={[
-            {
-              fontFamily: "Poppins_300Light",
-              fontSize: 13,
-              marginHorizontal: 5,
-            },
-            change?.percentage > 0 ? styles.profit : styles.loss,
-          ]}
-        >
-          {change?.percentage?.toFixed(2)} %
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Poppins_300Light",
-            fontSize: 13,
-            color: colors.text,
-          }}
-        >
-          ($ {change?.nominal.toFixed(2)}) {i18n.t("compared")}
-        </Text>
       </View>
     </View>
   );

@@ -4,13 +4,14 @@ const LightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "#ffffff",
-    border: "#000000",
-    card: "#f5f7fa",
-    softCard: "#e3e4e6",
-    text: "#000000",
-    disabledBackground: "#636262",
-    disabledColor: "#c9c9c9",
+    background: "#f2f2f2",
+    border: "#141414",
+    card: "#E9E9E9",
+    softCard: "#DCDCDC",
+    text: "#141414",
+    disabledBackground: "#4a4949",
+    disabledColor: "#b5b3b3",
+    attention:'#2E78A6'
   },
 };
 

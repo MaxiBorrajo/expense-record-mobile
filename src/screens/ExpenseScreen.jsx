@@ -13,6 +13,7 @@ import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
+import WarningDialogComponent from "../components/WarningDialogComponent";
 
 export default function ExpenseScreen({ route, navigation }) {
   const { deleteExpenseById, getExpenseById, updateExpenseById } =
@@ -74,70 +75,6 @@ export default function ExpenseScreen({ route, navigation }) {
             minHeight: Dimensions.get("window").height,
           }}
         >
-          <Dialog
-            isVisible={visible}
-            onBackdropPress={toggleDialog}
-            overlayStyle={{
-              borderRadius: 5,
-              elevation: 5,
-              backgroundColor: colors.background,
-              borderColor: colors.border,
-              borderWidth: 1,
-              borderStyle: "solid",
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Poppins_500Medium",
-                color: colors.text,
-                fontSize: 20,
-              }}
-            >
-              {i18n.t("deleteExpense")}
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Poppins_300Light",
-                color: colors.text,
-                fontSize: 12,
-              }}
-            >
-              {i18n.t("deleteWarning")}
-            </Text>
-            <Dialog.Actions>
-              <Button
-                title={i18n.t("delete")}
-                titleStyle={{
-                  color: "#fff",
-                  fontSize: 12,
-                  fontFamily: "Poppins_500Medium",
-                }}
-                buttonStyle={{
-                  backgroundColor: "#eb1717",
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => deleteExpense()}
-              />
-              <View style={{ width: 15 }}></View>
-              <Button
-                title={i18n.t("cancel")}
-                titleStyle={{
-                  color: colors.background,
-                  fontSize: 12,
-                  fontFamily: "Poppins_500Medium",
-                }}
-                buttonStyle={{
-                  backgroundColor: colors.text,
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => setVisible(false)}
-              />
-            </Dialog.Actions>
-          </Dialog>
           <GoBackButtonComponent />
           <View>
             <View
@@ -436,6 +373,16 @@ export default function ExpenseScreen({ route, navigation }) {
           </Foect.Form>
         </View>
       )}
+      <WarningDialogComponent
+        dialogObject={{
+          isVisible: visible,
+          toggleDialog: () => toggleDialog(),
+          title: i18n.t("deleteExpense"),
+          description: i18n.t("deleteWarning"),
+          cancel: () => setVisible(false),
+          action: () => deleteExpense(),
+        }}
+      />
     </SafeAreaView>
   );
 }

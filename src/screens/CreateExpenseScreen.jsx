@@ -15,7 +15,6 @@ import i18n from "../utils/i18n";
 
 export default function CreateExpenseScreen() {
   const { getCategories } = useContext(CategoryContext);
-  const firstCharge = useRef(true);
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [expenseForm, setExpenseForm] = useState({
@@ -84,9 +83,6 @@ export default function CreateExpenseScreen() {
                 width: 70,
                 height: 70,
                 elevation: 5,
-                borderColor: colors.border,
-                borderWidth: 1,
-                borderStyle: "solid",
                 alignSelf: "center",
               }}
             >
@@ -130,9 +126,6 @@ export default function CreateExpenseScreen() {
                           paddingHorizontal: 20,
                           borderRadius: 5,
                           elevation: 5,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                         }}
                       >
                         <TextInput
@@ -201,9 +194,6 @@ export default function CreateExpenseScreen() {
                             paddingHorizontal: 20,
                             borderRadius: 5,
                             elevation: 5,
-                            borderColor: colors.border,
-                            borderWidth: 1,
-                            borderStyle: "solid",
                           }}
                         >
                           <Text
@@ -277,9 +267,6 @@ export default function CreateExpenseScreen() {
                         backgroundColor: colors.card,
                         borderRadius: 5,
                         elevation: 5,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        borderStyle: "solid",
                         textAlignVertical: "top",
                       }}
                       onChangeText={(value) => {
@@ -330,9 +317,6 @@ export default function CreateExpenseScreen() {
                           height: "100%",
                           backgroundColor: colors.card,
                           color: colors.text,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                           fontSize: 12,
                           flexGrow: 1,
                         }}

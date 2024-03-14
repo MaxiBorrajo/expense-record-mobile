@@ -1,6 +1,6 @@
 import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import { useEffect, useState, useContext } from "react";
-import { Button, Dialog } from "@rneui/themed";
+import { Button } from "@rneui/themed";
 import { UserContext } from "../context/UserContext";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import ErrorComponent from "../components/ErrorComponent";

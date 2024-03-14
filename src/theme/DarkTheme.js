@@ -4,13 +4,14 @@ const DarkTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "#000000",
-    border: "#ffffff",
-    card: "#242424",
-    softCard: "#363433",
-    text: "#ffffff",
+    background: "#141414",
+    border: "#f2f2f2",
+    card: "#303030",
+    softCard: "#474747",
+    text: "#f2f2f2",
     disabledBackground: "#999999",
-    disabledColor: "#262626",
+    disabledColor: "#5e5e5e",
+    attention:'#2E78A6'
   },
 };
 

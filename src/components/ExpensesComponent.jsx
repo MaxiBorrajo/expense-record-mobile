@@ -1,4 +1,4 @@
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, ViewComponent } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { Card } from "@rneui/themed";
@@ -34,7 +34,7 @@ export default function ExpensesComponent({
     ];
 
     getExpenses(null, null, filters).then((expenses) => {
-      setExpenses(expenses.splice(0, 4));
+      setExpenses(expenses.splice(0, 5));
     });
   };
 
@@ -56,23 +56,19 @@ export default function ExpensesComponent({
     <Card
       containerStyle={{
         width: "100%",
-        height: "50%",
         backgroundColor: "transparent",
         elevation: 0,
         borderWidth: 0,
-        paddingBottom: 30,
-        paddingTop: 20,
         marginTop: 0,
       }}
     >
       <ExpensesHeaderComponent />
       <FlatList
-        style={{
-          height: "100%",
-        }}
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
+          paddingTop:20,
+          paddingBottom:490
         }}
         data={expenses}
         keyExtractor={(item) => item._id}

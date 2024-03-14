@@ -9,6 +9,7 @@ import { useTheme } from "@react-navigation/native";
 import { Skeleton } from "moti/skeleton";
 import { AppContext } from "../context/AppContext";
 import i18n from "../utils/i18n";
+import GoBackButtonComponent from "../components/GoBackButtonComponent";
 
 export default function CategoriesScreen({ route, navigation }) {
   const { colors } = useTheme();
@@ -73,10 +74,11 @@ export default function CategoriesScreen({ route, navigation }) {
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingVertical: 40,
+          paddingTop: 70,
           minHeight: Dimensions.get("window").height,
         }}
       >
+        <GoBackButtonComponent />
         <CreateCategoryButtonComponent
           action={() => navigation.navigate("CreateCategory")}
         />
