@@ -5,6 +5,7 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import { Icon } from "@rneui/themed";
 import i18n from "../utils/i18n";
+import { CountUp } from "use-count-up";
 
 export default function InfoComponent({
   route,
@@ -18,7 +19,7 @@ export default function InfoComponent({
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { getCurrentUser, endLoading } = useContext(UserContext);
+  const { getCurrentUser, endLoading, loading } = useContext(UserContext);
   const [user, setUser] = useState(null);
 
   const getMainInformation = async () => {
@@ -58,7 +59,7 @@ export default function InfoComponent({
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
-        rowGap:40
+        rowGap: 40,
       }}
     >
       <View
@@ -108,15 +109,35 @@ export default function InfoComponent({
             color: colors.text,
           }}
         >
-          {hideBalance
-            ? "******"
-            : balance >= 0
-            ? balance?.toFixed(2) >= 0.01
-              ? `$${balance?.toFixed(2)}`
-              : "$0.00"
-            : balance?.toFixed(2) * -1 >= 0.01
-            ? `-$${balance?.toFixed(2) * -1}`
-            : "$0.00"}
+          {hideBalance ? (
+            "******"
+          ) : balance >= 0 ? (
+            balance?.toFixed(2) >= 0.01 ? (
+              <CountUp
+                isCounting={!loading}
+                end={balance}
+                formatter={(val) => {
+                  return `$${val?.toFixed(2)?.toLocaleString()}`;
+                }}
+                duration={3.2}
+                easing={'easeOutCubic'}
+              />
+            ) : (
+              "$0.00"
+            )
+          ) : balance?.toFixed(2) * -1 >= 0.01 ? (
+            <CountUp
+              isCounting={!loading}
+              end={balance * -1}
+              formatter={(val) => {
+                return `$${val?.toFixed(2)?.toLocaleString()}`;
+              }}
+              duration={3.2}
+              easing={'easeOutCubic'}
+            />
+          ) : (
+            "$0.00"
+          )}
         </Text>
       </View>
       <View
@@ -161,9 +182,19 @@ export default function InfoComponent({
                 color: colors.text,
               }}
             >
-              {hideBalance
-                ? "******"
-                : `$${monthIncomeBalance?.toFixed(2)}`}
+              {hideBalance ? (
+                "******"
+              ) : (
+                <CountUp
+                  isCounting={!loading}
+                  end={monthIncomeBalance}
+                  formatter={(val) => {
+                    return `$${val?.toFixed(2)?.toLocaleString()}`;
+                  }}
+                  duration={3.2}
+                  easing={'easeOutCubic'}
+                />
+              )}
             </Text>
           </View>
         </View>
@@ -203,9 +234,19 @@ export default function InfoComponent({
                 color: colors.text,
               }}
             >
-              {hideBalance
-                ? "******"
-                : `$${monthLossBalance?.toFixed(2)}`}
+              {hideBalance ? (
+                "******"
+              ) : (
+                <CountUp
+                  isCounting={!loading}
+                  end={monthLossBalance * -1}
+                  formatter={(val) => {
+                    return `$${val?.toFixed(2)?.toLocaleString()}`;
+                  }}
+                  duration={3.2}
+                  easing={'easeOutCubic'}
+                />
+              )}
             </Text>
           </View>
         </View>

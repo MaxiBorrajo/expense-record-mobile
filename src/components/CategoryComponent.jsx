@@ -1,11 +1,11 @@
 import { Text, TouchableOpacity, View, Animated } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
 
-export default function CategoryComponent({ item, setErrorMessage }) {
+export default memo(function CategoryComponent({ item, setErrorMessage }) {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [fadeAnim] = useState(new Animated.Value(0));
@@ -22,10 +22,10 @@ export default function CategoryComponent({ item, setErrorMessage }) {
     if (item.user_id) {
       navigation.navigate({
         name: "Category",
-        params: { id: item._id },
+        params: { category: item },
       });
     } else {
-      setErrorMessage((prev) => i18n.t('categoryError'));
+      setErrorMessage((prev) => i18n.t("categoryError"));
       setTimeout(() => {
         setErrorMessage((prev) => null);
       }, 3000);
@@ -83,4 +83,4 @@ export default function CategoryComponent({ item, setErrorMessage }) {
       </Animated.View>
     </TouchableOpacity>
   );
-}
+});

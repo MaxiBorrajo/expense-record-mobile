@@ -319,15 +319,18 @@ export default function CreateExpenseScreen() {
                           color: colors.text,
                           fontSize: 12,
                           flexGrow: 1,
+                          elevation:5
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 12,
+                          elevation:5
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
+                          elevation:5
                         }}
                       />
                     )}

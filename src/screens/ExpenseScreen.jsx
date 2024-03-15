@@ -16,12 +16,11 @@ import i18n from "../utils/i18n";
 import WarningDialogComponent from "../components/WarningDialogComponent";
 
 export default function ExpenseScreen({ route, navigation }) {
-  const { deleteExpenseById, getExpenseById, updateExpenseById } =
+  const { deleteExpenseById, updateExpenseById } =
     useContext(ExpenseContext);
   const { getCategories } = useContext(CategoryContext);
-  const { id } = route.params;
+  const { expense } = route.params;
   const [loading, setLoading] = useState(false);
-  const [expense, setExpense] = useState(null);
   const [categories, setCategories] = useState(null);
   const [visible, setVisible] = useState(false);
   const { colors } = useTheme();
@@ -44,16 +43,6 @@ export default function ExpenseScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    getExpenseById(id).then((exp) => {
-      setExpense({
-        amount: exp.amount.toFixed(2),
-        category_id: exp.category_id,
-        title: exp.title,
-        description: exp.description,
-        createdAt: exp.createdAt,
-      });
-    });
-
     getCategories().then((categories) => {
       setCategories(categories);
     });

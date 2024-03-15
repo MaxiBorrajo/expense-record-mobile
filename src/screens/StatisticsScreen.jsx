@@ -219,6 +219,9 @@ export default function StatisticsScreen() {
                       balance={statistics[0].total}
                       income={statistics[0].totalIncome}
                       loss={statistics[0].totalLoss}
+                      loading={
+                        !statistics || !categoryStatistics || !monthStatistics
+                      }
                     />
                   ) : (
                     <Text

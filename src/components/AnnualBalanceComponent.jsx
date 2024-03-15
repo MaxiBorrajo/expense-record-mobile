@@ -4,8 +4,9 @@ import { useTheme } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CountUp } from "use-count-up";
 
-export default function AnnualBalanceComponent({ balance, income, loss }) {
+export default function AnnualBalanceComponent({ balance, income, loss, loading }) {
   const { colors } = useTheme();
   const [hideBalance, setHideBalance] = useState(false);
 
@@ -50,15 +51,35 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
             color: colors.text,
           }}
         >
-          {hideBalance
-            ? "******"
-            : balance >= 0
-            ? balance?.toFixed(2) >= 0.01
-              ? `$${balance?.toFixed(2)}`
-              : "$0.00"
-            : balance?.toFixed(2) * -1 >= 0.01
-            ? `-$${balance?.toFixed(2) * -1}`
-            : "$0.00"}
+           {hideBalance ? (
+            "******"
+          ) : balance >= 0 ? (
+            balance?.toFixed(2) >= 0.01 ? (
+              <CountUp
+                isCounting={!loading}
+                end={balance}
+                formatter={(val) => {
+                  return `$${val?.toFixed(2)?.toLocaleString()}`;
+                }}
+                duration={3.2}
+                easing={'easeOutCubic'}
+              />
+            ) : (
+              "$0.00"
+            )
+          ) : balance?.toFixed(2) * -1 >= 0.01 ? (
+            <CountUp
+              isCounting={!loading}
+              end={balance * -1}
+              formatter={(val) => {
+                return `$${val?.toFixed(2)?.toLocaleString()}`;
+              }}
+              duration={3.2}
+              easing={'easeOutCubic'}
+            />
+          ) : (
+            "$0.00"
+          )}
         </Text>
       </View>
       <View
@@ -103,11 +124,19 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
                 color: colors.text,
               }}
             >
-              {hideBalance
-                ? "******"
-                : income > 0
-                ? `$${(income / 1000)?.toFixed(2)}K`
-                : `-$${(income / 1000)?.toFixed(2) * -1}K`}
+              {hideBalance ? (
+                "******"
+              ) : (
+                <CountUp
+                  isCounting={!loading}
+                  end={income}
+                  formatter={(val) => {
+                    return `$${val?.toFixed(2)?.toLocaleString()}`;
+                  }}
+                  duration={3.2}
+                  easing={'easeOutCubic'}
+                />
+              )}
             </Text>
           </View>
         </View>
@@ -147,11 +176,19 @@ export default function AnnualBalanceComponent({ balance, income, loss }) {
                 color: colors.text,
               }}
             >
-              {hideBalance
-                ? "******"
-                : loss > 0
-                ? `$${(loss / 1000)?.toFixed(2)}K`
-                : `-$${(loss / 1000)?.toFixed(2) * -1}K`}
+              {hideBalance ? (
+                "******"
+              ) : (
+                <CountUp
+                  isCounting={!loading}
+                  end={loss * -1}
+                  formatter={(val) => {
+                    return `$${val?.toFixed(2)?.toLocaleString()}`;
+                  }}
+                  duration={3.2}
+                  easing={'easeOutCubic'}
+                />
+              )}
             </Text>
           </View>
         </View>

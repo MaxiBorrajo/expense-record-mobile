@@ -13,9 +13,9 @@ import i18n from "../utils/i18n";
 import WarningDialogComponent from "../components/WarningDialogComponent";
 
 export default function CategoryScreen({ route, navigation }) {
-  const { id } = route.params;
+  const { category } = route.params;
   const { colors } = useTheme();
-  const { getIcons, getCategoryById, updateCategoryById, deleteCategoryById } =
+  const { getIcons, updateCategoryById, deleteCategoryById } =
     useContext(CategoryContext);
   const [categoryForm, setCategoryForm] = useState({
     category_name: "",
@@ -66,20 +66,18 @@ export default function CategoryScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    getCategoryById(id).then((category) => {
-      setCategoryForm({
-        category_name: category.category_name,
-        icon_id: category.icon_id._id,
-      });
+    setCategoryForm({
+      category_name: category.category_name,
+      icon_id: category.icon_id._id,
+    });
 
-      getIcons().then((icons) => {
-        setIcons(icons);
+    getIcons().then((icons) => {
+      setIcons(icons);
 
-        let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
+      let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
 
-        setIndex(i);
-        setActualIcon(icons[i].icon);
-      });
+      setIndex(i);
+      setActualIcon(icons[i].icon);
     });
   }, []);
 

@@ -1,5 +1,5 @@
 import { View, SafeAreaView, Dimensions } from "react-native";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import InfoComponent from "../components/InfoComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
 import { useTheme } from "@react-navigation/native";
@@ -16,7 +16,8 @@ export default function MainScreen({ route, navigation }) {
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
   const { deleteCurrentUser } = useContext(UserContext);
-  
+  const [hideBalance, setHideBalance] = useState(false);
+
   const toggleDialog = () => {
     setVisible(!visible);
   };
@@ -65,7 +66,7 @@ export default function MainScreen({ route, navigation }) {
         <InfoComponent
           route={route}
           navigation={navigation}
-          reload={reload}
+          setReload={setReload}
           openBottomSheet={() => openBottomSheet()}
           hideBalance={hideBalance}
         />
@@ -75,7 +76,14 @@ export default function MainScreen({ route, navigation }) {
           reload={reload}
         />
       </View>
-      <BottomSheetMenuComponent ref={bottomSheetRef} logout={() => logout()} />
+      <BottomSheetMenuComponent
+        ref={bottomSheetRef}
+        logout={() => logout()}
+        hideBalance={hideBalance}
+        setHideBalance={setHideBalance}
+        reload={reload}
+        setReload={setReload}
+      />
       <WarningDialogComponent
         dialogObject={{
           isVisible: visible,
