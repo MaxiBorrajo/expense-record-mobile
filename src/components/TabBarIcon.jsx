@@ -3,7 +3,7 @@ import React from "react";
 import { Icon } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
 
-export default function TabBarIcon({ icon, focused, name }) {
+export default function TabBarIcon({ icon, focused }) {
   const { colors } = useTheme();
 
   return (
@@ -17,7 +17,7 @@ export default function TabBarIcon({ icon, focused, name }) {
       <Icon
         name={icon}
         type="font-awesome-5"
-        color={focused ? colors.text : colors.disabledColor}
+        color={focused ? colors.attention : colors.disabledColor}
         iconStyle={{ fontSize: 22 }}
       />
     </View>

@@ -26,6 +26,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
         borderRadius: 20,
         justifyContent: "space-between",
         gap: 10,
+        elevation:5
       }}
     >
       <View
@@ -72,7 +73,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
               isCounting={!loading}
               end={balance * -1}
               formatter={(val) => {
-                return `$${val?.toFixed(2)?.toLocaleString()}`;
+                return `-$${val?.toFixed(2)?.toLocaleString()}`;
               }}
               duration={3.2}
               easing={'easeOutCubic'}

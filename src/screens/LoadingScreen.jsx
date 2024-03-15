@@ -17,7 +17,7 @@ export default function LoadingScreen() {
         },
       ]}
     >
-      <ActivityIndicator color={colors.text} size='large'/>
+      <ActivityIndicator color={colors.attention} size='large' style={{ transform: [{ scaleX: 1.7 }, { scaleY: 1.7 }] }}/>
     </View>
   );
 }

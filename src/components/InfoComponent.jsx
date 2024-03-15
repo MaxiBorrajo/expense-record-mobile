@@ -119,7 +119,7 @@ export default function InfoComponent({
                 formatter={(val) => {
                   return `$${val?.toFixed(2)?.toLocaleString()}`;
                 }}
-                duration={3.2}
+                duration={2.5}
                 easing={'easeOutCubic'}
               />
             ) : (
@@ -130,9 +130,9 @@ export default function InfoComponent({
               isCounting={!loading}
               end={balance * -1}
               formatter={(val) => {
-                return `$${val?.toFixed(2)?.toLocaleString()}`;
+                return `-$${val?.toFixed(2)?.toLocaleString()}`;
               }}
-              duration={3.2}
+              duration={2.5}
               easing={'easeOutCubic'}
             />
           ) : (
@@ -191,7 +191,7 @@ export default function InfoComponent({
                   formatter={(val) => {
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
-                  duration={3.2}
+                  duration={2.5}
                   easing={'easeOutCubic'}
                 />
               )}
@@ -243,7 +243,7 @@ export default function InfoComponent({
                   formatter={(val) => {
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
-                  duration={3.2}
+                  duration={2.5}
                   easing={'easeOutCubic'}
                 />
               )}

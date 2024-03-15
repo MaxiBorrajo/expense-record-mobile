@@ -4,7 +4,6 @@ import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
-
 export default memo(function CategoryComponent({ item, setErrorMessage }) {
   const navigation = useNavigation();
   const { colors } = useTheme();
@@ -37,9 +36,8 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 20,
+        padding: 10,
         alignItems: "center",
-        backgroundColor: colors.card,
         width: "100%",
         borderRadius: 5,
       }}
@@ -56,7 +54,7 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
       >
         <View
           style={{
-            borderRadius: 5,
+            borderRadius: 50,
             backgroundColor: colors.softCard,
             alignItems: "center",
             justifyContent: "center",

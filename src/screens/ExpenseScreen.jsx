@@ -32,13 +32,13 @@ export default function ExpenseScreen({ route, navigation }) {
 
   const updateExpense = async (updatedExpense) => {
     setLoading(true);
-    await updateExpenseById(id, updatedExpense);
+    await updateExpenseById(expense._id, updatedExpense);
     setLoading(false);
     navigation.navigate("Main", { actionCompleted: true });
   };
 
   const deleteExpense = async () => {
-    await deleteExpenseById(id);
+    await deleteExpenseById(expense._id);
     navigation.navigate("Main", { actionCompleted: true });
   };
 
@@ -59,7 +59,7 @@ export default function ExpenseScreen({ route, navigation }) {
             backgroundColor: colors.background,
             color: colors.text,
             paddingHorizontal: 30,
-            rowGap: 30,
+            rowGap: 20,
             justifyContent: "center",
             minHeight: Dimensions.get("window").height,
           }}
@@ -76,7 +76,7 @@ export default function ExpenseScreen({ route, navigation }) {
             >
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 23,
                   fontFamily: "Poppins_500Medium",
                   color: colors.text,
                 }}
@@ -86,7 +86,7 @@ export default function ExpenseScreen({ route, navigation }) {
               <Icon
                 name="trash-alt"
                 type="font-awesome-5"
-                iconStyle={{ fontSize: 20, color: "#ed2139", paddingBottom: 9 }}
+                iconStyle={{ fontSize: 20, color: "#ed2139" }}
                 onPress={toggleDialog}
               />
             </View>
@@ -94,7 +94,7 @@ export default function ExpenseScreen({ route, navigation }) {
               <Text
                 style={{
                   color: colors.text,
-                  fontSize: 10,
+                  fontSize: 12,
                   fontFamily: "Poppins_300Light",
                 }}
               >
@@ -106,7 +106,7 @@ export default function ExpenseScreen({ route, navigation }) {
           <Foect.Form
             defaultValue={{
               title: expense?.title,
-              amount: +expense?.amount,
+              amount: +expense?.amount?.toFixed(2),
               description: expense?.description,
               category_id: expense?.category_id,
             }}
@@ -120,7 +120,7 @@ export default function ExpenseScreen({ route, navigation }) {
             {(form) => (
               <View
                 style={{
-                  rowGap: form.isInvalid ? 10 : 30,
+                  rowGap: 20,
                 }}
               >
                 <Foect.Control name={"title"} required>
@@ -139,16 +139,13 @@ export default function ExpenseScreen({ route, navigation }) {
                           paddingHorizontal: 20,
                           borderRadius: 5,
                           elevation: 5,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                         }}
                       >
                         <TextInput
                           style={{
                             color: colors.text,
                             fontFamily: "Poppins_300Light",
-                            fontSize: 12,
+                            fontSize: 14,
                             width: "100%",
                             paddingRight: 15,
                           }}
@@ -193,14 +190,13 @@ export default function ExpenseScreen({ route, navigation }) {
                           width: "100%",
                           alignItems: "center",
                           justifyContent: "center",
-                          paddingHorizontal: 50,
                           columnGap: 10,
                         }}
                       >
                         <View
                           style={{
                             flexDirection: "row",
-                            width: "90%",
+                            width: "100%",
                             alignItems: "center",
                             columnGap: 3,
                             backgroundColor: colors.card,
@@ -208,9 +204,6 @@ export default function ExpenseScreen({ route, navigation }) {
                             paddingHorizontal: 20,
                             borderRadius: 5,
                             elevation: 5,
-                            borderColor: colors.border,
-                            borderWidth: 1,
-                            borderStyle: "solid",
                           }}
                         >
                           <Text
@@ -226,7 +219,7 @@ export default function ExpenseScreen({ route, navigation }) {
                             style={{
                               color: colors.text,
                               fontFamily: "Poppins_300Light",
-                              fontSize: 12,
+                              fontSize: 14,
                               width: "100%",
                               paddingRight: 25,
                             }}
@@ -237,12 +230,6 @@ export default function ExpenseScreen({ route, navigation }) {
                             name="amount"
                           />
                         </View>
-                        <IncomeOrLossComponent
-                          amount={control.value}
-                          action={() =>
-                            form.setValue("amount", control.value * -1)
-                          }
-                        />
                       </View>
                       {control.isInvalid && control.errors.required && (
                         <Text
@@ -279,14 +266,11 @@ export default function ExpenseScreen({ route, navigation }) {
                         width: "100%",
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: 12,
+                        fontSize: 14,
                         padding: 10,
                         backgroundColor: colors.card,
                         borderRadius: 5,
                         elevation: 5,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        borderStyle: "solid",
                         textAlignVertical: "top",
                       }}
                       onChangeText={(value) => {
@@ -332,20 +316,20 @@ export default function ExpenseScreen({ route, navigation }) {
                           height: "100%",
                           backgroundColor: colors.card,
                           color: colors.text,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
-                          fontSize: 12,
+                          fontSize: 14,
                           flexGrow: 1,
+                          elevation:5
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
-                          fontSize: 12,
+                          fontSize: 14,
+                          elevation:5
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
-                          fontSize: 12,
+                          fontSize: 14,
+                          elevation:5
                         }}
                       />
                     )}

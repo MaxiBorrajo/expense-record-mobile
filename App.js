@@ -117,7 +117,10 @@ export default function App() {
                         component={CreateCategoryScreen}
                       />
                       <Stack.Screen name="Profile" component={ProfileScreen} />
-                      <Stack.Screen name="Categories" component={CategoriesScreen} />
+                      <Stack.Screen
+                        name="Categories"
+                        component={CategoriesScreen}
+                      />
                     </Stack.Navigator>
                   </AppContext.Provider>
                 </NavigationContainer>

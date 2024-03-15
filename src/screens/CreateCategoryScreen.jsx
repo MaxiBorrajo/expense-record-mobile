@@ -107,9 +107,6 @@ export default function CreateCategoryScreen({ navigation }) {
                         backgroundColor: colors.card,
                         borderRadius: 5,
                         elevation: 5,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        borderStyle: "solid",
                       }}
                       onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}

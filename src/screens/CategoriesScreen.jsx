@@ -116,8 +116,9 @@ export default function CategoriesScreen({ route, navigation }) {
             paddingBottom: 30,
           }}
           inputContainerStyle={{
-            borderRadius: 50,
+            borderRadius: 10,
             backgroundColor: colors.card,
+            paddingHorizontal: 5,
           }}
           inputStyle={{
             fontSize: 10,

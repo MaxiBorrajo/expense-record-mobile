@@ -77,8 +77,11 @@ export default function StatisticsScreen() {
     propsForDots: {
       r: "6",
       strokeWidth: "0",
-      stroke: "#58eb34",
+      stroke: colors.attention,
     },
+    styles:{
+      elevation:5
+    }
   };
 
   useEffect(() => {
@@ -94,7 +97,7 @@ export default function StatisticsScreen() {
         datasets: [
           {
             data: getMonthsData(result),
-            color: (opacity = 0.5) => `rgba(89, 235, 52, ${opacity})`,
+            color: (opacity = 0.5) => `rgba(215, 173, 87, ${opacity})`,
             strokeWidth: 5,
           },
         ],
@@ -142,6 +145,7 @@ export default function StatisticsScreen() {
                 overflow: "scroll",
                 minHeight: Dimensions.get("window").height,
                 rowGap: 10,
+                paddingTop:10
               }}
             >
               <Text
@@ -194,15 +198,18 @@ export default function StatisticsScreen() {
                       fontSize: 12,
                       width: 80,
                       height: 40,
+                      elevation:5
                     }}
                     buttonTextStyle={{
                       fontFamily: "Poppins_300Light",
                       color: colors.text,
                       fontSize: 12,
+                      elevation:5
                     }}
                     rowTextStyle={{
                       fontFamily: "Poppins_300Light",
                       fontSize: 12,
+                      elevation:5
                     }}
                   />
                 ) : null}
@@ -260,9 +267,10 @@ export default function StatisticsScreen() {
                           paddingTop: 20,
                           paddingRight: 50,
                           bottom: 12,
+                          elevation:5
                         }}
                         getDotColor={(dataPoint, index) => {
-                          return "#58eb34";
+                          return "#D7AD57";
                         }}
                         withHorizontalLabels={false}
                         withOuterLines={false}
@@ -448,15 +456,18 @@ export default function StatisticsScreen() {
                           fontSize: 12,
                           width: 80,
                           height: 40,
+                          elevation:5
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 12,
+                          elevation:5
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
+                          elevation:5
                         }}
                       />
                       <SelectDropdown
@@ -480,15 +491,18 @@ export default function StatisticsScreen() {
                           fontSize: 12,
                           width: 100,
                           height: 40,
+                          elevation:5
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 12,
+                          elevation:5
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
+                          elevation:5
                         }}
                       />
                     </View>

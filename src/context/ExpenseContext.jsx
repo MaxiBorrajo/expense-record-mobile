@@ -26,7 +26,7 @@ export function ExpenseContextProvider(props) {
   }
 
   async function getExpenses(sort, order, filters) {
-    let url = "https://expense-record-production.up.railway.app/api/expenses?";
+    let url = `${process.env.URL_BACKEND}/expenses?`;
 
     url = applySorting(sort, order, url);
 
