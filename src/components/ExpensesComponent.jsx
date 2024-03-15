@@ -67,7 +67,7 @@ export default function ExpensesComponent({
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
-          paddingTop:20,
+          paddingTop:10,
           paddingBottom:490
         }}
         data={expenses}

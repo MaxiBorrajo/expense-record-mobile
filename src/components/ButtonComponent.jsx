@@ -8,7 +8,7 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
     <Button
       title={label}
       buttonStyle={{
-        backgroundColor: colors.text,
+        backgroundColor: colors.attention,
         paddingVertical: 10,
         paddingHorizontal: 30,
         borderRadius: 5,
@@ -17,7 +17,7 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
         elevation:5
       }}
       titleStyle={{
-        color: colors.background,
+        color: colors.text,
         fontSize: 15,
         fontFamily: "Poppins_500Medium",
       }}
@@ -25,12 +25,12 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
       loading={loading}
       loadingProps={{
         size: "large",
-        color: colors.background,
+        color: 'white',
       }}
       disabled={disabled}
       disabledStyle={{
-        backgroundColor: colors.disabledColor,
-        color: colors.disabledBackground,
+        backgroundColor: colors.disabledBackground,
+        color: colors.disabledColor,
         elevation:5
       }}
     />

@@ -58,7 +58,7 @@ export default function CreateExpenseScreen() {
         <View
           style={{
             flex: 1,
-            rowGap: expenseForm.category_id ? 30 : 20,
+            rowGap: 20,
             justifyContent: "center",
           }}
         >
@@ -67,6 +67,7 @@ export default function CreateExpenseScreen() {
               fontSize: 20,
               fontFamily: "Poppins_500Medium",
               color: colors.text,
+              paddingBottom: 10,
             }}
           >
             {i18n.t("createExpense")}
@@ -107,7 +108,7 @@ export default function CreateExpenseScreen() {
             {(form) => (
               <View
                 style={{
-                  rowGap: form.isInvalid ? 10 : 20,
+                  rowGap: 20,
                 }}
               >
                 <Foect.Control name="title" required>
@@ -132,7 +133,7 @@ export default function CreateExpenseScreen() {
                           style={{
                             color: colors.text,
                             fontFamily: "Poppins_300Light",
-                            fontSize: 12,
+                            fontSize: 14,
                             width: "100%",
                             paddingRight: 15,
                           }}
@@ -168,25 +169,22 @@ export default function CreateExpenseScreen() {
                   }}
                 >
                   {(control) => (
-                    <View
-                      style={{
-                        rowGap: 10,
-                      }}
-                    >
+                    <View style={{
+                      rowGap: 10,
+                    }}> 
                       <View
                         style={{
                           flexDirection: "row",
                           width: "100%",
                           alignItems: "center",
                           justifyContent: "center",
-                          paddingHorizontal: 50,
                           columnGap: 10,
                         }}
                       >
                         <View
                           style={{
                             flexDirection: "row",
-                            width: "90%",
+                            width: "100%",
                             alignItems: "center",
                             columnGap: 3,
                             backgroundColor: colors.card,
@@ -209,23 +207,19 @@ export default function CreateExpenseScreen() {
                             style={{
                               color: colors.text,
                               fontFamily: "Poppins_300Light",
-                              fontSize: 12,
+                              fontSize: 14,
                               width: "100%",
                               paddingRight: 25,
                             }}
                             onBlur={control.markAsTouched}
-                            onChangeText={(text) => control.onChange(text)}
+                            onChangeText={(text) => 
+                              control.onChange(text)
+                            }
                             value={control.value.toString()}
                             keyboardType="decimal-pad"
                             name="amount"
                           />
                         </View>
-                        <IncomeOrLossComponent
-                          amount={control.value}
-                          action={() =>
-                            form.setValue("amount", control.value * -1)
-                          }
-                        />
                       </View>
                       {control.isInvalid && control.errors.required && (
                         <Text
@@ -262,12 +256,13 @@ export default function CreateExpenseScreen() {
                         width: "100%",
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: 12,
+                        fontSize: 14,
                         padding: 10,
                         backgroundColor: colors.card,
                         borderRadius: 5,
                         elevation: 5,
                         textAlignVertical: "top",
+                        paddingRight: 15,
                       }}
                       onChangeText={(value) => {
                         control.onChange(value);
@@ -309,7 +304,7 @@ export default function CreateExpenseScreen() {
                             ? item?.category_name
                             : i18n.t(item?.category_name);
                         }}
-                        defaultButtonText={i18n.t('selectCategory')}
+                        defaultButtonText={i18n.t("selectCategory")}
                         defaultValue={control.value}
                         buttonStyle={{
                           borderRadius: 5,
@@ -317,26 +312,26 @@ export default function CreateExpenseScreen() {
                           height: "100%",
                           backgroundColor: colors.card,
                           color: colors.text,
-                          fontSize: 12,
+                          fontSize: 14,
                           flexGrow: 1,
-                          elevation:5
+                          elevation: 5,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
-                          fontSize: 12,
-                          elevation:5
+                          fontSize: 14,
+                          elevation: 5,
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
-                          fontSize: 12,
-                          elevation:5
+                          fontSize: 14,
+                          elevation: 5,
                         }}
                       />
                     )}
                   </Foect.Control>
                   <ButtonComponent
-                    label={i18n.t('create')}
+                    label={i18n.t("create")}
                     loading={loading}
                     action={() => form.submit()}
                     disabled={form.isInvalid}

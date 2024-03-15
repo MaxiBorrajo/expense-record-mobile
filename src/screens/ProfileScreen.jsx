@@ -92,9 +92,6 @@ export default function ProfileScreen() {
                           paddingHorizontal: 20,
                           borderRadius: 5,
                           elevation: 5,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                         }}
                       >
                         <TextInput
@@ -143,9 +140,6 @@ export default function ProfileScreen() {
                           paddingHorizontal: 20,
                           borderRadius: 5,
                           elevation: 5,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                         }}
                       >
                         <TextInput

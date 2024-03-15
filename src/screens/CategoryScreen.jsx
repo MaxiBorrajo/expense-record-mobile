@@ -31,13 +31,13 @@ export default function CategoryScreen({ route, navigation }) {
   const editCategory = async (form) => {
     setErrorMessage(null);
     setLoading(true);
-    await updateCategoryById(id, form);
+    await updateCategoryById(category._id, form);
     setLoading(false);
     navigation.navigate("Categories", { actionCompleted: true });
   };
 
   const deleteCategory = async () => {
-    await deleteCategoryById(id);
+    await deleteCategoryById(category._id);
     navigation.navigate("Categories", { actionCompleted: true });
   };
 
@@ -152,9 +152,6 @@ export default function CategoryScreen({ route, navigation }) {
                           backgroundColor: colors.card,
                           borderRadius: 5,
                           elevation: 5,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderStyle: "solid",
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}

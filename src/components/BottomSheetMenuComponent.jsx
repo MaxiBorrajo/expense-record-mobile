@@ -17,7 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
 const BottomSheetMenuComponent = forwardRef(
   ({ toggleDialog, logout, hideBalance, setHideBalance, setReload }, ref) => {
@@ -28,6 +28,7 @@ const BottomSheetMenuComponent = forwardRef(
     const { getCurrentUser, updateCurrentUser } = useContext(UserContext);
     const { applyConversion } = useContext(ExpenseContext);
     const { colors } = useTheme();
+    const navigation = useNavigation();
 
     const translate = async (newLanguage) => {
       i18n.locale = newLanguage;

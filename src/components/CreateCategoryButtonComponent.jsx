@@ -10,7 +10,7 @@ const CreateCategoryButtonComponent = ({ action }) => {
     <TouchableOpacity
       style={{
         borderRadius: 50,
-        backgroundColor: colors.text,
+        backgroundColor: colors.attention,
         width: 55,
         height: 55,
         position: "absolute",

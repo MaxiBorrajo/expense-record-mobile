@@ -82,9 +82,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 5,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      borderStyle: "solid",
+                      borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
@@ -125,9 +123,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 5,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      borderStyle: "solid",
+                      borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}
                     value={control.value}
@@ -169,9 +165,7 @@ export default function RegisterScreen({ navigation }) {
                         paddingHorizontal: 20,
                         borderRadius: 5,
                         elevation: 5,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        borderStyle: "solid",
+                        borderBottomWidth:0
                       }}
                       onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
@@ -236,9 +230,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingLeft: 20,
                       borderRadius: 5,
                       elevation: 5,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      borderStyle: "solid",
+                      borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}

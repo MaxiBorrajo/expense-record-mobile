@@ -4,11 +4,15 @@ import { Icon } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import { getRandomHexColor, hexToRGBA } from "../utils/utils";
 
 export default memo(function ExpenseComponent({ item }) {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [fadeAnim] = useState(new Animated.Value(0));
+  const color = getRandomHexColor();
+  const colorOpacity = hexToRGBA(color, 0.1);
+
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -22,9 +26,8 @@ export default memo(function ExpenseComponent({ item }) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 20,
+        padding: 10,
         alignItems: "center",
-        backgroundColor: colors.card,
         width: "100%",
         borderRadius: 5,
       }}
@@ -45,8 +48,8 @@ export default memo(function ExpenseComponent({ item }) {
       >
         <View
           style={{
-            borderRadius: 5,
-            backgroundColor: colors.softCard,
+            borderRadius: 50,
+            backgroundColor: colorOpacity,
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
@@ -59,7 +62,7 @@ export default memo(function ExpenseComponent({ item }) {
               item.category_id ? item.category_id.icon_id.icon : "money-bill"
             }
             type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: colors.text }}
+            iconStyle={{ fontSize: 20, color: color }}
           ></Icon>
         </View>
         <View

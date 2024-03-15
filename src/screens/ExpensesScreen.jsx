@@ -587,8 +587,9 @@ export default function ExpensesScreen() {
             paddingBottom: 20,
           }}
           inputContainerStyle={{
-            borderRadius: 50,
+            borderRadius: 10,
             backgroundColor: colors.card,
+            paddingHorizontal: 5,
           }}
           inputStyle={{
             fontSize: 10,

@@ -110,9 +110,7 @@ export default function ResetPasswordScreen({ navigation }) {
                       paddingLeft: 20,
                       borderRadius: 5,
                       elevation: 5,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      borderStyle: "solid",
+                      borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
@@ -164,9 +162,7 @@ export default function ResetPasswordScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 5,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      borderStyle: "solid",
+                      borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
