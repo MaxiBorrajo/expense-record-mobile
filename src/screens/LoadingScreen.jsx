@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import React, { useEffect, useRef } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import React from "react";
 import { useTheme } from "@react-navigation/native";
 
 

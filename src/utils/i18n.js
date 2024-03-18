@@ -135,10 +135,16 @@ const translations = {
     reset: "Reset",
     categories: "Categories",
     categoryError: "You can only edit categories created by you",
-    dataNotFound: 'No results found'
+    dataNotFound: "No results found",
+    aboutUs: "About Us",
+    aboutUsDescription:
+      'The truth is, there is no "we" here. This application was developed by a single person, after several months of hard work and dedication, with great learning in the process. I have many plans for its improvement and still much to learn. If you like the application, I invite you to share your opinions and suggestions through my social networks. Additionally, you can contribute to its maintenance and growth by inviting me for a coffee. I thank you in advance for your support and the use you make of the app.',
   },
   es: {
-    dataNotFound: 'No se han encontrado resultados',
+    aboutUsDescription:
+      'La verdad es que no hay un "nosotros" aquí. Esta aplicación fue desarrollada por una sola persona, tras varios meses de arduo trabajo y dedicación, con un gran aprendizaje en el proceso. Tengo muchos planes para su mejora y aún mucho por aprender. Si te agrada la aplicación, te invito a compartir tus opiniones y sugerencias a través de mis redes sociales. Además, puedes contribuir a su mantenimiento y crecimiento invitándome a un café. Agradezco de antemano tu apoyo y el uso que haces de la app.',
+    aboutUs: "Sobre nosotros",
+    dataNotFound: "No se han encontrado resultados",
     categoryError: "Solo puedes editar categorías creadas por ti.",
     categories: "Categorías",
     reset: "Restablecer",

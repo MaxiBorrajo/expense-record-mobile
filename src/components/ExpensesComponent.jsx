@@ -6,19 +6,12 @@ import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
-import { AppContext } from "../context/AppContext";
-
-export default function ExpensesComponent({
-  route,
-  navigation,
-  setReload,
-  reload,
-}) {
+import i18n from "../utils/i18n";
+export default function ExpensesComponent({ route, navigation }) {
   const { getExpenses } = useContext(ExpenseContext);
-  const { loading } = useContext(UserContext);
+  const { reload } = useContext(UserContext);
   const [expenses, setExpenses] = useState(null);
   const { colors } = useTheme();
-  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
 
   const getLastExpenses = async () => {
     const filters = [
@@ -74,8 +67,6 @@ export default function ExpensesComponent({
         renderItem={({ item }) => (
           <ExpenseComponent
             item={item}
-            setReload={setReload}
-            loading={loading}
           />
         )}
         ListEmptyComponent={() =>
