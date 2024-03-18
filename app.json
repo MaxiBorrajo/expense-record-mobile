@@ -22,7 +22,7 @@
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./assets/dark_adaptive_icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#000000"
       },
       "package": "com.maximilianoborrajo.expenserecordmobile"
     },
@@ -36,17 +36,6 @@
     },
     "plugins": [
       "expo-localization"
-    ],
-    "dark": {
-      "icon": "./assets/icon.png",
-      "splash": {
-        "image": "./assets/splash.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff"
-      },
-      "web": {
-        "favicon": "./assets/favicon.ico"
-      }
-    }
+    ]
   }
 }

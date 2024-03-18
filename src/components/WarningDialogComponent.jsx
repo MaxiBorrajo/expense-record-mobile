@@ -13,7 +13,7 @@ const { colors } = useTheme();
         onBackdropPress={dialogObject.toggleDialog}
         overlayStyle={{
           borderRadius: 20,
-          elevation: 5,
+          elevation: 3,
           backgroundColor: colors.card,
           alignItems: "center",
           justifyContent: "center",

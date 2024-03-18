@@ -151,7 +151,7 @@ export default function CategoryScreen({ route, navigation }) {
                           padding: 10,
                           backgroundColor: colors.card,
                           borderRadius: 5,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}

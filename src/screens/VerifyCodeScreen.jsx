@@ -90,7 +90,7 @@ export default function VerifyCodeScreen({ navigation }) {
                         alignItems: "center",
                         backgroundColor: colors.card,
                         borderRadius: 5,
-                        elevation: 5,
+                        elevation: 3,
                         borderColor: colors.border,
                         borderWidth: 1,
                         borderStyle: "solid",

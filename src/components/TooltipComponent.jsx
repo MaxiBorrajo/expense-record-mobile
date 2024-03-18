@@ -31,7 +31,7 @@ const TooltipComponent = ({ dataPoint, colors, monthData }) => {
           padding: 5,
           justifyContent: "center",
           alignItems: "center",
-          elevation: 5,
+          elevation: 3,
         }}
       >
         <Text

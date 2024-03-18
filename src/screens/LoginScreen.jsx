@@ -82,7 +82,7 @@ export default function LoginScreen({ navigation }) {
                         paddingVertical: 10,
                         paddingHorizontal: 20,
                         borderRadius: 5,
-                        elevation: 5,
+                        elevation: 3,
                         borderBottomWidth:0
                       }}
                       onBlur={control.markAsTouched}
@@ -147,7 +147,7 @@ export default function LoginScreen({ navigation }) {
                       paddingVertical: 10,
                       paddingLeft: 20,
                       borderRadius: 5,
-                      elevation: 5,
+                      elevation: 3,
                       borderBottomWidth:0
                     }}
                     onBlur={control.markAsTouched}

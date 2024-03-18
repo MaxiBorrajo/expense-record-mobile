@@ -14,7 +14,7 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
         borderRadius: 5,
         alignItems: "center",
         justifyContent: "center",
-        elevation:5
+        elevation:3
       }}
       titleStyle={{
         color: colors.text,
@@ -31,7 +31,7 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
       disabledStyle={{
         backgroundColor: colors.disabledBackground,
         color: colors.disabledColor,
-        elevation:5
+        elevation:3
       }}
     />
   );

@@ -78,7 +78,7 @@ export default function StatisticsScreen() {
     color: () => colors.attention,
     labelColor: () => colors.text,
     styles: {
-      elevation: 5,
+      elevation: 3,
     },
   };
 
@@ -194,18 +194,18 @@ export default function StatisticsScreen() {
                       fontSize: 12,
                       width: 80,
                       height: 40,
-                      elevation: 5,
+                      elevation: 3,
                     }}
                     buttonTextStyle={{
                       fontFamily: "Poppins_300Light",
                       color: colors.text,
                       fontSize: 12,
-                      elevation: 5,
+                      elevation: 3,
                     }}
                     rowTextStyle={{
                       fontFamily: "Poppins_300Light",
                       fontSize: 12,
-                      elevation: 5,
+                      elevation: 3,
                     }}
                   />
                 ) : null}
@@ -289,18 +289,18 @@ export default function StatisticsScreen() {
                             fontSize: 12,
                             width: 80,
                             height: 40,
-                            elevation: 5,
+                            elevation: 3,
                           }}
                           buttonTextStyle={{
                             fontFamily: "Poppins_300Light",
                             color: colors.text,
                             fontSize: 12,
-                            elevation: 5,
+                            elevation: 3,
                           }}
                           rowTextStyle={{
                             fontFamily: "Poppins_300Light",
                             fontSize: 12,
-                            elevation: 5,
+                            elevation: 3,
                           }}
                         />
                       </View>
@@ -312,7 +312,7 @@ export default function StatisticsScreen() {
                         style={{
                           borderRadius: 20,
                           paddingRight: 0,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         withHorizontalLabels={false}
                         withOuterLines={false}
@@ -379,18 +379,18 @@ export default function StatisticsScreen() {
                           fontSize: 12,
                           width: 100,
                           height: 40,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 12,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                       />
                     </View>

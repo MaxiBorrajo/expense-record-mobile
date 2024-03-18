@@ -83,7 +83,7 @@ export default function CreateExpenseScreen() {
                 textAlign: "center",
                 width: 70,
                 height: 70,
-                elevation: 5,
+                elevation: 3,
                 alignSelf: "center",
               }}
             >
@@ -126,7 +126,7 @@ export default function CreateExpenseScreen() {
                           paddingVertical: 10,
                           paddingHorizontal: 20,
                           borderRadius: 5,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                       >
                         <TextInput
@@ -191,7 +191,7 @@ export default function CreateExpenseScreen() {
                             paddingVertical: 10,
                             paddingHorizontal: 20,
                             borderRadius: 5,
-                            elevation: 5,
+                            elevation: 3,
                           }}
                         >
                           <Text
@@ -260,7 +260,7 @@ export default function CreateExpenseScreen() {
                         padding: 10,
                         backgroundColor: colors.card,
                         borderRadius: 5,
-                        elevation: 5,
+                        elevation: 3,
                         textAlignVertical: "top",
                         paddingRight: 15,
                       }}
@@ -314,18 +314,18 @@ export default function CreateExpenseScreen() {
                           color: colors.text,
                           fontSize: 14,
                           flexGrow: 1,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 14,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 14,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                       />
                     )}

@@ -49,7 +49,7 @@ export default function App() {
     };
 
     AsyncStorage.getItem("theme").then((theme) => {
-      setIsDarkTheme(theme && theme === "dark");
+      setIsDarkTheme(!theme || (theme && theme === "light"));
     });
 
     getAuth();

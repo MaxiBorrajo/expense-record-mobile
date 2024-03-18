@@ -26,7 +26,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
         borderRadius: 20,
         justifyContent: "space-between",
         gap: 10,
-        elevation:5
+        elevation:3
       }}
     >
       <View

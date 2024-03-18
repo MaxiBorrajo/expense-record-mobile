@@ -138,7 +138,7 @@ export default function ExpenseScreen({ route, navigation }) {
                           paddingVertical: 10,
                           paddingHorizontal: 20,
                           borderRadius: 5,
-                          elevation: 5,
+                          elevation: 3,
                         }}
                       >
                         <TextInput
@@ -203,7 +203,7 @@ export default function ExpenseScreen({ route, navigation }) {
                             paddingVertical: 10,
                             paddingHorizontal: 20,
                             borderRadius: 5,
-                            elevation: 5,
+                            elevation: 3,
                           }}
                         >
                           <Text
@@ -270,7 +270,7 @@ export default function ExpenseScreen({ route, navigation }) {
                         padding: 10,
                         backgroundColor: colors.card,
                         borderRadius: 5,
-                        elevation: 5,
+                        elevation: 3,
                         textAlignVertical: "top",
                       }}
                       onChangeText={(value) => {

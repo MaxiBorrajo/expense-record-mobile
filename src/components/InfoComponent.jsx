@@ -60,7 +60,7 @@ export default function InfoComponent({
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
         rowGap: 40,
-        elevation:5
+        elevation:3
       }}
     >
       <View
