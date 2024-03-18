@@ -1,31 +1,33 @@
 {
   "expo": {
-    "name": "Expense Record",
-    "slug": "expense-record-mobile",
+    "name": "Fehu: Expense Tracker",
+    "slug": "fehu-expense-tracker-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "icon": "./assets/dark_icon.png",
+    "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/dark_splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "userInterfaceStyle": "automatic"
     },
     "android": {
+      "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/dark_adaptive_icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.maximilianoborrajo.expenserecordmobile"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/dark_favicon.ico"
     },
     "extra": {
       "eas": {
@@ -34,6 +36,17 @@
     },
     "plugins": [
       "expo-localization"
-    ]
+    ],
+    "dark": {
+      "icon": "./assets/icon.png",
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      },
+      "web": {
+        "favicon": "./assets/favicon.ico"
+      }
+    }
   }
 }

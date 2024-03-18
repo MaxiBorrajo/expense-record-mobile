@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HeroScreen from "./src/screens/HeroScreen";
@@ -41,7 +40,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [auth, setAuth] = useState(null);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   useEffect(() => {
     const getAuth = async () => {
@@ -50,7 +49,7 @@ export default function App() {
     };
 
     AsyncStorage.getItem("theme").then((theme) => {
-      theme && theme === "dark" ? setIsDarkTheme(true) : setIsDarkTheme(false);
+      setIsDarkTheme(theme && theme === "dark");
     });
 
     getAuth();

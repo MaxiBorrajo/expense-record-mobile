@@ -92,7 +92,6 @@ const translations = {
     totalIncome: "Total income",
     totalLoss: "Total loss",
     withoutCategory: "Without category",
-    noDataFound: "No data found",
     monthStatistics: "Month statistics",
     categoryStatistics: "Category statistics",
     month: "Month",
@@ -136,8 +135,10 @@ const translations = {
     reset: "Reset",
     categories: "Categories",
     categoryError: "You can only edit categories created by you",
+    dataNotFound: 'No results found'
   },
   es: {
+    dataNotFound: 'No se han encontrado resultados',
     categoryError: "Solo puedes editar categorías creadas por ti.",
     categories: "Categorías",
     reset: "Restablecer",
@@ -241,7 +242,6 @@ const translations = {
     totalIncome: "Ingresos totales",
     totalLoss: "Perdidas totales",
     withoutCategory: "Sin categoría",
-    noDataFound: "No se encontró información",
     monthStatistics: "Estadísticas mensuales",
     categoryStatistics: "Estadísticas por categoría",
     month: "Mes",

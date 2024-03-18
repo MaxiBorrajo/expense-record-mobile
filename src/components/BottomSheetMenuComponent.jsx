@@ -34,11 +34,19 @@ const BottomSheetMenuComponent = forwardRef(
       i18n.locale = newLanguage;
       setLanguage(newLanguage);
       await AsyncStorage.setItem("language", newLanguage);
+      setReload(true);
     };
 
     const handleHideBalance = async (value) => {
       setHideBalance(value);
       await AsyncStorage.setItem("hideBalance", `${value}`);
+      setReload(true);
+    };
+
+    const handleChangeTheme = async () => {
+      setIsDarkTheme(!isDarkTheme);
+      AsyncStorage.setItem("theme", !isDarkTheme ? "dark" : "light");
+      setReload(true);
     };
 
     const updateCurrency = async (newCurrency) => {
@@ -127,13 +135,7 @@ const BottomSheetMenuComponent = forwardRef(
               backgroundInactive={"gray"}
               value={isDarkTheme}
               onValueChange={() => {
-                AsyncStorage.setItem(
-                  "theme",
-                  !isDarkTheme ? "dark" : "light",
-                  () => {
-                    setIsDarkTheme(!isDarkTheme);
-                  }
-                );
+                handleChangeTheme();
               }}
             />
           </View>

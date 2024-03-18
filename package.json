@@ -32,10 +32,10 @@
     "expo-localization": "~14.3.0",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "expo-system-ui": "^2.9.3",
     "foect": "^0.1.6",
     "i18n-js": "^4.2.0",
     "lottie-react-native": "5.1.6",
-    "moti": "^0.28.1",
     "react": "18.2.0",
     "react-native": "0.72.10",
     "react-native-asset": "^2.1.1",
@@ -52,7 +52,6 @@
     "react-native-svg": "13.9.0",
     "react-native-switch": "^1.5.1",
     "react-native-vector-icons": "^10.0.3",
-    "redux": "^5.0.1",
     "use-count-up": "^3.0.1"
   },
   "devDependencies": {

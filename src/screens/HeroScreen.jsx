@@ -18,7 +18,7 @@ export default function HeroScreen({ navigation }) {
         style={{ flex: 1 }}
       >
         <View style={styles.container}>
-          <Text style={styles.title}>Expense Record</Text>
+          <Text style={styles.title}>Fehu: Expense Tracker</Text>
           <View>
             <Text style={styles.subtitle}>
               {i18n.t('phrase')}

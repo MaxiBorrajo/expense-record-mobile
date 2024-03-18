@@ -1,4 +1,4 @@
-import { Text, View, FlatList, ViewComponent } from "react-native";
+import { Text, View, FlatList, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { Card } from "@rneui/themed";
@@ -6,7 +6,6 @@ import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
-import { Skeleton } from "moti/skeleton";
 import { AppContext } from "../context/AppContext";
 
 export default function ExpensesComponent({
@@ -67,8 +66,8 @@ export default function ExpensesComponent({
         contentContainerStyle={{
           alignItems: "center",
           justifyContent: "center",
-          paddingTop:10,
-          paddingBottom:490
+          paddingTop: 10,
+          paddingBottom: 490,
         }}
         data={expenses}
         keyExtractor={(item) => item._id}
@@ -79,125 +78,39 @@ export default function ExpensesComponent({
             loading={loading}
           />
         )}
-        ListEmptyComponent={() => (
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              paddingBottom: 30,
-              rowGap: 20,
-              width: "100%",
-              paddingRight: 10,
-            }}
-          >
+        ListEmptyComponent={() =>
+          !expenses ? (
             <View
               style={{
-                flexDirection: "row",
-                padding: 20,
                 alignItems: "center",
-                justifyContent: "flex-start",
-                backgroundColor: colors.card,
-                borderRadius: 5,
-                columnGap: 15,
-                width: "100%",
+                justifyContent: "center",
+                minHeight: "100%",
+                minWidth: "100%",
               }}
             >
-              <Skeleton
-                show={!expenses}
-                width={60}
-                height={60}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
-                  direction: "left",
-                }}
-              ></Skeleton>
-              <Skeleton
-                show={!expenses}
-                width={"80%"}
-                height={40}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
-                }}
-              ></Skeleton>
+              <ActivityIndicator color={colors.attention} size="large" />
             </View>
+          ) : expenses && expenses.length === 0 ? (
             <View
               style={{
-                flexDirection: "row",
-                padding: 20,
                 alignItems: "center",
-                justifyContent: "flex-start",
-                backgroundColor: colors.card,
-                borderRadius: 5,
-                columnGap: 15,
-                width: "100%",
+                justifyContent: "center",
+                minHeight: "100%",
+                minWidth: "100%",
               }}
             >
-              <Skeleton
-                show={!expenses}
-                width={60}
-                height={60}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: "Poppins_400Regular",
+                  color: colors.text,
                 }}
-              ></Skeleton>
-              <Skeleton
-                show={!expenses}
-                width={"80%"}
-                height={40}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
-                }}
-              ></Skeleton>
+              >
+                {i18n.t("dataNotFound")}
+              </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                padding: 20,
-                alignItems: "center",
-                justifyContent: "flex-start",
-                backgroundColor: colors.card,
-                borderRadius: 5,
-                columnGap: 15,
-                width: "100%",
-              }}
-            >
-              <Skeleton
-                show={!expenses}
-                width={60}
-                height={60}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
-                }}
-              ></Skeleton>
-              <Skeleton
-                show={!expenses}
-                width={"80%"}
-                height={40}
-                colorMode={isDarkTheme ? "dark" : "light"}
-                radius={5}
-                transition={{
-                  type: "timing",
-                  duration: 2000,
-                }}
-              ></Skeleton>
-            </View>
-          </View>
-        )}
+          ) : null
+        }
         ItemSeparatorComponent={() => (
           <View style={{ height: 10, width: "100%" }}></View>
         )}

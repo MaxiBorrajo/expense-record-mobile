@@ -1,4 +1,11 @@
-import { Text, View, FlatList, SafeAreaView, Dimensions } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  SafeAreaView,
+  Dimensions,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { SearchBar } from "@rneui/themed";
 import { CategoryContext } from "../context/CategoryContext";
@@ -6,7 +13,6 @@ import CategoryComponent from "../components/CategoryComponent";
 import CreateCategoryButtonComponent from "../components/CreateCategoryButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
-import { Skeleton } from "moti/skeleton";
 import { AppContext } from "../context/AppContext";
 import i18n from "../utils/i18n";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -143,125 +149,39 @@ export default function CategoriesScreen({ route, navigation }) {
               setReload={setReload}
             />
           )}
-          ListEmptyComponent={() => (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                paddingBottom: 30,
-                rowGap: 20,
-                width: "100%",
-                paddingRight: 10,
-              }}
-            >
+          ListEmptyComponent={() =>
+            !categories ? (
               <View
                 style={{
-                  flexDirection: "row",
-                  padding: 20,
                   alignItems: "center",
-                  justifyContent: "flex-start",
-                  backgroundColor: colors.card,
-                  borderRadius: 5,
-                  columnGap: 15,
-                  width: "100%",
+                  justifyContent: "center",
+                  minHeight: '100%',
+                  minWidth: '100%'
                 }}
               >
-                <Skeleton
-                  show={!categories}
-                  width={60}
-                  height={60}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
-                    direction: "left",
-                  }}
-                ></Skeleton>
-                <Skeleton
-                  show={!categories}
-                  width={"80%"}
-                  height={40}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
-                  }}
-                ></Skeleton>
+                <ActivityIndicator color={colors.attention} size="large" />
               </View>
+            ) : categories && categories.length === 0 ? (
               <View
                 style={{
-                  flexDirection: "row",
-                  padding: 20,
                   alignItems: "center",
-                  justifyContent: "flex-start",
-                  backgroundColor: colors.card,
-                  borderRadius: 5,
-                  columnGap: 15,
-                  width: "100%",
+                  justifyContent: "center",
+                  minHeight: '100%',
+                  minWidth: '100%'
                 }}
               >
-                <Skeleton
-                  show={!categories}
-                  width={60}
-                  height={60}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "Poppins_400Regular",
+                    color: colors.text,
                   }}
-                ></Skeleton>
-                <Skeleton
-                  show={!categories}
-                  width={"80%"}
-                  height={40}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
-                  }}
-                ></Skeleton>
+                >
+                  {i18n.t("dataNotFound")}
+                </Text>
               </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  padding: 20,
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  backgroundColor: colors.card,
-                  borderRadius: 5,
-                  columnGap: 15,
-                  width: "100%",
-                }}
-              >
-                <Skeleton
-                  show={!categories}
-                  width={60}
-                  height={60}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
-                  }}
-                ></Skeleton>
-                <Skeleton
-                  show={!categories}
-                  width={"80%"}
-                  height={40}
-                  colorMode={isDarkTheme ? "dark" : "light"}
-                  radius={5}
-                  transition={{
-                    type: "timing",
-                    duration: 2000,
-                  }}
-                ></Skeleton>
-              </View>
-            </View>
-          )}
+            ) : null
+          }
           ItemSeparatorComponent={() => (
             <View style={{ height: 20, width: "100%" }}></View>
           )}

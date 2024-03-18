@@ -5,18 +5,19 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
 import SelectDropdown from "react-native-select-dropdown";
-import { PieChart, LineChart } from "react-native-chart-kit";
+import { PieChart, BarChart } from "react-native-chart-kit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import AnnualBalanceComponent from "../components/AnnualBalanceComponent";
-import { Icon } from "@rneui/themed";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
+import TooltipComponent from "../components/TooltipComponent";
 
 export default function StatisticsScreen() {
   const [year, setYear] = useState(new Date().getFullYear());
@@ -29,7 +30,6 @@ export default function StatisticsScreen() {
   const [firstYear, setFirstYear] = useState(null);
   const [dataPoint, setDataPoint] = useState(null);
   const { colors } = useTheme();
-
   const monthData = (index) => {
     const monthDataFound = statistics[0].months.find(
       (month) => month.month === index + 1
@@ -73,15 +73,13 @@ export default function StatisticsScreen() {
     backgroundColor: colors.background,
     backgroundGradientFrom: colors.card,
     backgroundGradientTo: colors.card,
-    color: () => colors.text,
-    propsForDots: {
-      r: "6",
-      strokeWidth: "0",
-      stroke: colors.attention,
+    barRadius: 5,
+    fillShadowGradientFromOpacity: 1,
+    color: () => colors.attention,
+    labelColor: () => colors.text,
+    styles: {
+      elevation: 5,
     },
-    styles:{
-      elevation:5
-    }
   };
 
   useEffect(() => {
@@ -97,8 +95,6 @@ export default function StatisticsScreen() {
         datasets: [
           {
             data: getMonthsData(result),
-            color: (opacity = 0.5) => `rgba(215, 173, 87, ${opacity})`,
-            strokeWidth: 5,
           },
         ],
       });
@@ -145,7 +141,7 @@ export default function StatisticsScreen() {
                 overflow: "scroll",
                 minHeight: Dimensions.get("window").height,
                 rowGap: 10,
-                paddingTop:10
+                paddingTop: 10,
               }}
             >
               <Text
@@ -198,18 +194,18 @@ export default function StatisticsScreen() {
                       fontSize: 12,
                       width: 80,
                       height: 40,
-                      elevation:5
+                      elevation: 5,
                     }}
                     buttonTextStyle={{
                       fontFamily: "Poppins_300Light",
                       color: colors.text,
                       fontSize: 12,
-                      elevation:5
+                      elevation: 5,
                     }}
                     rowTextStyle={{
                       fontFamily: "Poppins_300Light",
                       fontSize: 12,
-                      elevation:5
+                      elevation: 5,
                     }}
                   />
                 ) : null}
@@ -241,154 +237,89 @@ export default function StatisticsScreen() {
                         width: "100%",
                       }}
                     >
-                      {i18n.t("noDataFound")}
+                      {i18n.t("dataNotFound")}
                     </Text>
                   )}
                   {monthStatistics ? (
                     <View>
-                      <Text
+                      <View
                         style={{
-                          color: colors.text,
-                          fontSize: 16,
-                          fontFamily: "Poppins_300Light",
-                          paddingBottom: 10,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          width: "100%",
+                          paddingBottom: 25,
                         }}
                       >
-                        {i18n.t("monthStatistics")}
-                      </Text>
-                      <LineChart
+                        <Text
+                          style={{
+                            color: colors.text,
+                            fontSize: 16,
+                            fontFamily: "Poppins_300Light",
+                          }}
+                        >
+                          {i18n.t("monthStatistics")}
+                        </Text>
+                        <SelectDropdown
+                          data={["None", ...months]}
+                          onSelect={(selectedItem, index) => {
+                            if (index === 0) {
+                              setMonth(null);
+                            } else {
+                              setMonth(index - 1);
+                            }
+                          }}
+                          buttonTextAfterSelection={(selectedItem) => {
+                            return i18n.t(selectedItem);
+                          }}
+                          rowTextForSelection={(item) => {
+                            return i18n.t(item);
+                          }}
+                          defaultButtonText={i18n.t("month")}
+                          defaultValue={
+                            month != null && month != undefined
+                              ? i18n.t(months[month])
+                              : i18n.t("none")
+                          }
+                          buttonStyle={{
+                            borderRadius: 5,
+                            alignSelf: "center",
+                            backgroundColor: colors.card,
+                            color: colors.text,
+                            fontSize: 12,
+                            width: 80,
+                            height: 40,
+                            elevation: 5,
+                          }}
+                          buttonTextStyle={{
+                            fontFamily: "Poppins_300Light",
+                            color: colors.text,
+                            fontSize: 12,
+                            elevation: 5,
+                          }}
+                          rowTextStyle={{
+                            fontFamily: "Poppins_300Light",
+                            fontSize: 12,
+                            elevation: 5,
+                          }}
+                        />
+                      </View>
+                      <BarChart
                         data={monthStatistics}
                         width={Dimensions.get("screen").width - 40}
                         height={240}
                         chartConfig={chartConfig}
-                        bezier
                         style={{
                           borderRadius: 20,
-                          paddingTop: 20,
-                          paddingRight: 50,
-                          bottom: 12,
-                          elevation:5
-                        }}
-                        getDotColor={(dataPoint, index) => {
-                          return "#D7AD57";
+                          paddingRight: 0,
+                          elevation: 5,
                         }}
                         withHorizontalLabels={false}
                         withOuterLines={false}
                         decorator={() => {
                           return dataPoint ? (
-                            <View
-                              style={{
-                                position: "absolute",
-                                top: dataPoint.y - 50,
-                                left: dataPoint.x + 10,
-                                backgroundColor: colors.card,
-                                borderColor: "#58eb34",
-                                borderWidth: 1,
-                                borderStyle: "solid",
-                                borderRadius: 5,
-                                padding: 10,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                rowGap: 10,
-                              }}
-                            >
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  columnGap: 10,
-                                }}
-                              >
-                                <Icon
-                                  name="wallet"
-                                  type="font-awesome-5"
-                                  iconStyle={{
-                                    color: colors.text,
-                                    fontSize: 13,
-                                  }}
-                                ></Icon>
-                                <Text
-                                  style={{
-                                    color: colors.text,
-                                    fontSize: 13,
-                                    fontFamily: "Poppins_300Light",
-                                  }}
-                                >
-                                  {monthData(dataPoint.index)
-                                    ? monthData(dataPoint.index)?.total > 0
-                                      ? `$${(
-                                          monthData(dataPoint.index)?.total /
-                                          1000
-                                        )?.toFixed(2)}K`
-                                      : `-$${(
-                                          (monthData(dataPoint.index)?.total /
-                                            1000) *
-                                          -1
-                                        )?.toFixed(2)}K`
-                                    : `$0.00K`}
-                                </Text>
-                              </View>
-
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  columnGap: 10,
-                                }}
-                              >
-                                <Icon
-                                  name="arrow-up"
-                                  type="font-awesome"
-                                  iconStyle={[styles.profit, { fontSize: 13 }]}
-                                ></Icon>
-                                <Text
-                                  style={{
-                                    color: colors.text,
-                                    fontSize: 13,
-                                    fontFamily: "Poppins_300Light",
-                                  }}
-                                >
-                                  {monthData(dataPoint.index)
-                                    ? `$${(
-                                        monthData(dataPoint.index)
-                                          ?.totalIncome / 1000
-                                      )?.toFixed(2)}K`
-                                    : `$0.00K`}
-                                </Text>
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  columnGap: 10,
-                                }}
-                              >
-                                <Icon
-                                  name="arrow-down"
-                                  type="font-awesome"
-                                  iconStyle={[styles.loss, { fontSize: 13 }]}
-                                ></Icon>
-                                <Text
-                                  style={{
-                                    color: colors.text,
-                                    fontSize: 13,
-                                    fontFamily: "Poppins_300Light",
-                                  }}
-                                >
-                                  {monthData(dataPoint.index)
-                                    ? `-$${(
-                                        (monthData(dataPoint.index)?.totalLoss /
-                                          1000) *
-                                        -1
-                                      )?.toFixed(2)}K`
-                                    : `$0.00K`}
-                                </Text>
-                              </View>
-                            </View>
-                          ) : null;
+                            <TooltipComponent dataPoint={dataPoint} colors={colors} monthData={monthData} />
+                          ) : null; 
                         }}
                         onDataPointClick={(index) => {
                           dataPoint && index.index === dataPoint.index
@@ -400,6 +331,7 @@ export default function StatisticsScreen() {
                               }));
                         }}
                         withInnerLines={false}
+                        showBarTops={false}
                       />
                     </View>
                   ) : null}
@@ -409,67 +341,23 @@ export default function StatisticsScreen() {
                       rowGap: 30,
                     }}
                   >
-                    <Text
-                      style={{
-                        color: colors.text,
-                        fontSize: 16,
-                        fontFamily: "Poppins_300Light",
-                      }}
-                    >
-                      {i18n.t("categoryStatistics")}
-                    </Text>
                     <View
                       style={{
                         flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "space-between",
                         width: "100%",
-                        paddingHorizontal: 20,
                       }}
                     >
-                      <SelectDropdown
-                        data={["None", ...months]}
-                        onSelect={(selectedItem, index) => {
-                          if (index === 0) {
-                            setMonth(null);
-                          } else {
-                            setMonth(index - 1);
-                          }
-                        }}
-                        buttonTextAfterSelection={(selectedItem) => {
-                          return i18n.t(selectedItem);
-                        }}
-                        rowTextForSelection={(item) => {
-                          return i18n.t(item);
-                        }}
-                        defaultButtonText={i18n.t("month")}
-                        defaultValue={
-                          month != null && month != undefined
-                            ? i18n.t(months[month])
-                            : i18n.t("none")
-                        }
-                        buttonStyle={{
-                          borderRadius: 5,
-                          alignSelf: "center",
-                          backgroundColor: colors.card,
+                      <Text
+                        style={{
                           color: colors.text,
-                          fontSize: 12,
-                          width: 80,
-                          height: 40,
-                          elevation:5
-                        }}
-                        buttonTextStyle={{
+                          fontSize: 16,
                           fontFamily: "Poppins_300Light",
-                          color: colors.text,
-                          fontSize: 12,
-                          elevation:5
                         }}
-                        rowTextStyle={{
-                          fontFamily: "Poppins_300Light",
-                          fontSize: 12,
-                          elevation:5
-                        }}
-                      />
+                      >
+                        {i18n.t("categoryStatistics")}
+                      </Text>
                       <SelectDropdown
                         data={["Loss", "Income"]}
                         onSelect={(selectedItem, index) => {
@@ -491,18 +379,18 @@ export default function StatisticsScreen() {
                           fontSize: 12,
                           width: 100,
                           height: 40,
-                          elevation:5
+                          elevation: 5,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 12,
-                          elevation:5
+                          elevation: 5,
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
-                          elevation:5
+                          elevation: 5,
                         }}
                       />
                     </View>
@@ -617,7 +505,7 @@ export default function StatisticsScreen() {
                     paddingTop: 40,
                   }}
                 >
-                  {i18n.t("noDataFound")}
+                  {i18n.t("dataNotFound")}
                 </Text>
               )}
             </View>
