@@ -1,14 +1,14 @@
 import { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-
+import {URL_BACKEND} from "@env"
 export const CategoryContext = createContext();
 
 export function CategoryContextProvider(props) {
   
   async function getCategories(keyword) {
     let url =
-      "https://expense-record-production.up.railway.app/api/categories?";
+      `${URL_BACKEND}/categories?`;
 
     url = keyword ? url + `&keyword=${keyword}` : url;
 
@@ -22,7 +22,7 @@ export function CategoryContextProvider(props) {
   }
 
   async function getIcons() {
-    let url = "https://expense-record-production.up.railway.app/api/icons?";
+    let url = `${URL_BACKEND}/icons?`;
 
     const result = await axios.get(url, {
       headers: {
@@ -35,7 +35,7 @@ export function CategoryContextProvider(props) {
 
   async function getCategoryById(id) {
     const result = await axios.get(
-      `https://expense-record-production.up.railway.app/api/categories/${id}`,
+      `${URL_BACKEND}/categories/${id}`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -48,7 +48,7 @@ export function CategoryContextProvider(props) {
 
   async function createCategory(category) {
     const result = await axios.post(
-      `https://expense-record-production.up.railway.app/api/categories`,
+      `${URL_BACKEND}/categories`,
       category,
       {
         headers: {
@@ -62,7 +62,7 @@ export function CategoryContextProvider(props) {
 
   async function updateCategoryById(id, category) {
     const result = await axios.put(
-      `https://expense-record-production.up.railway.app/api/categories/${id}`,
+      `${URL_BACKEND}/categories/${id}`,
       category,
       {
         headers: {
@@ -76,7 +76,7 @@ export function CategoryContextProvider(props) {
 
   async function deleteCategoryById(id) {
     const result = await axios.delete(
-      `https://expense-record-production.up.railway.app/api/categories/${id}`,
+      `${URL_BACKEND}/categories/${id}`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,

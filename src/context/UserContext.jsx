@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import i18n from "../utils/i18n";
 import { ExpenseContext } from "../context/ExpenseContext";
+import {URL_BACKEND} from "@env"
 
 export const UserContext = createContext();
 
@@ -15,6 +16,17 @@ export function UserContextProvider(props) {
   const [currency, setCurrency] = useState(null);
   const [reload, setReload] = useState(false);
   const { applyConversion } = useContext(ExpenseContext);
+
+  const getUserGoogle = async (token) => {
+    if(!token) return;
+    const result = await axios.get(`https://www.googleapis.com/userinfo/v2/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log(result.data)
+  }
 
   const updateCurrency = async (newCurrency) => {
     if (currency && newCurrency) {
@@ -36,7 +48,6 @@ export function UserContextProvider(props) {
       i18n.locale = value ? value : i18n.locale;
       setLanguage(value ? value : i18n.locale);
     });
-    
   };
 
   const setActualUser = async () => {
@@ -66,7 +77,7 @@ export function UserContextProvider(props) {
 
   const getHideBalance = () => {
     AsyncStorage.getItem("hideBalance").then((value) => {
-      setHideBalance(value === 'true' ? true : false);
+      setHideBalance(value === "true" ? true : false);
     });
   };
 
@@ -79,25 +90,16 @@ export function UserContextProvider(props) {
   }
 
   async function verifyCode(data) {
-    await axios.post(
-      "https://expense-record-production.up.railway.app/api/auth/verify",
-      data
-    );
+    await axios.post(`${URL_BACKEND}/auth/verify`, data);
   }
 
   async function resetPassword(data) {
-    await axios.post(
-      "https://expense-record-production.up.railway.app/api/auth/resetPassword",
-      data
-    );
+    await axios.post(`${URL_BACKEND}/auth/resetPassword`, data);
     await AsyncStorage.removeItem("email");
   }
 
   async function register(data) {
-    const response = await axios.post(
-      "https://expense-record-production.up.railway.app/api/auth",
-      data
-    );
+    const response = await axios.post(`${URL_BACKEND}/auth`, data);
     await AsyncStorage.setItem("token", response.data.resource.token);
     await AsyncStorage.setItem(
       "user",
@@ -107,7 +109,7 @@ export function UserContextProvider(props) {
 
   async function login(data) {
     const response = await axios.post(
-      "https://expense-record-production.up.railway.app/api/auth/login",
+      `${URL_BACKEND}/auth/login`,
       data
     );
     await AsyncStorage.setItem("token", response.data.resource.token);
@@ -118,49 +120,36 @@ export function UserContextProvider(props) {
   }
 
   async function forgotPassword(data) {
-    await axios.post(
-      "https://expense-record-production.up.railway.app/api/auth/forgotPassword",
-      data
-    );
+    await axios.post(`${URL_BACKEND}/auth/forgotPassword`, data);
     await AsyncStorage.setItem("email", data.email);
   }
 
   async function getCurrentUser() {
-    const result = await axios.get(
-      "https://expense-record-production.up.railway.app/api/users",
-      {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        },
-      }
-    );
+    const result = await axios.get(`${process.env.URL_BACKEND}/users`, {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+    });
 
     return result.data.resource;
   }
 
   async function updateCurrentUser(info) {
-    const result = await axios.put(
-      `https://expense-record-production.up.railway.app/api/users`,
-      info,
-      {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        },
-      }
-    );
+    const result = await axios.put(`${URL_BACKEND}/users`, info, {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+    });
 
     return result.data.resource;
   }
 
   async function deleteCurrentUser() {
-    const result = await axios.delete(
-      `https://expense-record-production.up.railway.app/api/users`,
-      {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        },
-      }
-    );
+    const result = await axios.delete(`${URL_BACKEND}/users`, {
+      headers: {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      },
+    });
 
     return result.data.message;
   }
@@ -190,7 +179,8 @@ export function UserContextProvider(props) {
         reload,
         setReload,
         currency,
-        user
+        user,
+        getUserGoogle
       }}
     >
       {props.children}

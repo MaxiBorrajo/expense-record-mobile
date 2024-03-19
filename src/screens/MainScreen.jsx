@@ -31,6 +31,7 @@ export default function MainScreen({ route, navigation }) {
   const logout = async () => {
     await AsyncStorage.removeItem("user");
     await AsyncStorage.removeItem("email");
+    await AsyncStorage.removeItem("token");
     navigation.navigate("Hero");
   };
 
