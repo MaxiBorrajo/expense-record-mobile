@@ -54,6 +54,10 @@ export default function CreateCategoryScreen({ navigation }) {
     getIcons().then((icons) => {
       setIcons(icons);
       setActualIcon(icons[index].icon);
+      setCategoryForm((prev) => ({
+        ...prev,
+        icon_id: icons[index]._id,
+      }));
     });
   }, []);
 

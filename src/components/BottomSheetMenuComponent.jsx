@@ -9,6 +9,8 @@ import { Icon } from "@rneui/themed";
 import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
 import { useNavigation, useTheme } from "@react-navigation/native";
+import { AppContext } from "../context/AppContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
   const snapPoints = useMemo(() => ["80%"], []);
@@ -16,17 +18,23 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
   const {
     translate,
     handleHideBalance,
-    handleChangeTheme,
     updateCurrency,
-    isDarkTheme,
     hideBalance,
     currency,
     language,
+    setReload,
   } = useContext(UserContext);
   const navigation = useNavigation();
+  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
   const icon = isDarkTheme
     ? require("../../assets/images/fehu_light.png")
     : require("../../assets/images/fehu_dark.png");
+
+  const handleChangeTheme = async () => {
+    setIsDarkTheme(!isDarkTheme);
+    AsyncStorage.setItem("theme", !isDarkTheme ? "dark" : "light");
+    setReload(true);
+  };
 
   return (
     <BottomSheet
@@ -114,8 +122,8 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
             backgroundActive={"gray"}
             backgroundInactive={"gray"}
             value={hideBalance}
-            onValueChange={(value) => {
-              handleHideBalance(value);
+            onValueChange={async (value) => {
+              await handleHideBalance(value);
             }}
           />
         </View>

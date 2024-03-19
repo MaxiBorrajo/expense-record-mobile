@@ -14,8 +14,7 @@ export default function MainScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
-  const { deleteCurrentUser, reload, setReload } = useContext(UserContext);
-  const [hideBalance, setHideBalance] = useState(false);
+  const { deleteCurrentUser, reload, setReload, loadConfiguration } = useContext(UserContext);
 
   const toggleDialog = () => {
     setVisible(!visible);

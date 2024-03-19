@@ -14,7 +14,7 @@ import CreateCategoryScreen from "./src/screens/CreateCategoryScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
 import AboutUsScreen from "./src/screens/AboutUsScreen";
-import { useEffect, useContext } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ExpenseContextProvider } from "./src/context/ExpenseContext";
 import { CategoryContextProvider } from "./src/context/CategoryContext";
@@ -23,16 +23,47 @@ import { MenuProvider } from "react-native-popup-menu";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DarkTheme from "./src/theme/DarkTheme";
 import LightTheme from "./src/theme/LightTheme";
-import { UserContext } from "../context/UserContext";
 import "react-native-reanimated";
 import "react-native-gesture-handler";
+import {
+  Poppins_900Black,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_300Light,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
+import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppContext } from "./src/context/AppContext";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const { loadConfiguration, isDarkTheme } = useContext(UserContext);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [auth, setAuth] = useState(null);
+
   useEffect(() => {
-    loadConfiguration();
+    AsyncStorage.getItem("theme").then((theme) => {
+      setIsDarkTheme(!theme ? isDarkTheme : theme === "dark");
+    });
+    AsyncStorage.getItem("token").then((token) => {
+      setAuth(token);
+    });
   }, []);
+
+  let [fontsLoaded] = useFonts({
+    Poppins_900Black,
+    Poppins_400Regular,
+    Poppins_600SemiBold,
+    Poppins_500Medium,
+    Poppins_300Light,
+    Poppins_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <SafeAreaProvider>
@@ -41,46 +72,55 @@ export default function App() {
           <CategoryContextProvider>
             <UserContextProvider>
               <MenuProvider>
-                <NavigationContainer
-                  theme={isDarkTheme ? DarkTheme : LightTheme}
-                >
-                  <Stack.Navigator
-                    screenOptions={{
-                      headerShown: false,
-                      animation: "slide_from_bottom",
-                    }}
-                    initialRouteName={auth ? "Home" : "Hero"}
-                  >
-                    <Stack.Screen name="Hero" component={HeroScreen} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Register" component={RegisterScreen} />
-                    <Stack.Screen
-                      name="ForgotPassword"
-                      component={ForgotPasswordScreen}
-                    />
-                    <Stack.Screen
-                      name="ResetPassword"
-                      component={ResetPasswordScreen}
-                    />
-                    <Stack.Screen
-                      name="VerifyCode"
-                      component={VerifyCodeScreen}
-                    />
-                    <Stack.Screen name="Expenses" component={ExpensesScreen} />
-                    <Stack.Screen name="Expense" component={ExpenseScreen} />
-                    <Stack.Screen name="Category" component={CategoryScreen} />
-                    <Stack.Screen
-                      name="CreateCategory"
-                      component={CreateCategoryScreen}
-                    />
-                    <Stack.Screen name="Profile" component={ProfileScreen} />
-                    <Stack.Screen
-                      name="Categories"
-                      component={CategoriesScreen}
-                    />
-                    <Stack.Screen name="AboutUs" component={AboutUsScreen} />
-                  </Stack.Navigator>
+                <NavigationContainer theme={isDarkTheme ? DarkTheme : LightTheme}>
+                  <AppContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
+                    <Stack.Navigator
+                      screenOptions={{
+                        headerShown: false,
+                        animation: "slide_from_bottom",
+                      }}
+                      initialRouteName={auth ? "Home" : "Hero"}
+                    >
+                      <Stack.Screen name="Hero" component={HeroScreen} />
+                      <Stack.Screen name="Login" component={LoginScreen} />
+                      <Stack.Screen name="Home" component={HomeScreen} />
+                      <Stack.Screen
+                        name="Register"
+                        component={RegisterScreen}
+                      />
+                      <Stack.Screen
+                        name="ForgotPassword"
+                        component={ForgotPasswordScreen}
+                      />
+                      <Stack.Screen
+                        name="ResetPassword"
+                        component={ResetPasswordScreen}
+                      />
+                      <Stack.Screen
+                        name="VerifyCode"
+                        component={VerifyCodeScreen}
+                      />
+                      <Stack.Screen
+                        name="Expenses"
+                        component={ExpensesScreen}
+                      />
+                      <Stack.Screen name="Expense" component={ExpenseScreen} />
+                      <Stack.Screen
+                        name="Category"
+                        component={CategoryScreen}
+                      />
+                      <Stack.Screen
+                        name="CreateCategory"
+                        component={CreateCategoryScreen}
+                      />
+                      <Stack.Screen name="Profile" component={ProfileScreen} />
+                      <Stack.Screen
+                        name="Categories"
+                        component={CategoriesScreen}
+                      />
+                      <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+                    </Stack.Navigator>
+                  </AppContext.Provider>
                 </NavigationContainer>
               </MenuProvider>
             </UserContextProvider>

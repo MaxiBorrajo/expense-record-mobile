@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext";
 import { Icon } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { CountUp } from "use-count-up";
-
+import { useTheme } from "@react-navigation/native";
 export default function AnnualBalanceComponent({
   balance,
   income,
@@ -12,6 +12,7 @@ export default function AnnualBalanceComponent({
   loading,
 }) {
   const { hideBalance } = useContext(UserContext);
+  const { colors } = useTheme();
   return (
     <View
       style={{
