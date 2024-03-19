@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";

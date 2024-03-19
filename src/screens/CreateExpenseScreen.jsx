@@ -1,13 +1,11 @@
 import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState, useContext, useEffect, useRef } from "react";
-import GoBackButtonComponent from "../components/GoBackButtonComponent";
+import { useState, useContext, useEffect } from "react";
 import { Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { CategoryContext } from "../context/CategoryContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
-import IncomeOrLossComponent from "../components/IncomeOrLossComponent";
 import { useTheme } from "@react-navigation/native";
 import Foect from "foect";
 import { ExpenseContext } from "../context/ExpenseContext";

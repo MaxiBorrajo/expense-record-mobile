@@ -13,6 +13,18 @@ import CategoryScreen from "./src/screens/CategoryScreen";
 import CreateCategoryScreen from "./src/screens/CreateCategoryScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
+import AboutUsScreen from "./src/screens/AboutUsScreen";
+import { useEffect, useState } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ExpenseContextProvider } from "./src/context/ExpenseContext";
+import { CategoryContextProvider } from "./src/context/CategoryContext";
+import { UserContextProvider } from "./src/context/UserContext";
+import { MenuProvider } from "react-native-popup-menu";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import DarkTheme from "./src/theme/DarkTheme";
+import LightTheme from "./src/theme/LightTheme";
+import "react-native-reanimated";
+import "react-native-gesture-handler";
 import {
   Poppins_900Black,
   Poppins_400Regular,
@@ -22,37 +34,22 @@ import {
   Poppins_700Bold,
 } from "@expo-google-fonts/poppins";
 import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ExpenseContextProvider } from "./src/context/ExpenseContext";
-import { CategoryContextProvider } from "./src/context/CategoryContext";
-import { UserContextProvider } from "./src/context/UserContext";
-import { MenuProvider } from "react-native-popup-menu";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import DarkTheme from "./src/theme/DarkTheme";
-import LightTheme from "./src/theme/LightTheme";
 import { AppContext } from "./src/context/AppContext";
-import "react-native-reanimated";
-import "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [auth, setAuth] = useState(null);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [auth, setAuth] = useState(null);
 
   useEffect(() => {
-    const getAuth = async () => {
-      const authToken = await AsyncStorage.getItem("token");
-      setAuth(authToken);
-    };
-
     AsyncStorage.getItem("theme").then((theme) => {
-      setIsDarkTheme(!theme || (theme && theme === "light"));
+      setIsDarkTheme(!theme ? isDarkTheme : theme === "dark");
     });
-
-    getAuth();
+    AsyncStorage.getItem("token").then((token) => {
+      setAuth(token);
+    });
   }, []);
 
   let [fontsLoaded] = useFonts({
@@ -75,12 +72,13 @@ export default function App() {
           <CategoryContextProvider>
             <UserContextProvider>
               <MenuProvider>
-                <NavigationContainer
-                  theme={isDarkTheme ? DarkTheme : LightTheme}
-                >
+                <NavigationContainer theme={isDarkTheme ? DarkTheme : LightTheme}>
                   <AppContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
                     <Stack.Navigator
-                      screenOptions={{ headerShown: false }}
+                      screenOptions={{
+                        headerShown: false,
+                        animation: "slide_from_bottom",
+                      }}
                       initialRouteName={auth ? "Home" : "Hero"}
                     >
                       <Stack.Screen name="Hero" component={HeroScreen} />
@@ -120,6 +118,7 @@ export default function App() {
                         name="Categories"
                         component={CategoriesScreen}
                       />
+                      <Stack.Screen name="AboutUs" component={AboutUsScreen} />
                     </Stack.Navigator>
                   </AppContext.Provider>
                 </NavigationContainer>
