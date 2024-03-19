@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Fehu: Expense Tracker",
-    "slug": "fehu-expense-tracker-mobile",
+    "slug": "expense-record-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/dark_icon.png",
