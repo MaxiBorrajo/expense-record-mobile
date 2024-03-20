@@ -1,6 +1,6 @@
 import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
@@ -8,13 +8,27 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
+import * as Google from "expo-auth-session/providers/google";
 
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
-  const { login } = useContext(UserContext);
+  const { login, getUserGoogle } = useContext(UserContext);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: process.env.ANDROID_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    handleSignInWithGoogle();
+  }, [response]);
+
+  const handleSignInWithGoogle = async () => {
+    if (response?.type === "success") {
+      await getUserGoogle(response.accessToken);
+    }
+  };
 
   const loginUser = async (form) => {
     try {
@@ -44,6 +58,7 @@ export default function LoginScreen({ navigation }) {
           position: "relative",
           rowGap: 20,
           minHeight: Dimensions.get("window").height,
+          paddingTop: 100,
         }}
       >
         <GoBackButtonComponent />
@@ -83,7 +98,7 @@ export default function LoginScreen({ navigation }) {
                         paddingHorizontal: 20,
                         borderRadius: 5,
                         elevation: 3,
-                        borderBottomWidth:0
+                        borderBottomWidth: 0,
                       }}
                       onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
@@ -148,7 +163,7 @@ export default function LoginScreen({ navigation }) {
                       paddingLeft: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
@@ -199,12 +214,40 @@ export default function LoginScreen({ navigation }) {
                   {i18n.t("noAccount")}
                 </Text>
               </View>
-              <ButtonComponent
-                label={i18n.t("signIn")}
-                action={() => form.submit()}
-                loading={loading}
-                disabled={form.isInvalid}
-              />
+              <View style={{ rowGap: 30 }}>
+                <ButtonComponent
+                  label={i18n.t("signIn")}
+                  action={() => form.submit()}
+                  loading={loading}
+                  disabled={form.isInvalid}
+                />
+                <Text
+                  style={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                    color: colors.text,
+                    textAlign: "center",
+                  }}
+                >
+                  Or
+                </Text>
+                <Icon
+                  name="google"
+                  type="font-awesome-5"
+                  iconStyle={{
+                    color: colors.text,
+                    fontSize: 25,
+                    padding: 15,
+                    backgroundColor: colors.card,
+                    borderRadius: 10,
+                    alignSelf: "center",
+                    maxWidth:'fit-content'
+                  }}
+                  onPress={() => {
+                    promptAsync();
+                  }}
+                ></Icon>
+              </View>
             </View>
           )}
         </Foect.Form>

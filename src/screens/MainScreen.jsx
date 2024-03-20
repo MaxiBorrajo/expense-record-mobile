@@ -10,13 +10,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../context/UserContext";
 
 export default function MainScreen({ route, navigation }) {
-  const [reload, setReload] = useState(false);
   const { colors } = useTheme();
   const [visible, setVisible] = useState(false);
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
-  const { deleteCurrentUser } = useContext(UserContext);
-  const [hideBalance, setHideBalance] = useState(false);
+  const { deleteCurrentUser, reload, setReload, loadConfiguration } = useContext(UserContext);
 
   const toggleDialog = () => {
     setVisible(!visible);
@@ -33,6 +31,7 @@ export default function MainScreen({ route, navigation }) {
   const logout = async () => {
     await AsyncStorage.removeItem("user");
     await AsyncStorage.removeItem("email");
+    await AsyncStorage.removeItem("token");
     navigation.navigate("Hero");
   };
 
@@ -66,23 +65,16 @@ export default function MainScreen({ route, navigation }) {
         <InfoComponent
           route={route}
           navigation={navigation}
-          setReload={setReload}
           openBottomSheet={() => openBottomSheet()}
-          hideBalance={hideBalance}
         />
         <ExpensesComponent
           route={route}
           navigation={navigation}
-          reload={reload}
         />
       </View>
       <BottomSheetMenuComponent
         ref={bottomSheetRef}
         logout={() => logout()}
-        hideBalance={hideBalance}
-        setHideBalance={setHideBalance}
-        reload={reload}
-        setReload={setReload}
       />
       <WarningDialogComponent
         dialogObject={{

@@ -1,21 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useTheme } from "@react-navigation/native";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { Icon } from "@rneui/themed";
 import i18n from "../utils/i18n";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CountUp } from "use-count-up";
-
-export default function AnnualBalanceComponent({ balance, income, loss, loading }) {
+import { useTheme } from "@react-navigation/native";
+export default function AnnualBalanceComponent({
+  balance,
+  income,
+  loss,
+  loading,
+}) {
+  const { hideBalance } = useContext(UserContext);
   const { colors } = useTheme();
-  const [hideBalance, setHideBalance] = useState(false);
-
-  useEffect(() => {
-    AsyncStorage.getItem("hideBalance", (value) => {
-      setHideBalance(Boolean(value));
-    });
-  }, []);
-
   return (
     <View
       style={{
@@ -26,7 +23,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
         borderRadius: 20,
         justifyContent: "space-between",
         gap: 10,
-        elevation:3
+        elevation: 3,
       }}
     >
       <View
@@ -52,7 +49,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
             color: colors.text,
           }}
         >
-           {hideBalance ? (
+          {hideBalance ? (
             "******"
           ) : balance >= 0 ? (
             balance?.toFixed(2) >= 0.01 ? (
@@ -63,7 +60,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
                   return `$${val?.toFixed(2)?.toLocaleString()}`;
                 }}
                 duration={3.2}
-                easing={'easeOutCubic'}
+                easing={"easeOutCubic"}
               />
             ) : (
               "$0.00"
@@ -76,7 +73,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
                 return `-$${val?.toFixed(2)?.toLocaleString()}`;
               }}
               duration={3.2}
-              easing={'easeOutCubic'}
+              easing={"easeOutCubic"}
             />
           ) : (
             "$0.00"
@@ -135,7 +132,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
                   duration={3.2}
-                  easing={'easeOutCubic'}
+                  easing={"easeOutCubic"}
                 />
               )}
             </Text>
@@ -187,7 +184,7 @@ export default function AnnualBalanceComponent({ balance, income, loss, loading 
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
                   duration={3.2}
-                  easing={'easeOutCubic'}
+                  easing={"easeOutCubic"}
                 />
               )}
             </Text>

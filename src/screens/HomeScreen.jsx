@@ -7,14 +7,18 @@ import MainScreen from "./MainScreen";
 import LoadingScreen from "./LoadingScreen";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import i18n from "../utils/i18n";
 
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {
   const { colors } = useTheme();
-  const { loading } = useContext(UserContext);
+  const { loading, loadConfiguration } = useContext(UserContext);
+
+  useEffect(()=>{
+    loadConfiguration()
+  }, [])
 
   const screenOptions = {
     tabBarShowLabel: false,

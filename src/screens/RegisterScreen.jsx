@@ -1,6 +1,6 @@
 import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
@@ -8,13 +8,26 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-
+import * as Google from "expo-auth-session/providers/google";
 export default function RegisterScreen({ navigation }) {
   const { register } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: process.env.ANDROID_CLIENT_ID,
+  });
+
+  useEffect(() => {
+    handleSignInWithGoogle();
+  }, [response]);
+
+  const handleSignInWithGoogle = async () => {
+    if (response?.type === "success") {
+      await getUserGoogle(response.accessToken);
+    }
+  };
 
   async function registerUser(form) {
     try {
@@ -43,6 +56,7 @@ export default function RegisterScreen({ navigation }) {
           rowGap: 20,
           justifyContent: "center",
           minHeight: Dimensions.get("window").height,
+          paddingTop: 70,
         }}
       >
         <GoBackButtonComponent />
@@ -82,7 +96,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
@@ -123,7 +137,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
                     }}
                     onBlur={control.markAsTouched}
                     value={control.value}
@@ -165,7 +179,7 @@ export default function RegisterScreen({ navigation }) {
                         paddingHorizontal: 20,
                         borderRadius: 5,
                         elevation: 3,
-                        borderBottomWidth:0
+                        borderBottomWidth: 0,
                       }}
                       onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
@@ -230,7 +244,7 @@ export default function RegisterScreen({ navigation }) {
                       paddingLeft: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
                     }}
                     onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
@@ -270,12 +284,40 @@ export default function RegisterScreen({ navigation }) {
               >
                 {i18n.t("haveAccount")}
               </Text>
-              <ButtonComponent
-                label={i18n.t("signUp")}
-                action={() => form.submit()}
-                loading={loading}
-                disabled={form.isInvalid}
-              />
+              <View style={{ rowGap: 30 }}>
+                <ButtonComponent
+                  label={i18n.t("signUp")}
+                  action={() => form.submit()}
+                  loading={loading}
+                  disabled={form.isInvalid}
+                />
+                <Text
+                  style={{
+                    fontFamily: "Poppins_300Light",
+                    fontSize: 15,
+                    color: colors.text,
+                    textAlign: "center",
+                  }}
+                >
+                  Or
+                </Text>
+                <Icon
+                  name="google"
+                  type="font-awesome-5"
+                  iconStyle={{
+                    color: colors.text,
+                    fontSize: 25,
+                    padding: 15,
+                    backgroundColor: colors.card,
+                    borderRadius: 10,
+                    alignSelf: "center",
+                    maxWidth: "fit-content",
+                  }}
+                  onPress={() => {
+                    promptAsync();
+                  }}
+                ></Icon>
+              </View>
             </View>
           )}
         </Foect.Form>

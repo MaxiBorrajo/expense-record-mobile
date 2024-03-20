@@ -10,21 +10,17 @@ import { CountUp } from "use-count-up";
 export default function InfoComponent({
   route,
   navigation,
-  reload,
   openBottomSheet,
-  hideBalance,
 }) {
   const { getBalance, getAmount } = useContext(ExpenseContext);
   const [balance, setBalance] = useState(null);
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { getCurrentUser, endLoading, loading } = useContext(UserContext);
-  const [user, setUser] = useState(null);
+  const { user, endLoading, loading, hideBalance, reload } = useContext(UserContext);
 
   const getMainInformation = async () => {
     await Promise.all([
-      getCurrentUser().then((user) => setUser(user)),
       getBalance().then((balance) => setBalance(balance)),
       getAmount(new Date().getMonth(), 1).then((amount) =>
         setMonthIncomeBalance(amount)

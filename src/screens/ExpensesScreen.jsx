@@ -16,7 +16,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { months, generateYearList, getDaysOfTheMonth } from "../utils/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
-import { AppContext } from "../context/AppContext";
+import { UserContext } from "../context/UserContext";
 import {
   Menu,
   MenuOptions,
@@ -39,12 +39,9 @@ export default function ExpensesScreen() {
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
   const [categories, setCategories] = useState(null);
-  const [reload, setReload] = useState(false);
+  const {reload, setReload} = useContext(UserContext);
   const [firstYear, setFirstYear] = useState(null);
-  const bottomSheetParameters = useRef(null);
   const { colors } = useTheme();
-  const [openedParameters, setOpenedParameters] = useState(false);
-  const snapPoints = useMemo(() => ["50%", "50%"], []);
   const sortSelect = useRef({});
   const orderSelect = useRef({});
   const yearSelect = useRef({});
@@ -66,17 +63,6 @@ export default function ExpensesScreen() {
       value: 0,
     },
   ];
-  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
-
-  const openParameteres = () => {
-    setOpenedParameters(!openedParameters);
-
-    if (openedParameters) {
-      bottomSheetParameters.current.close();
-    }
-
-    bottomSheetParameters.current.snapToIndex(1);
-  };
 
   const cancelSearch = () => {
     if (searchBar.current) {

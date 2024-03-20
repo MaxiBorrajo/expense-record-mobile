@@ -13,7 +13,7 @@ import CategoryComponent from "../components/CategoryComponent";
 import CreateCategoryButtonComponent from "../components/CreateCategoryButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
-import { AppContext } from "../context/AppContext";
+import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 
@@ -29,9 +29,8 @@ export default function CategoriesScreen({ route, navigation }) {
     category_name: null,
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const [reload, setReload] = useState(false);
   const [actualIcon, setActualIcon] = useState(null);
-  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
+  const { reload, setReload } = useContext(UserContext);
 
   const cancelSearch = () => {
     if (searchBar.current) {

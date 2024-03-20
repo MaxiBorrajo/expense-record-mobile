@@ -8,8 +8,15 @@ import {
 } from "react-native";
 import { Button } from "@rneui/themed";
 import i18n from "../utils/i18n";
-
+import { UserContext } from "../context/UserContext";
+import { useContext, useEffect } from "react";
 export default function HeroScreen({ navigation }) {
+  const { loadConfiguration } = useContext(UserContext);
+
+  useEffect(() => {
+    loadConfiguration();
+  }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
@@ -20,11 +27,9 @@ export default function HeroScreen({ navigation }) {
         <View style={styles.container}>
           <Text style={styles.title}>Fehu: Expense Tracker</Text>
           <View>
-            <Text style={styles.subtitle}>
-              {i18n.t('phrase')}
-            </Text>
+            <Text style={styles.subtitle}>{i18n.t("phrase")}</Text>
             <Button
-              title={i18n.t('getStarted')}
+              title={i18n.t("getStarted")}
               buttonStyle={{
                 backgroundColor: "white",
                 paddingVertical: 10,
