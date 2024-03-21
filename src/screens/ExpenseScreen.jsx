@@ -33,12 +33,12 @@ export default function ExpenseScreen({ route, navigation }) {
     setLoading(true);
     await updateExpenseById(expense._id, updatedExpense);
     setLoading(false);
-    navigation.navigate("Main", { actionCompleted: true });
+    navigation.navigate("Expenses", { actionCompleted: true });
   };
 
   const deleteExpense = async () => {
     await deleteExpenseById(expense._id);
-    navigation.navigate("Main", { actionCompleted: true });
+    navigation.navigate("Expenses", { actionCompleted: true });
   };
 
   useEffect(() => {

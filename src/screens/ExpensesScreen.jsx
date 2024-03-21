@@ -25,7 +25,7 @@ import {
 } from "react-native-popup-menu";
 import i18n from "../utils/i18n";
 
-export default function ExpensesScreen() {
+export default function ExpensesScreen({ route, navigation }) {
   const { getExpenses } = useContext(ExpenseContext);
   const { getCategories } = useContext(CategoryContext);
   const [expenses, setExpenses] = useState(null);
@@ -39,7 +39,7 @@ export default function ExpensesScreen() {
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
   const [categories, setCategories] = useState(null);
-  const {reload, setReload} = useContext(UserContext);
+  const { reload, setReload } = useContext(UserContext);
   const [firstYear, setFirstYear] = useState(null);
   const { colors } = useTheme();
   const sortSelect = useRef({});
@@ -89,7 +89,7 @@ export default function ExpensesScreen() {
     setType(null);
   };
 
-  useEffect(() => {
+  function expensesSetUp() {
     setExpenses((prev) => null);
     setReload(false);
     AsyncStorage.getItem("user").then((result) => {
@@ -131,7 +131,21 @@ export default function ExpensesScreen() {
     getCategories().then((categories) => {
       setCategories(categories);
     });
+  }
+
+  useEffect(() => {
+    expensesSetUp();
   }, [sort, order, category, keyword, year, month, day, type, reload]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      if (route.params?.actionCompleted) {
+        expensesSetUp();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, route.params?.actionCompleted]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -609,8 +623,8 @@ export default function ExpensesScreen() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: '100%',
-                  minWidth: '100%'
+                  minHeight: "100%",
+                  minWidth: "100%",
                 }}
               >
                 <ActivityIndicator color={colors.attention} size="large" />
@@ -620,8 +634,8 @@ export default function ExpensesScreen() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: '100%',
-                  minWidth: '100%'
+                  minHeight: "100%",
+                  minWidth: "100%",
                 }}
               >
                 <Text
