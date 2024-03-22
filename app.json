@@ -17,7 +17,6 @@
       "userInterfaceStyle": "automatic"
     },
     "android": {
-      "googleServicesFile": "google-services.json",
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./assets/dark_adaptive_icon.png",
