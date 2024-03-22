@@ -24,9 +24,10 @@
       "distribution": "internal"
     },
     "production": {
-      "env":{
+      "env": {
         "URL_BACKEND": "https://expense-record-production.up.railway.app/api",
-        "ANDROID_CLIENT_ID":"440036428069-sqko1un37nvkki6vm0uo1oe50bjcmc59.apps.googleusercontent.com"
+        "ANDROID_CLIENT_ID": "440036428069-sqko1un37nvkki6vm0uo1oe50bjcmc59.apps.googleusercontent.com",
+        "GOOGLE_SERVICES_JSON": "google-services.json"
       }
     }
   },

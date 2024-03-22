@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
+    "@expo/config-plugins": "~7.2.2",
+    "@expo/prebuild-config": "~6.2.4",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
@@ -29,6 +31,8 @@
     "eas-cli": "^7.6.0",
     "expo": "~49.0.15",
     "expo-auth-session": "~5.0.2",
+    "expo-constants": "~14.4.2",
+    "expo-device": "~5.4.0",
     "expo-font": "~11.4.0",
     "expo-linear-gradient": "~12.3.0",
     "expo-localization": "~14.3.0",
@@ -56,9 +60,7 @@
     "react-native-svg": "13.9.0",
     "react-native-switch": "^1.5.1",
     "react-native-vector-icons": "^10.0.3",
-    "use-count-up": "^3.0.1",
-    "expo-device": "~5.4.0",
-    "expo-constants": "~14.4.2"
+    "use-count-up": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

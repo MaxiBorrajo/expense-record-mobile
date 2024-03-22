@@ -11,15 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "automatic"
     },
     "android": {
-      "googleServicesFile":"fehu-expense-tracker-firebase-adminsdk-hv2sa-94dd39dcd8.json",
+      "googleServicesFile": "google-services.json",
       "userInterfaceStyle": "automatic",
       "adaptiveIcon": {
         "foregroundImage": "./assets/dark_adaptive_icon.png",
@@ -35,9 +33,7 @@
         "projectId": "0854aae1-2b3d-4d3d-a448-00b41c05b3f0"
       }
     },
-    "scheme":"expenserecordmobile",
-    "plugins": [
-      "expo-localization"
-    ]
+    "scheme": "expenserecordmobile",
+    "plugins": ["expo-localization"]
   }
 }
