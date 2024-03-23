@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import i18n from "../utils/i18n";
 import { ExpenseContext } from "../context/ExpenseContext";
-import {URL_BACKEND} from "@env"
 
 export const UserContext = createContext();
 
@@ -90,16 +89,16 @@ export function UserContextProvider(props) {
   }
 
   async function verifyCode(data) {
-    await axios.post(`${URL_BACKEND}/auth/verify`, data);
+    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/verify`, data);
   }
 
   async function resetPassword(data) {
-    await axios.post(`${URL_BACKEND}/auth/resetPassword`, data);
+    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/resetPassword`, data);
     await AsyncStorage.removeItem("email");
   }
 
   async function register(data) {
-    const response = await axios.post(`${URL_BACKEND}/auth`, data);
+    const response = await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth`, data);
     await AsyncStorage.setItem("token", response.data.resource.token);
     await AsyncStorage.setItem(
       "user",
@@ -109,7 +108,7 @@ export function UserContextProvider(props) {
 
   async function login(data) {
     const response = await axios.post(
-      `${URL_BACKEND}/auth/login`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/login`,
       data
     );
     await AsyncStorage.setItem("token", response.data.resource.token);
@@ -120,12 +119,12 @@ export function UserContextProvider(props) {
   }
 
   async function forgotPassword(data) {
-    await axios.post(`${URL_BACKEND}/auth/forgotPassword`, data);
+    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/forgotPassword`, data);
     await AsyncStorage.setItem("email", data.email);
   }
 
   async function getCurrentUser() {
-    const result = await axios.get(`${process.env.URL_BACKEND}/users`, {
+    const result = await axios.get(`${process.env.process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },
@@ -135,7 +134,7 @@ export function UserContextProvider(props) {
   }
 
   async function updateCurrentUser(info) {
-    const result = await axios.put(`${URL_BACKEND}/users`, info, {
+    const result = await axios.put(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, info, {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },
@@ -145,7 +144,7 @@ export function UserContextProvider(props) {
   }
 
   async function deleteCurrentUser() {
-    const result = await axios.delete(`${URL_BACKEND}/users`, {
+    const result = await axios.delete(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },

@@ -16,7 +16,7 @@ export default function RegisterScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.ANDROID_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
 
   useEffect(() => {

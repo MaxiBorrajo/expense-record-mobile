@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
   const { colors } = useTheme();
   const { login, getUserGoogle } = useContext(UserContext);
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.ANDROID_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
   });
 
   useEffect(() => {

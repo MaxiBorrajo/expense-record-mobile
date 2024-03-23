@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import {URL_BACKEND} from "@env"
 export const ExpenseContext = createContext();
 
 export function ExpenseContextProvider(props) {
@@ -26,7 +25,7 @@ export function ExpenseContextProvider(props) {
   }
 
   async function getExpenses(sort, order, filters) {
-    let url = `${process.env.URL_BACKEND}/expenses?`;
+    let url = `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses?`;
 
     url = applySorting(sort, order, url);
 
@@ -45,7 +44,7 @@ export function ExpenseContextProvider(props) {
 
   async function getAmount(month, type) {
     let url =
-      `${URL_BACKEND}/expenses/amount?`;
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/amount?`;
 
     if (month !== undefined && month !== null) {
       url = url + `month=${month}&`;
@@ -68,7 +67,7 @@ export function ExpenseContextProvider(props) {
 
   async function getBalance() {
     const result = await axios.get(
-      `${URL_BACKEND}/expenses/balance`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/balance`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -80,7 +79,7 @@ export function ExpenseContextProvider(props) {
   }
 
   async function getStatistics(year = new Date().getFullYear()) {
-    let url = `${URL_BACKEND}/expenses/statistics?`;
+    let url = `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/statistics?`;
 
     if (year) {
       url = url + `year=${year}`;
@@ -100,7 +99,7 @@ export function ExpenseContextProvider(props) {
     month = new Date().getMonth(),
     type = 1
   ) {
-    let url = `${URL_BACKEND}/expenses/statisticsByCategory?`;
+    let url = `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/statisticsByCategory?`;
 
     if (year) {
       url = url + `year=${year}&`;
@@ -127,7 +126,7 @@ export function ExpenseContextProvider(props) {
 
   async function getExpenseById(id) {
     const result = await axios.get(
-      `${URL_BACKEND}/expenses/${id}`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/${id}`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -140,7 +139,7 @@ export function ExpenseContextProvider(props) {
 
   async function createExpense(expense) {
     const result = await axios.post(
-      `${URL_BACKEND}/api/expenses`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/api/expenses`,
       expense,
       {
         headers: {
@@ -154,7 +153,7 @@ export function ExpenseContextProvider(props) {
 
   async function updateExpenseById(id, expense) {
     const result = await axios.put(
-      `${URL_BACKEND}/expenses/${id}`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/${id}`,
       expense,
       {
         headers: {
@@ -168,7 +167,7 @@ export function ExpenseContextProvider(props) {
 
   async function deleteExpenseById(id) {
     const result = await axios.delete(
-      `${URL_BACKEND}/expenses/${id}`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/${id}`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -181,7 +180,7 @@ export function ExpenseContextProvider(props) {
 
   async function applyConversion(conversion) {
     const result = await axios.put(
-      `${URL_BACKEND}/expenses/conversion`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/conversion`,
       conversion,
       {
         headers: {
