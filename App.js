@@ -37,8 +37,6 @@ import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
 import * as WebBrowser from "expo-web-browser";
-import { DotEnvConfig } from 'react-native-dotenv';
-DotEnvConfig();
 
 WebBrowser.maybeCompleteAuthSession();
 const Stack = createNativeStackNavigator();
