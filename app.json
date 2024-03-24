@@ -29,11 +29,6 @@
     "web": {
       "favicon": "./assets/dark_favicon.ico"
     },
-    "extra": {
-      "eas": {
-        "projectId": "0854aae1-2b3d-4d3d-a448-00b41c05b3f0"
-      }
-    },
     "scheme": "expenserecordmobile",
     "plugins": [
       "expo-localization"
