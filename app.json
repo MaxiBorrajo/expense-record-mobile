@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "userInterfaceStyle": "automatic"
@@ -24,26 +22,38 @@
         "foregroundImage": "./assets/dark_adaptive_icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.maximilianoborrajo.expenserecordmobile"
+      "package": "com.maximilianoborrajo.expenserecordmobile",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/dark_favicon.ico"
     },
-    "expo": {
-      "android":{
-        "googleServicesFile": "./google-services.json"
-      },
-      "extra": {
-        "eas": {
-          "projectId": "0854aae1-2b3d-4d3d-a448-00b41c05b3f0"  
-        }
+
+    "scheme": "expenserecordmobile",
+    "extra": {
+      "eas": {
+        "projectId": "0854aae1-2b3d-4d3d-a448-00b41c05b3f0"
       }
     },
-    "scheme": "expenserecordmobile",
     "plugins": [
       "expo-localization",
-      "expo-notifications"
+      "expo-notifications",
+      {
+        "icon": "./assets/dark_icon.png",
+        "color": "#242528",
+        "sounds": ["./assets/notification.wav"],
+        "mode": "production"
+      }
     ],
-    "owner": "maxiborrajo"
-  }
+    "notification": {
+      "icon": "./assets/dark_icon.png",
+      "color": "#242528",
+      "sounds": ["./assets/notification.wav"],
+      "mode": "production"
+    },
+    "androidStatusBar": {
+      "hidden":true
+    }
+  },
+  "owner": "maxiborrajo"
 }

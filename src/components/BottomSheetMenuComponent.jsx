@@ -13,28 +13,13 @@ import { AppContext } from "../context/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
-  const snapPoints = useMemo(() => ["80%"], []);
+  const snapPoints = useMemo(() => ["70%"], []);
   const { colors } = useTheme();
-  const {
-    translate,
-    handleHideBalance,
-    updateCurrency,
-    hideBalance,
-    currency,
-    language,
-    setReload,
-  } = useContext(UserContext);
   const navigation = useNavigation();
-  const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
+  const { isDarkTheme } = useContext(AppContext);
   const icon = isDarkTheme
     ? require("../../assets/images/fehu_light.png")
     : require("../../assets/images/fehu_dark.png");
-
-  const handleChangeTheme = async () => {
-    setIsDarkTheme(!isDarkTheme);
-    AsyncStorage.setItem("theme", !isDarkTheme ? "dark" : "light");
-    setReload(true);
-  };
 
   return (
     <BottomSheet
@@ -67,172 +52,37 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
             paddingBottom: 5,
           }}
         >
-          {i18n.t("configuration")}
+          {i18n.t("options")}
         </Text>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <Text
+        <TouchableOpacity onPress={() => navigation.navigate("Configuration")}>
+          <View
             style={{
-              fontSize: 15,
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: 10,
             }}
           >
-            {i18n.t("darkMode")}
-          </Text>
-          <Switch
-            circleSize={25}
-            activeText={""}
-            inActiveText={""}
-            backgroundActive={"gray"}
-            backgroundInactive={"gray"}
-            value={isDarkTheme}
-            onValueChange={() => {
-              handleChangeTheme();
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-            }}
-          >
-            {i18n.t("hideBalance")}
-          </Text>
-          <Switch
-            circleSize={25}
-            activeText={""}
-            inActiveText={""}
-            backgroundActive={"gray"}
-            backgroundInactive={"gray"}
-            value={hideBalance}
-            onValueChange={async (value) => {
-              await handleHideBalance(value);
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-            }}
-          >
-            {i18n.t("currency")}
-          </Text>
-          <SelectDropdown
-            search={true}
-            searchInputTxtStyle={{
-              fontSize: 14,
-              fontFamily: "Poppins_300Light",
-              textAlign: "center",
-            }}
-            data={currencies}
-            onSelect={(selectedItem) => {
-              updateCurrency(selectedItem);
-            }}
-            buttonTextAfterSelection={(selectedItem) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item) => {
-              return item;
-            }}
-            defaultButtonText={currency ? currency : "ARS"}
-            defaultValue={currency}
-            buttonStyle={{
-              color: colors.text,
-              fontSize: 12,
-              padding: 0,
-              margin: 0,
-              width: 60,
-              height: 20,
-              backgroundColor: "transparent",
-            }}
-            buttonTextStyle={{
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-              fontSize: 14,
-            }}
-            rowTextStyle={{
-              fontFamily: "Poppins_300Light",
-              fontSize: 14,
-            }}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-            }}
-          >
-            {i18n.t("language")}
-          </Text>
-          <SelectDropdown
-            data={languages}
-            onSelect={(selectedItem) => {
-              translate(selectedItem.toLowerCase());
-            }}
-            buttonTextAfterSelection={(selectedItem) => {
-              return selectedItem;
-            }}
-            rowTextForSelection={(item) => {
-              return item;
-            }}
-            defaultButtonText={language ? language.toUpperCase() : "EN"}
-            defaultValue={language ? language.toUpperCase() : "EN"}
-            buttonStyle={{
-              color: colors.text,
-              fontSize: 12,
-              padding: 0,
-              margin: 0,
-              width: 60,
-              height: 20,
-              backgroundColor: "transparent",
-            }}
-            buttonTextStyle={{
-              fontFamily: "Poppins_300Light",
-              color: colors.text,
-              fontSize: 14,
-            }}
-            rowTextStyle={{
-              fontFamily: "Poppins_300Light",
-              fontSize: 14,
-            }}
-          />
-        </View>
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: "Poppins_300Light",
+                color: colors.text,
+              }}
+            >
+              {i18n.t("settings")}
+            </Text>
+            <Icon
+              name="wrench"
+              type="font-awesome-5"
+              iconStyle={{
+                color: colors.text,
+                fontSize: 20,
+                paddingBottom: 9,
+              }}
+            ></Icon>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
           <View
             style={{
@@ -257,8 +107,8 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 5,
-                paddingRight: 21,
+                paddingBottom: 9,
+                paddingRight: 2,
               }}
             ></Icon>
           </View>
@@ -287,8 +137,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 5,
-                paddingRight: 21,
+                paddingBottom: 9,
               }}
             ></Icon>
           </View>
@@ -317,8 +166,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
                 height: 25,
                 width: 25,
                 resizeMode: "center",
-                marginRight: 17,
-                marginBottom: 7,
+                marginBottom: 9,
               }}
             />
           </View>
@@ -347,8 +195,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 5,
-                paddingRight: 18,
+                paddingBottom: 9,
               }}
             ></Icon>
           </View>
@@ -377,8 +224,8 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: isDarkTheme ? "#f53333" : "#eb1717",
                 fontSize: 20,
-                paddingBottom: 5,
-                paddingRight: 20,
+                paddingBottom: 9,
+                paddingRight:3
               }}
             ></Icon>
           </View>

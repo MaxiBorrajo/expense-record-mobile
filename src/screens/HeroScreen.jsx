@@ -15,17 +15,14 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import * as TaskManager from "expo-task-manager";
 
-// const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
+const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
 
-// TaskManager.defineTask(
-//   BACKGROUND_NOTIFICATION_TASK,
-//   ({ data, error, executionInfo }) => {
-//     console.log("Received a notification in the background!");
-//     // Do something with the notification data
-//   }
-// );
+TaskManager.defineTask(
+  BACKGROUND_NOTIFICATION_TASK,
+  ({ data, error, executionInfo }) => {}
+);
 
-// Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -35,6 +32,9 @@ Notifications.setNotificationHandler({
   }),
 });
 
+Notifications.setNotificationChannelAsync("default", {
+  sound: "mySoundFile.wav",
+});
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -50,7 +50,6 @@ export default function HeroScreen({ navigation }) {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
-        console.log(notification);
       });
 
     responseListener.current =
@@ -58,10 +57,12 @@ export default function HeroScreen({ navigation }) {
         console.log(response);
       });
 
-      return () => {
-        Notifications.removeNotificationSubscription(notificationListener.current);
-        Notifications.removeNotificationSubscription(responseListener.current);
-      };
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -163,6 +164,7 @@ async function schedulePushNotification() {
       title: "You've got mail! 📬",
       body: "Here is the notification body",
       data: { data: "goes here" },
+      sound: "notification.wav",
     },
     trigger: { seconds: 2 },
   });
@@ -177,6 +179,7 @@ async function registerForPushNotificationsAsync() {
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",
+      showBadge: true,
     });
   }
 

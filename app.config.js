@@ -25,14 +25,25 @@ module.exports = {
         EXPO_PUBLIC_GOOGLE_SERVICES_JSON: "google-services.json",
       },
     },
-
-    scheme: "expenserecordmobile",
+  },
+  android: {
+    package: "com.maximilianoborrajo.expenserecordmobile"
   },
   expo: {
+    scheme: "expenserecordmobile",
     extra: {
       eas: {
         projectId: "0854aae1-2b3d-4d3d-a448-00b41c05b3f0",
       },
+    },
+    notification: {
+      icon: "./assets/dark_icon.png",
+      color: "#242528",
+      sounds: ["./assets/notification.wav"],
+      mode: "production"
+    },
+    android: {
+      package: "com.maximilianoborrajo.expenserecordmobile"
     },
   },
 };

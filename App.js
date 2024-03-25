@@ -14,6 +14,7 @@ import CreateCategoryScreen from "./src/screens/CreateCategoryScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import CategoriesScreen from "./src/screens/CategoriesScreen";
 import AboutUsScreen from "./src/screens/AboutUsScreen";
+import ConfigurationScreen from "./src/screens/ConfigurationScreen";
 import { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ExpenseContextProvider } from "./src/context/ExpenseContext";
@@ -123,6 +124,7 @@ export default function App() {
                         component={CategoriesScreen}
                       />
                       <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+                      <Stack.Screen name="Configuration" component={ConfigurationScreen} />
                     </Stack.Navigator>
                   </AppContext.Provider>
                 </NavigationContainer>

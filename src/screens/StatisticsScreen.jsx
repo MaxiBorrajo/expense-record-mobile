@@ -331,6 +331,7 @@ export default function StatisticsScreen() {
                         }}
                         withInnerLines={false}
                         showBarTops={false}
+                        showValuesOnTopOfBars
                       />
                     </View>
                   ) : null}

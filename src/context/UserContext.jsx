@@ -11,21 +11,25 @@ export function UserContextProvider(props) {
   const [user, setUser] = useState(null);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [hideBalance, setHideBalance] = useState(false);
+  const [blockNotifications, setBlockNotifications] = useState(false);
   const [language, setLanguage] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [reload, setReload] = useState(false);
   const { applyConversion } = useContext(ExpenseContext);
 
   const getUserGoogle = async (token) => {
-    if(!token) return;
-    const result = await axios.get(`https://www.googleapis.com/userinfo/v2/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if (!token) return;
+    const result = await axios.get(
+      `https://www.googleapis.com/userinfo/v2/me`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    console.log(result.data)
-  }
+    console.log(result.data);
+  };
 
   const updateCurrency = async (newCurrency) => {
     if (currency && newCurrency) {
@@ -42,6 +46,14 @@ export function UserContextProvider(props) {
     }
   };
 
+  const handleBlockNotifications = async (value) => {
+    await updateCurrentUser({
+      blockNotifications: value,
+    });
+    setBlockNotifications(value);
+    setReload(true);
+  };
+
   const getLanguage = () => {
     AsyncStorage.getItem("language").then((value) => {
       i18n.locale = value ? value : i18n.locale;
@@ -53,6 +65,7 @@ export function UserContextProvider(props) {
     const user = await getCurrentUser();
     setUser((prev) => user);
     setCurrency(user.currency);
+    setBlockNotifications(user.blockNotifications);
   };
 
   const handleHideBalance = async (value) => {
@@ -89,16 +102,25 @@ export function UserContextProvider(props) {
   }
 
   async function verifyCode(data) {
-    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/verify`, data);
+    await axios.post(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/verify`,
+      data
+    );
   }
 
   async function resetPassword(data) {
-    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/resetPassword`, data);
+    await axios.post(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/resetPassword`,
+      data
+    );
     await AsyncStorage.removeItem("email");
   }
 
   async function register(data) {
-    const response = await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth`, data);
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth`,
+      data
+    );
     await AsyncStorage.setItem("token", response.data.resource.token);
     await AsyncStorage.setItem(
       "user",
@@ -119,36 +141,49 @@ export function UserContextProvider(props) {
   }
 
   async function forgotPassword(data) {
-    await axios.post(`${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/forgotPassword`, data);
+    await axios.post(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/forgotPassword`,
+      data
+    );
     await AsyncStorage.setItem("email", data.email);
   }
 
   async function getCurrentUser() {
-    const result = await axios.get(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
-      headers: {
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      },
-    });
+    const result = await axios.get(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
 
     return result.data.resource;
   }
 
   async function updateCurrentUser(info) {
-    const result = await axios.put(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, info, {
-      headers: {
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      },
-    });
+    const result = await axios.put(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/users`,
+      info,
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
 
     return result.data.resource;
   }
 
   async function deleteCurrentUser() {
-    const result = await axios.delete(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
-      headers: {
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      },
-    });
+    const result = await axios.delete(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
 
     return result.data.message;
   }
@@ -179,7 +214,11 @@ export function UserContextProvider(props) {
         setReload,
         currency,
         user,
-        getUserGoogle
+        getUserGoogle,
+        setActualUser,
+        blockNotifications,
+        setBlockNotifications,
+        handleBlockNotifications,
       }}
     >
       {props.children}

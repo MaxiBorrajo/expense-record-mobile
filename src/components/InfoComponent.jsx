@@ -17,7 +17,7 @@ export default function InfoComponent({
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { user, endLoading, loading, hideBalance, reload } = useContext(UserContext);
+  const { user, endLoading, loading, hideBalance, reload, setActualUser } = useContext(UserContext);
 
   const getMainInformation = async () => {
     await Promise.all([
@@ -28,6 +28,7 @@ export default function InfoComponent({
       getAmount(new Date().getMonth(), 0).then((amount) =>
         setMonthLossBalance(amount)
       ),
+      setActualUser()
     ]);
     endLoading();
   };
