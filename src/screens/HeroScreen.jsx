@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ImageBackground,
   Dimensions,
+  Platform,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import i18n from "../utils/i18n";
@@ -12,70 +13,28 @@ import { UserContext } from "../context/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
+import * as TaskManager from "expo-task-manager";
+
+// const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
+
+// TaskManager.defineTask(
+//   BACKGROUND_NOTIFICATION_TASK,
+//   ({ data, error, executionInfo }) => {
+//     console.log("Received a notification in the background!");
+//     // Do something with the notification data
+//   }
+// );
+
+// Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 
-async function sendPushNotification(expoPushToken) {
-  const message = {
-    to: expoPushToken,
-    sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
-    data: { someData: "goes here" },
-  };
-
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = await Notifications.getExpoPushTokenAsync({
-      projectId: Constants.expoConfig.extra.eas.projectId,
-    });
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  return token.data;
-}
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -91,6 +50,7 @@ export default function HeroScreen({ navigation }) {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
+        console.log(notification);
       });
 
     responseListener.current =
@@ -98,12 +58,10 @@ export default function HeroScreen({ navigation }) {
         console.log(response);
       });
 
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
+      return () => {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
   }, []);
 
   useEffect(() => {
@@ -119,36 +77,36 @@ export default function HeroScreen({ navigation }) {
       >
         <View style={styles.container}>
           <Text style={styles.title}>Fehu: Expense Tracker</Text>
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Text>Your expo push token: {expoPushToken}</Text>
+            <View style={{ alignItems: "center", justifyContent: "center" }}>
+              <Text>
+                Title: {notification && notification.request.content.title}{" "}
+              </Text>
+              <Text>
+                Body: {notification && notification.request.content.body}
+              </Text>
+              <Text>
+                Data:{" "}
+                {notification &&
+                  JSON.stringify(notification.request.content.data)}
+              </Text>
+            </View>
+            <Button
+              title="Press to schedule a notification"
+              onPress={async () => {
+                await schedulePushNotification();
+              }}
+            />
+          </View>
           <View>
             <Text style={styles.subtitle}>{i18n.t("phrase")}</Text>
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "space-around",
-              }}
-            >
-              <Text>Your expo push token: {expoPushToken}</Text>
-              <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Text>
-                  Title: {notification && notification.request.content.title}{" "}
-                </Text>
-                <Text>
-                  Body: {notification && notification.request.content.body}
-                </Text>
-                <Text>
-                  Data:{" "}
-                  {notification &&
-                    JSON.stringify(notification.request.content.data)}
-                </Text>
-              </View>
-              <Button
-                title="Press to Send Notification"
-                onPress={async () => {
-                  await sendPushNotification(expoPushToken);
-                }}
-              />
-            </View>
             <Button
               title={i18n.t("getStarted")}
               buttonStyle={{
@@ -198,3 +156,53 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
+
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: "Here is the notification body",
+      data: { data: "goes here" },
+    },
+    trigger: { seconds: 2 },
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    // Learn more about projectId:
+    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "0854aae1-2b3d-4d3d-a448-00b41c05b3f0",
+      })
+    ).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
+}

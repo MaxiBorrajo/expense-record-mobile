@@ -124,7 +124,7 @@ export function UserContextProvider(props) {
   }
 
   async function getCurrentUser() {
-    const result = await axios.get(`${process.env.process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
+    const result = await axios.get(`${process.env.EXPO_PUBLIC_URL_BACKEND}/users`, {
       headers: {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },
