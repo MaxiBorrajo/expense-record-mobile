@@ -14,7 +14,7 @@ export default function MainScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
-  const { deleteCurrentUser, reload, setReload } = useContext(UserContext);
+  const { deleteCurrentUser, reload, setReload, setLoading } = useContext(UserContext);
 
   const toggleDialog = () => {
     setVisible(!visible);
@@ -23,9 +23,9 @@ export default function MainScreen({ route, navigation }) {
   const deleteAccount = async () => {
     setVisible(false);
     setLoading(true);
-    setErrorMessage(null);
     await deleteCurrentUser();
     await logout();
+    setLoading(false);
   };
 
   const logout = async () => {
