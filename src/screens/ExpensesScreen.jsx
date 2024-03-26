@@ -157,7 +157,7 @@ export default function ExpensesScreen({ route, navigation }) {
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingTop: 70,
+          paddingTop: 90,
           minHeight: Dimensions.get("window").height,
         }}
       >
@@ -185,6 +185,17 @@ export default function ExpensesScreen({ route, navigation }) {
               <Icon name="sliders" type="font-awesome" color={colors.text} />
             </MenuTrigger>
             <MenuOptions
+              customStyles={{
+                optionsContainer: {
+                  backgroundColor: "transparent",
+                  elevation: 0,
+                },
+                optionsWrapper: {
+                  borderRadius: 10,
+                  right: 30,
+                  bottom:40
+                },
+              }}
               style={{ backgroundColor: colors.card, padding: 20, rowGap: 10 }}
             >
               {sort || order || type || category || year || month || day ? (
@@ -207,7 +218,7 @@ export default function ExpensesScreen({ route, navigation }) {
                     style={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
-                      fontSize: 15,
+                      fontSize: 10,
                     }}
                   >
                     {i18n.t("reset")}
@@ -216,7 +227,7 @@ export default function ExpensesScreen({ route, navigation }) {
                     name="times"
                     color={colors.text}
                     type="font-awesome-5"
-                    iconStyle={{ fontSize: 15 }}
+                    iconStyle={{ fontSize: 12 }}
                   />
                 </MenuOption>
               ) : null}
@@ -224,7 +235,7 @@ export default function ExpensesScreen({ route, navigation }) {
                 style={{
                   color: colors.text,
                   fontFamily: "Poppins_500Medium",
-                  fontSize: 17,
+                  fontSize: 12,
                   paddingTop: 5,
                 }}
               >
@@ -259,17 +270,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                 />
               </MenuOption>
@@ -305,17 +316,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                 />
               </MenuOption>
@@ -348,17 +359,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                 />
               </MenuOption>
@@ -366,7 +377,7 @@ export default function ExpensesScreen({ route, navigation }) {
                 style={{
                   color: colors.text,
                   fontFamily: "Poppins_500Medium",
-                  fontSize: 17,
+                  fontSize: 12,
                   paddingTop: 5,
                 }}
               >
@@ -405,17 +416,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                 />
               </MenuOption>
@@ -423,7 +434,7 @@ export default function ExpensesScreen({ route, navigation }) {
                 style={{
                   color: colors.text,
                   fontFamily: "Poppins_500Medium",
-                  fontSize: 17,
+                  fontSize: 12,
                   paddingTop: 5,
                 }}
               >
@@ -458,17 +469,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                 />
               </MenuOption>
@@ -476,7 +487,7 @@ export default function ExpensesScreen({ route, navigation }) {
                 style={{
                   color: colors.text,
                   fontFamily: "Poppins_500Medium",
-                  fontSize: 17,
+                  fontSize: 12,
                   paddingTop: 5,
                 }}
               >
@@ -514,17 +525,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   ref={sortSelect}
                 />
@@ -560,17 +571,17 @@ export default function ExpensesScreen({ route, navigation }) {
                     borderColor: colors.border,
                     borderWidth: 1,
                     borderStyle: "solid",
-                    fontSize: 15,
+                    fontSize: 12,
                     width: "105%",
                   }}
                   buttonTextStyle={{
                     fontFamily: "Poppins_300Light",
                     color: colors.text,
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   rowTextStyle={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: 15,
+                    fontSize: 12,
                   }}
                   ref={orderSelect}
                 />

@@ -13,16 +13,7 @@ import { UserContext } from "../context/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import * as TaskManager from "expo-task-manager";
-
-const BACKGROUND_NOTIFICATION_TASK = "BACKGROUND-NOTIFICATION-TASK";
-
-TaskManager.defineTask(
-  BACKGROUND_NOTIFICATION_TASK,
-  ({ data, error, executionInfo }) => {}
-);
-
-Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -30,10 +21,6 @@ Notifications.setNotificationHandler({
     shouldPlaySound: true,
     shouldSetBadge: true,
   }),
-});
-
-Notifications.setNotificationChannelAsync("default", {
-  sound: "mySoundFile.wav",
 });
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
@@ -43,9 +30,10 @@ export default function HeroScreen({ navigation }) {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
+      AsyncStorage.setItem("expoToken", token);
+    });
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -54,7 +42,19 @@ export default function HeroScreen({ navigation }) {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        const {
+          notification: {
+            request: {
+              content: {
+                data: { screen },
+              },
+            },
+          },
+        } = response;
+
+        if (screen) {
+          navigation.navigate(screen);
+        }
       });
 
     return () => {
@@ -78,34 +78,6 @@ export default function HeroScreen({ navigation }) {
       >
         <View style={styles.container}>
           <Text style={styles.title}>Fehu: Expense Tracker</Text>
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            <Text>Your expo push token: {expoPushToken}</Text>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Text>
-                Title: {notification && notification.request.content.title}{" "}
-              </Text>
-              <Text>
-                Body: {notification && notification.request.content.body}
-              </Text>
-              <Text>
-                Data:{" "}
-                {notification &&
-                  JSON.stringify(notification.request.content.data)}
-              </Text>
-            </View>
-            <Button
-              title="Press to schedule a notification"
-              onPress={async () => {
-                await schedulePushNotification();
-              }}
-            />
-          </View>
           <View>
             <Text style={styles.subtitle}>{i18n.t("phrase")}</Text>
             <Button
@@ -141,6 +113,7 @@ const styles = StyleSheet.create({
     rowGap: 150,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     minHeight: Dimensions.get("window").height,
+    paddingTop:50
   },
   safeArea: {
     flex: 1,
@@ -158,30 +131,8 @@ const styles = StyleSheet.create({
   },
 });
 
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
-      data: { data: "goes here" },
-      sound: "notification.wav",
-    },
-    trigger: { seconds: 2 },
-  });
-}
-
 async function registerForPushNotificationsAsync() {
   let token;
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-      showBadge: true,
-    });
-  }
 
   if (Device.isDevice) {
     const { status: existingStatus } =
@@ -195,16 +146,22 @@ async function registerForPushNotificationsAsync() {
       alert("Failed to get push token for push notification!");
       return;
     }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "0854aae1-2b3d-4d3d-a448-00b41c05b3f0",
-      })
-    ).data;
+    token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
+  }
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      showBadge: true,
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FE9018",
+      sound: "notification.wav",
+      enableVibrate: true,
+    });
   }
 
   return token;

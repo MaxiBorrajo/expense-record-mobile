@@ -18,17 +18,17 @@ const { colors } = useTheme();
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          padding: 20,
+          paddingHorizontal: 20,
+          paddingVertical:40,
           width: "90%",
-          height: "50%",
-          rowGap: 30,
+          rowGap: 20,
         }}
       >
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
             color: colors.text,
-            fontSize: 37,
+            fontSize: 20,
           }}
         >
           {dialogObject.title}
@@ -37,9 +37,9 @@ const { colors } = useTheme();
           style={{
             fontFamily: "Poppins_300Light",
             color: colors.text,
-            fontSize: 18,
+            fontSize: 13,
             textAlign: "center",
-            lineHeight: 35,
+            lineHeight: 25,
           }}
         >
           {dialogObject.description}
@@ -56,7 +56,7 @@ const { colors } = useTheme();
               title={i18n.t("cancel")}
               titleStyle={{
                 color: colors.background,
-                fontSize: 15,
+                fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
               buttonStyle={{
@@ -73,7 +73,7 @@ const { colors } = useTheme();
               title={i18n.t("delete")}
               titleStyle={{
                 color: "#fff",
-                fontSize: 15,
+                fontSize: 12,
                 fontFamily: "Poppins_500Medium",
               }}
               buttonStyle={{

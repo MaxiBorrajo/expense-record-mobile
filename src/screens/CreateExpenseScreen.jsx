@@ -50,7 +50,6 @@ export default function CreateExpenseScreen() {
           minHeight: Dimensions.get("window").height,
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: 50,
         }}
       >
         <View

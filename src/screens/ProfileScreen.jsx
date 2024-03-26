@@ -49,9 +49,9 @@ export default function ProfileScreen() {
             color: colors.text,
             paddingHorizontal: 30,
             rowGap: 20,
-            justifyContent: "center",
             minHeight: Dimensions.get("window").height,
             position: "relative",
+            justifyContent: "center",
           }}
         >
           <GoBackButtonComponent />
@@ -194,132 +194,120 @@ export default function ProfileScreen() {
                     </View>
                   )}
                 </Foect.Control>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                    columnGap: 10,
+                <Foect.Control
+                  name="budget"
+                  callback={(value, control) => {
+                    return +value != 0;
                   }}
                 >
-                  <Foect.Control
-                    name="budget"
-                    callback={(value, control) => {
-                      return +value != 0;
-                    }}
-                  >
-                    {(control) => (
-                      <View
+                  {(control) => (
+                    <View
+                      style={{
+                        rowGap: 10,
+                      }}
+                    >
+                      <Text
                         style={{
-                          rowGap: 10,
-                          flex: 1,
+                          fontSize: 13,
+                          fontFamily: "Poppins_400Regular",
+                          color: colors.text,
                         }}
                       >
-                        <Text
-                          style={{
-                            fontSize: 13,
-                            fontFamily: "Poppins_400Regular",
-                            color: colors.text,
-                          }}
-                        >
-                          {i18n.t("budget")}
-                        </Text>
-                        <View
-                          style={{
-                            backgroundColor: colors.card,
-                            paddingVertical: 10,
-                            borderRadius: 5,
-                            elevation: 3,
-                            paddingHorizontal: 20,
-                          }}
-                        >
-                          <TextInput
-                            style={{
-                              color: colors.text,
-                              fontFamily: "Poppins_300Light",
-                              fontSize: 12,
-                            }}
-                            onChangeText={(value) => {
-                              control.onChange(value);
-                            }}
-                            value={control.value.toString()}
-                            keyboardType="numeric"
-                          />
-                        </View>
-                        {control.isInvalid && control.errors.callback && (
-                          <Text
-                            style={{
-                              color: "#ed2139",
-                              fontSize: 12,
-                              fontFamily: "Poppins_500Medium",
-                            }}
-                          >
-                            {i18n.t("budgetError")}
-                          </Text>
-                        )}
-                      </View>
-                    )}
-                  </Foect.Control>
-                  <Foect.Control
-                    name="budgetWarning"
-                    callback={(value, control) => {
-                      return +value != 0;
-                    }}
-                  >
-                    {(control) => (
+                        {i18n.t("budget")}
+                      </Text>
                       <View
                         style={{
-                          rowGap: 10,
-                          flex: 1,
+                          backgroundColor: colors.card,
+                          paddingVertical: 10,
+                          borderRadius: 5,
+                          elevation: 3,
+                          paddingHorizontal: 20,
                         }}
                       >
+                        <TextInput
+                          style={{
+                            color: colors.text,
+                            fontFamily: "Poppins_300Light",
+                            fontSize: 12,
+                          }}
+                          onChangeText={(value) => {
+                            control.onChange(value);
+                          }}
+                          value={control.value.toString()}
+                          keyboardType="numeric"
+                        />
+                      </View>
+                      {control.isInvalid && control.errors.callback && (
                         <Text
                           style={{
-                            fontSize: 13,
-                            fontFamily: "Poppins_400Regular",
-                            color: colors.text,
+                            color: "#ed2139",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          {i18n.t("warningBudget")}
+                          {i18n.t("budgetError")}
                         </Text>
-                        <View
+                      )}
+                    </View>
+                  )}
+                </Foect.Control>
+                <Foect.Control
+                  name="budgetWarning"
+                  callback={(value, control) => {
+                    return +value != 0;
+                  }}
+                >
+                  {(control) => (
+                    <View
+                      style={{
+                        rowGap: 10,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: "Poppins_400Regular",
+                          color: colors.text,
+                        }}
+                      >
+                        {i18n.t("warningBudget")}
+                      </Text>
+                      <View
+                        style={{
+                          backgroundColor: colors.card,
+                          paddingVertical: 10,
+                          borderRadius: 5,
+                          elevation: 3,
+                          paddingHorizontal: 20,
+                        }}
+                      >
+                        <TextInput
                           style={{
-                            backgroundColor: colors.card,
-                            paddingVertical: 10,
-                            borderRadius: 5,
-                            elevation: 3,
-                            paddingHorizontal: 20,
+                            color: colors.text,
+                            fontFamily: "Poppins_300Light",
+                            fontSize: 12,
+                          }}
+                          onChangeText={(value) => {
+                            control.onChange(value);
+                          }}
+                          value={control.value.toString()}
+                          keyboardType="numeric"
+                        />
+                      </View>
+                      {control.isInvalid && control.errors.callback && (
+                        <Text
+                          style={{
+                            color: "#ed2139",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
                           }}
                         >
-                          <TextInput
-                            style={{
-                              color: colors.text,
-                              fontFamily: "Poppins_300Light",
-                              fontSize: 12,
-                            }}
-                            onChangeText={(value) => {
-                              control.onChange(value);
-                            }}
-                            value={control.value.toString()}
-                            keyboardType="numeric"
-                          />
-                        </View>
-                        {control.isInvalid && control.errors.callback && (
-                          <Text
-                            style={{
-                              color: "#ed2139",
-                              fontSize: 12,
-                              fontFamily: "Poppins_500Medium",
-                            }}
-                          >
-                            {i18n.t("warningBudgetError")}
-                          </Text>
-                        )}
-                      </View>
-                    )}
-                  </Foect.Control>
-                </View>
+                          {i18n.t("warningBudgetError")}
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </Foect.Control>
                 <View
                   style={{
                     width: "100%",
@@ -347,6 +335,7 @@ export default function ProfileScreen() {
                       borderRadius: 5,
                       alignItems: "center",
                       justifyContent: "center",
+                      marginTop:10
                     }}
                     disabled={form.isInvalid}
                     disabledStyle={{

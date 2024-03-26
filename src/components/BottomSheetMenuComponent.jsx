@@ -1,21 +1,17 @@
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import React, { useMemo, useContext, forwardRef } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Switch } from "react-native-switch";
-import SelectDropdown from "react-native-select-dropdown";
-import { currencies } from "../utils/utils";
-import { languages } from "../utils/utils";
-import { Icon } from "@rneui/themed";
-import { UserContext } from "../context/UserContext";
+import { Icon, Badge } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { AppContext } from "../context/AppContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext } from "../context/UserContext";
 
 const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
-  const snapPoints = useMemo(() => ["70%"], []);
+  const snapPoints = useMemo(() => ["75%"], []);
   const { colors } = useTheme();
   const navigation = useNavigation();
+  const { notifications } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
   const icon = isDarkTheme
     ? require("../../assets/images/fehu_light.png")
@@ -49,11 +45,48 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
             fontSize: 20,
             fontFamily: "Poppins_400Regular",
             color: colors.text,
-            paddingBottom: 5,
+            paddingBottom: 3,
           }}
         >
           {i18n.t("options")}
         </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: 10,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: "Poppins_300Light",
+                color: colors.text,
+              }}
+            >
+              {i18n.t("notifications")}
+            </Text>
+            <View style={{ position: "relative" }}>
+              <Icon
+                name="bell"
+                type="font-awesome-5"
+                iconStyle={{
+                  color: colors.text,
+                  fontSize: 20,
+                  paddingBottom: 3,
+                }}
+              ></Icon>
+              {notifications && notifications.length ? (
+                <Badge
+                  status="warning"
+                  containerStyle={{ position: "absolute", top: 0, right: -2 }}
+                />
+              ) : null}
+            </View>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Configuration")}>
           <View
             style={{
@@ -78,7 +111,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 9,
+                paddingBottom: 3,
               }}
             ></Icon>
           </View>
@@ -107,7 +140,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 9,
+                paddingBottom: 3,
                 paddingRight: 2,
               }}
             ></Icon>
@@ -137,7 +170,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 9,
+                paddingBottom: 3,
               }}
             ></Icon>
           </View>
@@ -195,7 +228,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: colors.text,
                 fontSize: 20,
-                paddingBottom: 9,
+                paddingBottom: 3,
               }}
             ></Icon>
           </View>
@@ -224,8 +257,8 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               iconStyle={{
                 color: isDarkTheme ? "#f53333" : "#eb1717",
                 fontSize: 20,
-                paddingBottom: 9,
-                paddingRight:3
+                paddingBottom: 3,
+                paddingRight: 3,
               }}
             ></Icon>
           </View>

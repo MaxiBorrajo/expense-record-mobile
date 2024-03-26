@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import i18n from "../utils/i18n";
 import { ExpenseContext } from "../context/ExpenseContext";
+import { NotificationContext } from "../context/NotificationContext";
 
 export const UserContext = createContext();
 
@@ -14,8 +15,10 @@ export function UserContextProvider(props) {
   const [blockNotifications, setBlockNotifications] = useState(false);
   const [language, setLanguage] = useState(null);
   const [currency, setCurrency] = useState(null);
+  const [notifications, setNotifications] = useState(null);
   const [reload, setReload] = useState(false);
   const { applyConversion } = useContext(ExpenseContext);
+  const { getNotifications } = useContext(NotificationContext);
 
   const getUserGoogle = async (token) => {
     if (!token) return;
@@ -81,10 +84,17 @@ export function UserContextProvider(props) {
     setReload(true);
   };
 
+  const handleNotifications = async () => {
+    const notifications = await getNotifications();
+
+    setNotifications((prev) => notifications);
+  };
+
   const loadConfiguration = async () => {
     await setActualUser();
     getLanguage();
     getHideBalance();
+    handleNotifications();
   };
 
   const getHideBalance = () => {
@@ -219,6 +229,8 @@ export function UserContextProvider(props) {
         blockNotifications,
         setBlockNotifications,
         handleBlockNotifications,
+        notifications,
+        handleNotifications
       }}
     >
       {props.children}

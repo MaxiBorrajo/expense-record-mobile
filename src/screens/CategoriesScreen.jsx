@@ -79,8 +79,9 @@ export default function CategoriesScreen({ route, navigation }) {
           alignItems: "center",
           position: "relative",
           paddingHorizontal: 20,
-          paddingTop: 70,
           minHeight: Dimensions.get("window").height,
+          justifyContent:'center',
+          paddingTop:90
         }}
       >
         <GoBackButtonComponent />

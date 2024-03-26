@@ -75,6 +75,7 @@ export default function MainScreen({ route, navigation }) {
       <BottomSheetMenuComponent
         ref={bottomSheetRef}
         logout={() => logout()}
+        toggleDialog={toggleDialog}
       />
       <WarningDialogComponent
         dialogObject={{

@@ -17,12 +17,12 @@ export default function AnnualBalanceComponent({
     <View
       style={{
         paddingVertical: 40,
-        paddingHorizontal: 30,
+        paddingHorizontal: 20,
         width: "100%",
         backgroundColor: colors.card,
         borderRadius: 20,
         justifyContent: "space-between",
-        gap: 10,
+        gap: 15,
         elevation: 3,
       }}
     >
@@ -36,7 +36,7 @@ export default function AnnualBalanceComponent({
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: 20,
+            fontSize: 17,
             color: colors.text,
           }}
         >
@@ -45,7 +45,7 @@ export default function AnnualBalanceComponent({
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: 35,
+            fontSize: 30,
             color: colors.text,
           }}
         >
@@ -96,7 +96,7 @@ export default function AnnualBalanceComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 13,
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -118,7 +118,7 @@ export default function AnnualBalanceComponent({
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 17,
+                fontSize: 15,
                 color: colors.text,
               }}
             >
@@ -148,7 +148,7 @@ export default function AnnualBalanceComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 13,
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -170,7 +170,7 @@ export default function AnnualBalanceComponent({
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 17,
+                fontSize: 15,
                 color: colors.text,
               }}
             >

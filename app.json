@@ -41,15 +41,13 @@
       {
         "icon": "./assets/dark_icon.png",
         "color": "#242528",
-        "sounds": ["./assets/notification.wav"],
-        "mode": "production"
+        "sounds": ["./assets/notification.wav"]
       }
     ],
     "notification": {
       "icon": "./assets/dark_icon.png",
       "color": "#242528",
-      "sounds": ["./assets/notification.wav"],
-      "mode": "production"
+      "sounds": ["./assets/notification.wav"]
     },
     "androidStatusBar": {
       "hidden":true

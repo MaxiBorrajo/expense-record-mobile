@@ -26,7 +26,7 @@ export default function GoBackButtonComponent() {
 const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
-    top: 35,
+    top: 50,
     left: 15,
     zIndex: 100,
   },

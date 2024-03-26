@@ -139,11 +139,12 @@ export function ExpenseContextProvider(props) {
 
   async function createExpense(expense) {
     const result = await axios.post(
-      `${process.env.EXPO_PUBLIC_URL_BACKEND}/api/expenses`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses`,
       expense,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
         },
       }
     );
@@ -158,6 +159,7 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
         },
       }
     );
@@ -171,6 +173,7 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
         },
       }
     );

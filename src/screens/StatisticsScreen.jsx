@@ -124,7 +124,7 @@ export default function StatisticsScreen() {
       ) : (
         <FlatList
           contentContainerStyle={[
-            { backgroundColor: colors.background, paddingTop: 40 },
+            { backgroundColor: colors.background },
             !statistics ? { flex: 1 } : null,
           ]}
           ListHeaderComponent={
@@ -133,6 +133,7 @@ export default function StatisticsScreen() {
                 flex: 1,
                 backgroundColor: colors.background,
                 color: colors.text,
+                paddingTop:60,
                 paddingBottom: 120,
                 alignItems: "center",
                 position: "relative",
@@ -140,7 +141,7 @@ export default function StatisticsScreen() {
                 overflow: "scroll",
                 minHeight: Dimensions.get("window").height,
                 rowGap: 10,
-                paddingTop: 10,
+                justifyContent: 'center'
               }}
             >
               <Text

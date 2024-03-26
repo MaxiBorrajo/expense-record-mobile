@@ -15,8 +15,7 @@ import i18n from "../utils/i18n";
 import WarningDialogComponent from "../components/WarningDialogComponent";
 
 export default function ExpenseScreen({ route, navigation }) {
-  const { deleteExpenseById, updateExpenseById } =
-    useContext(ExpenseContext);
+  const { deleteExpenseById, updateExpenseById } = useContext(ExpenseContext);
   const { getCategories } = useContext(CategoryContext);
   const { expense } = route.params;
   const [loading, setLoading] = useState(false);
@@ -61,6 +60,8 @@ export default function ExpenseScreen({ route, navigation }) {
             rowGap: 20,
             justifyContent: "center",
             minHeight: Dimensions.get("window").height,
+            position: "relative",
+            paddingTop:50
           }}
         >
           <GoBackButtonComponent />
@@ -317,18 +318,18 @@ export default function ExpenseScreen({ route, navigation }) {
                           color: colors.text,
                           fontSize: 14,
                           flexGrow: 1,
-                          elevation:5
+                          elevation: 5,
                         }}
                         buttonTextStyle={{
                           fontFamily: "Poppins_300Light",
                           color: colors.text,
                           fontSize: 14,
-                          elevation:5
+                          elevation: 5,
                         }}
                         rowTextStyle={{
                           fontFamily: "Poppins_300Light",
                           fontSize: 14,
-                          elevation:5
+                          elevation: 5,
                         }}
                       />
                     )}

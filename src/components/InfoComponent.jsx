@@ -3,21 +3,18 @@ import { useState, useEffect, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
-import { Icon } from "@rneui/themed";
+import { Icon, Badge } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { CountUp } from "use-count-up";
 
-export default function InfoComponent({
-  route,
-  navigation,
-  openBottomSheet,
-}) {
+export default function InfoComponent({ route, navigation, openBottomSheet }) {
   const { getBalance, getAmount } = useContext(ExpenseContext);
   const [balance, setBalance] = useState(null);
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { user, endLoading, loading, hideBalance, reload, setActualUser } = useContext(UserContext);
+  const { user, endLoading, loading, hideBalance, reload, setActualUser, notifications } =
+    useContext(UserContext);
 
   const getMainInformation = async () => {
     await Promise.all([
@@ -28,7 +25,7 @@ export default function InfoComponent({
       getAmount(new Date().getMonth(), 0).then((amount) =>
         setMonthLossBalance(amount)
       ),
-      setActualUser()
+      setActualUser(),
     ]);
     endLoading();
   };
@@ -50,14 +47,15 @@ export default function InfoComponent({
   return (
     <View
       style={{
-        paddingVertical: 50,
+        paddingTop: 60,
+        paddingBottom: 30,
         paddingHorizontal: 30,
         width: "100%",
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
-        rowGap: 40,
-        elevation:3
+        rowGap: 30,
+        elevation: 3,
       }}
     >
       <View
@@ -70,19 +68,27 @@ export default function InfoComponent({
       >
         <Text
           style={{
-            fontSize: 15,
+            fontSize: 13,
             fontFamily: "Poppins_300Light",
             color: colors.text,
           }}
         >
           {i18n.t("welcome")}, {user?.firstName} {user?.lastName}
         </Text>
-        <Icon
-          name="gear"
-          type="font-awesome"
-          iconStyle={{ color: colors.text, fontSize: 20, paddingBottom: 3 }}
-          onPress={openBottomSheet}
-        ></Icon>
+        <View style={{ position: "relative" }}>
+          <Icon
+            name="gear"
+            type="font-awesome"
+            iconStyle={{ color: colors.text, fontSize: 20, paddingBottom: 3 }}
+            onPress={openBottomSheet}
+          ></Icon>
+          {notifications && notifications.length ? (
+            <Badge
+              status="warning"
+              containerStyle={{ position: "absolute", top:0, right:-2}}
+            />
+          ) : null}
+        </View>
       </View>
       <View
         style={{
@@ -94,7 +100,7 @@ export default function InfoComponent({
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: 20,
+            fontSize: 17,
             color: colors.text,
           }}
         >
@@ -103,7 +109,7 @@ export default function InfoComponent({
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: 35,
+            fontSize: 30,
             color: colors.text,
           }}
         >
@@ -118,7 +124,7 @@ export default function InfoComponent({
                   return `$${val?.toFixed(2)?.toLocaleString()}`;
                 }}
                 duration={2.5}
-                easing={'easeOutCubic'}
+                easing={"easeOutCubic"}
               />
             ) : (
               "$0.00"
@@ -131,7 +137,7 @@ export default function InfoComponent({
                 return `-$${val?.toFixed(2)?.toLocaleString()}`;
               }}
               duration={2.5}
-              easing={'easeOutCubic'}
+              easing={"easeOutCubic"}
             />
           ) : (
             "$0.00"
@@ -154,7 +160,7 @@ export default function InfoComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 13,
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -176,7 +182,7 @@ export default function InfoComponent({
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 17,
+                fontSize: 15,
                 color: colors.text,
               }}
             >
@@ -190,7 +196,7 @@ export default function InfoComponent({
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
                   duration={2.5}
-                  easing={'easeOutCubic'}
+                  easing={"easeOutCubic"}
                 />
               )}
             </Text>
@@ -206,7 +212,7 @@ export default function InfoComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 13,
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -242,7 +248,7 @@ export default function InfoComponent({
                     return `$${val?.toFixed(2)?.toLocaleString()}`;
                   }}
                   duration={2.5}
-                  easing={'easeOutCubic'}
+                  easing={"easeOutCubic"}
                 />
               )}
             </Text>

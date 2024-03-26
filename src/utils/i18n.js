@@ -146,10 +146,15 @@ const translations = {
     warningBudget: "Budget Alert Percentage",
     budgetError: "Monthly budget must be greater than zero",
     warningBudgetError: "Budget Alert Percentage must be greater than zero",
+    Save: "Save",
+    notifications: "Notifications",
   },
   es: {
+    notifications: "Notificaciones",
+    Save: "Ahorro",
     budgetError: "El Presupuesto mensual debe ser mayor a cero",
-    warningBudgetError: "El Porcentaje de alerta de presupuesto debe ser mayor a cero",
+    warningBudgetError:
+      "El Porcentaje de alerta de presupuesto debe ser mayor a cero",
     budget: "Presupuesto mensual",
     warningBudget: "Porcentaje de alerta de presupuesto",
     blockNotifications: "Bloquear notificaciones",

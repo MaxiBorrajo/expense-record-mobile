@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import React, { useMemo, useContext, forwardRef } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -46,7 +47,15 @@ export default function ConfigurationScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ paddingTop: 80, rowGap: 20, paddingHorizontal: 30 }}>
+      <View
+        style={{
+          justifyContent: "center",
+          rowGap: 20,
+          paddingHorizontal: 30,
+          minHeight: Dimensions.get("window").height,
+          position: "relative",
+        }}
+      >
         <GoBackButtonComponent />
         <Text
           style={{
@@ -55,7 +64,7 @@ export default function ConfigurationScreen() {
             color: colors.text,
           }}
         >
-          {i18n.t("profile")}
+          {i18n.t("settings")}
         </Text>
         <View
           style={{
