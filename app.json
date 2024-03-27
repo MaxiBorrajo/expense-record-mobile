@@ -42,7 +42,8 @@
         "color": "#242528",
         "sounds": ["./assets/notification.wav"]
       },
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "@react-native-firebase/app"
     ],
     "notification": {
       "icon": "./assets/dark_icon.png",

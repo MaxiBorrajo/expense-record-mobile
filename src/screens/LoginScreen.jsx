@@ -13,7 +13,6 @@ import {
   GoogleSigninButton,
 } from "@react-native-google-signin/google-signin";
 import { AppContext } from "../context/AppContext";
-GoogleSignin.configure();
 
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +22,9 @@ export default function LoginScreen({ navigation }) {
   const { login, loginWithGoogle } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
 
   const googleSignIn = async () => {
     try {
