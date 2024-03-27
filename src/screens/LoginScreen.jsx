@@ -8,16 +8,46 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
+import { AppContext } from "../context/AppContext";
+GoogleSignin.configure();
 
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
-  const { login } = useContext(UserContext);
+  const { login, loginWithGoogle } = useContext(UserContext);
+  const { isDarkTheme } = useContext(AppContext);
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
+
+  const googleSignIn = async () => {
+    try {
+      setLoading(true);
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        email: userInfo.user.email,
+        firstName: userInfo.user.givenName,
+        lastName: userInfo.user.familyName,
+        oauthuser: true,
+      };
+      await loginWithGoogle(user);
+      setLoading(false);
+      navigation.navigate("Home");
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
+  };
 
   const loginUser = async (form) => {
     try {
@@ -220,6 +250,16 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
+                <GoogleSigninButton
+                  size={GoogleSigninButton.Size.Standard}
+                  color={
+                    isDarkTheme
+                      ? GoogleSigninButton.Color.Dark
+                      : GoogleSigninButton.Color.Light
+                  }
+                  onPress={googleSignIn()}
+                />
+                {/* ;
                 <Icon
                   name="google"
                   type="font-awesome-5"
@@ -232,9 +272,8 @@ export default function LoginScreen({ navigation }) {
                     alignSelf: "center",
                     maxWidth: "fit-content",
                   }}
-                  onPress={() => {
-                  }}
-                ></Icon>
+                  onPress={() => googleSignIn()}
+                ></Icon> */}
               </View>
             </View>
           )}
