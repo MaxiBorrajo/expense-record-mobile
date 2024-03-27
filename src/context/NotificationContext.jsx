@@ -17,10 +17,10 @@ export function NotificationContextProvider(props) {
     return result.data.resource;
   }
 
-  async function readNotifications(notificationsIds) {
+  async function readNotification(id) {
     const result = await axios.put(
-      `${process.env.EXPO_PUBLIC_URL_BACKEND}/notifications`,
-      notificationsIds,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/notifications/${id}`,
+      null,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -48,7 +48,7 @@ export function NotificationContextProvider(props) {
       value={{
         deleteNotification,
         getNotifications,
-        readNotifications,
+        readNotification,
       }}
     >
       {props.children}

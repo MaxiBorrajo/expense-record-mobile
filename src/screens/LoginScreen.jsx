@@ -6,12 +6,13 @@ import { Input, Icon } from "@rneui/themed";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
+import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from "@react-native-google-signin/google-signin";
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+// } from "@react-native-google-signin/google-signin";
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,32 +21,32 @@ export default function LoginScreen({ navigation }) {
   const { login, handleGoogleLogin } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
   
-  useEffect(() => {
-    GoogleSignin.configure();
-  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure();
+  // }, []);
 
-  const googleLogin = async () => {
-    try {
-      setLoading(true);
-      const userInfo = await GoogleSignin.signIn();
-      const user = {
-        email: userInfo.email,
-        firstName: userInfo.givenName,
-        lastName: userInfo.familyName,
-        oauthuser: true,
-      };
-      await handleGoogleLogin(user);
-      setLoading(false);
-      navigation.navigate("Home");
-    } catch (error) {
-      setLoading(false);
-      if (error.response.data) {
-        setErrorMessage(error.response.data.Error);
-      } else {
-        setErrorMessage(error.message);
-      }
-    }
-  };
+  // const googleLogin = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const userInfo = await GoogleSignin.signIn();
+  //     const user = {
+  //       email: userInfo.email,
+  //       firstName: userInfo.givenName,
+  //       lastName: userInfo.familyName,
+  //       oauthuser: true,
+  //     };
+  //     await handleGoogleLogin(user);
+  //     setLoading(false);
+  //     navigation.navigate("Home");
+  //   } catch (error) {
+  //     setLoading(false);
+  //     if (error.response.data) {
+  //       setErrorMessage(error.response.data.Error);
+  //     } else {
+  //       setErrorMessage(error.message);
+  //     }
+  //   }
+  // };
 
   const loginUser = async (form) => {
     try {
@@ -248,7 +249,7 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
-                <GoogleSigninButton
+                {/* <GoogleSigninButton
                   size={GoogleSigninButton.Size.Standard}
                   color={
                     isDarkTheme
@@ -256,8 +257,7 @@ export default function LoginScreen({ navigation }) {
                       : GoogleSigninButton.Color.Dark
                   }
                   onPress={googleLogin}
-                />
-                ;
+                /> */}
                 {/* <Icon
                   name="google"
                   type="font-awesome-5"

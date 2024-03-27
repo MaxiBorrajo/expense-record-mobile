@@ -16,10 +16,14 @@ import i18n from "../utils/i18n";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 export default function NotificationsScreen() {
   const { colors } = useTheme();
-  const { deleteNotification, readNotifications } =
+  const { deleteNotification } =
     useContext(NotificationContext);
   const [errorMessage, setErrorMessage] = useState("");
   const { handleNotifications, notifications } = useContext(UserContext);
+
+  useEffect(() => {
+    handleNotifications();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -34,7 +38,7 @@ export default function NotificationsScreen() {
           minHeight: Dimensions.get("window").height,
           justifyContent: "center",
           paddingTop: 90,
-          rowGap:10
+          rowGap: 15,
         }}
       >
         <GoBackButtonComponent />

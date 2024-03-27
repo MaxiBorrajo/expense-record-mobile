@@ -5,6 +5,11 @@ module.exports = {
         buildType: "apk",
       },
     },
+    development: {
+      android: {
+        buildType: "apk",
+      },
+    },
     preview2: {
       android: {
         gradleCommand: ":app:assembleRelease",
@@ -27,7 +32,7 @@ module.exports = {
     },
   },
   android: {
-    package: "com.maximilianoborrajo.expenserecordmobile"
+    package: "com.maximilianoborrajo.expenserecordmobile",
   },
   expo: {
     scheme: "expenserecordmobile",
@@ -40,10 +45,10 @@ module.exports = {
       icon: "./assets/dark_icon.png",
       color: "#242528",
       sounds: ["./assets/notification.wav"],
-      mode: "production"
+      mode: "production",
     },
     android: {
-      package: "com.maximilianoborrajo.expenserecordmobile"
+      package: "com.maximilianoborrajo.expenserecordmobile",
     },
   },
 };

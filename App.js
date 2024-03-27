@@ -39,6 +39,7 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
+import { StatusBar } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -70,6 +71,15 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+      <StatusBar
+        barStyle={isDarkTheme ? DarkTheme.colors.text : LightTheme.colors.text}
+        backgroundColor={
+          isDarkTheme
+            ? DarkTheme.colors.background
+            : LightTheme.colors.background
+        }
+        translucent
+      />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <ExpenseContextProvider>
           <CategoryContextProvider>
