@@ -21,6 +21,7 @@
     "@gorhom/bottom-sheet": "^4.6.1",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
@@ -30,7 +31,6 @@
     "date-fns": "^3.2.0",
     "deprecated-react-native-prop-types": "^5.0.0",
     "expo": "^50.0.14",
-    "expo-auth-session": "~5.4.0",
     "expo-constants": "~15.4.5",
     "expo-device": "~5.9.3",
     "expo-font": "~11.10.3",
@@ -60,7 +60,8 @@
     "react-native-svg": "14.1.0",
     "react-native-switch": "^1.5.1",
     "react-native-vector-icons": "^10.0.3",
-    "use-count-up": "^3.0.1"
+    "use-count-up": "^3.0.1",
+    "expo-dev-client": "~3.3.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

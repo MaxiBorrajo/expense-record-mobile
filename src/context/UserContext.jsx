@@ -20,18 +20,16 @@ export function UserContextProvider(props) {
   const { applyConversion } = useContext(ExpenseContext);
   const { getNotifications } = useContext(NotificationContext);
 
-  const getUserGoogle = async (token) => {
-    if (!token) return;
-    const result = await axios.get(
-      `https://www.googleapis.com/userinfo/v2/me`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+  const handleGoogleLogin = async (data) => {
+    const response = await axios.post(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/auth/google`,
+      data
     );
-
-    console.log(result.data);
+    await AsyncStorage.setItem("token", response.data.resource.token);
+    await AsyncStorage.setItem(
+      "user",
+      JSON.stringify(response.data.resource.user)
+    );
   };
 
   const updateCurrency = async (newCurrency) => {
@@ -224,13 +222,13 @@ export function UserContextProvider(props) {
         setReload,
         currency,
         user,
-        getUserGoogle,
+        handleGoogleLogin,
         setActualUser,
         blockNotifications,
         setBlockNotifications,
         handleBlockNotifications,
         notifications,
-        handleNotifications
+        handleNotifications,
       }}
     >
       {props.children}

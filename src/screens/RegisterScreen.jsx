@@ -8,26 +8,12 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import * as Google from "expo-auth-session/providers/google";
 export default function RegisterScreen({ navigation }) {
   const { register } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-  });
-
-  useEffect(() => {
-    handleSignInWithGoogle();
-  }, [response]);
-
-  const handleSignInWithGoogle = async () => {
-    if (response?.type === "success") {
-      await getUserGoogle(response.accessToken);
-    }
-  };
 
   async function registerUser(form) {
     try {
@@ -310,7 +296,7 @@ export default function RegisterScreen({ navigation }) {
                     >
                       Or
                     </Text>
-                    <Icon
+                    {/* <Icon
                       name="google"
                       type="font-awesome-5"
                       iconStyle={{
@@ -325,7 +311,7 @@ export default function RegisterScreen({ navigation }) {
                       onPress={() => {
                         promptAsync();
                       }}
-                    ></Icon>
+                    ></Icon> */}
                   </View>
                 </View>
               )}

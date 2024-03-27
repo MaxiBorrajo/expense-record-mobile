@@ -8,25 +8,42 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import * as Google from "expo-auth-session/providers/google";
-
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
-  const { login, getUserGoogle } = useContext(UserContext);
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-  });
-
+  const { login, handleGoogleLogin } = useContext(UserContext);
+  const { isDarkTheme } = useContext(AppContext);
+  
   useEffect(() => {
-    handleSignInWithGoogle();
-  }, [response]);
+    GoogleSignin.configure();
+  }, []);
 
-  const handleSignInWithGoogle = async () => {
-    if (response?.type === "success") {
-      await getUserGoogle(response.accessToken);
+  const googleLogin = async () => {
+    try {
+      setLoading(true);
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        email: userInfo.email,
+        firstName: userInfo.givenName,
+        lastName: userInfo.familyName,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+      setLoading(false);
+      navigation.navigate("Home");
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
     }
   };
 
@@ -231,7 +248,17 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
-                <Icon
+                <GoogleSigninButton
+                  size={GoogleSigninButton.Size.Standard}
+                  color={
+                    isDarkTheme
+                      ? GoogleSigninButton.Color.Dark
+                      : GoogleSigninButton.Color.Dark
+                  }
+                  onPress={googleLogin}
+                />
+                ;
+                {/* <Icon
                   name="google"
                   type="font-awesome-5"
                   iconStyle={{
@@ -241,12 +268,12 @@ export default function LoginScreen({ navigation }) {
                     backgroundColor: colors.card,
                     borderRadius: 10,
                     alignSelf: "center",
-                    maxWidth:'fit-content'
+                    maxWidth: "fit-content",
                   }}
                   onPress={() => {
                     promptAsync();
                   }}
-                ></Icon>
+                ></Icon> */}
               </View>
             </View>
           )}

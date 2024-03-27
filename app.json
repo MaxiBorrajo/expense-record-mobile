@@ -42,6 +42,10 @@
         "icon": "./assets/dark_icon.png",
         "color": "#242528",
         "sounds": ["./assets/notification.wav"]
+      },
+      "expo-dev-launcher",
+      {
+        "launchModeExperimental": "most-recent"
       }
     ],
     "notification": {

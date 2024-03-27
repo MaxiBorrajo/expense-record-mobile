@@ -39,9 +39,7 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
-import * as WebBrowser from "expo-web-browser";
 
-WebBrowser.maybeCompleteAuthSession();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
