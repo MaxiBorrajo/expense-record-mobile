@@ -30,7 +30,7 @@ export default function HomeScreen() {
       width: 200,
       borderRadius: 20,
       borderTopWidth: 0,
-      left: (Dimensions.get('window').width / 2) - 100,
+      left: (Dimensions.get('window').width / 2) - 102,
       bottom:20,
       elevation:5
     },

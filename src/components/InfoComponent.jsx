@@ -13,9 +13,15 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
   const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
   const [monthLossBalance, setMonthLossBalance] = useState(null);
   const { colors } = useTheme();
-  const { user, endLoading, loading, hideBalance, reload, setActualUser, notifications } =
-    useContext(UserContext);
-
+  const {
+    user,
+    endLoading,
+    loading,
+    hideBalance,
+    reload,
+    setActualUser,
+    unreadNotifications,
+  } = useContext(UserContext);
   const getMainInformation = async () => {
     await Promise.all([
       getBalance().then((balance) => setBalance(balance)),
@@ -82,10 +88,10 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             iconStyle={{ color: colors.text, fontSize: 20, paddingBottom: 3 }}
             onPress={openBottomSheet}
           ></Icon>
-          {notifications && notifications.length ? (
+          {unreadNotifications && unreadNotifications.length ? (
             <Badge
               status="warning"
-              containerStyle={{ position: "absolute", top:0, right:-2}}
+              containerStyle={{ position: "absolute", top: 0, right: -2 }}
             />
           ) : null}
         </View>

@@ -16,6 +16,7 @@ export function UserContextProvider(props) {
   const [language, setLanguage] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [notifications, setNotifications] = useState(null);
+  const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [reload, setReload] = useState(false);
   const { applyConversion } = useContext(ExpenseContext);
   const { getNotifications } = useContext(NotificationContext);
@@ -82,10 +83,14 @@ export function UserContextProvider(props) {
     setReload(true);
   };
 
+  const getUnreadNotifications = (notifications) => {
+    return notifications.map((notification) => !notification.read);
+  };
+
   const handleNotifications = async () => {
     const notifications = await getNotifications();
-
     setNotifications((prev) => notifications);
+    setUnreadNotifications((prev) => getUnreadNotifications(notifications));
   };
 
   const loadConfiguration = async () => {
@@ -229,6 +234,7 @@ export function UserContextProvider(props) {
         handleBlockNotifications,
         notifications,
         handleNotifications,
+        unreadNotifications,
       }}
     >
       {props.children}

@@ -1,9 +1,6 @@
 import { format } from "date-fns";
 
-export const languages = [
-  "EN",
-  "ES",
-];
+export const languages = ["EN", "ES"];
 
 export const months = [
   "January",
@@ -59,13 +56,13 @@ export const getRandomHexColor = () => {
 };
 
 export const hexToRGBA = (hex, alpha) => {
-  hex = hex.replace('#', '');
+  hex = hex.replace("#", "");
   let r = parseInt(hex.substring(0, 2), 16);
   let g = parseInt(hex.substring(2, 4), 16);
   let b = parseInt(hex.substring(4, 6), 16);
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
+};
 
 export const currencies = [
   "AED",
@@ -230,3 +227,36 @@ export const currencies = [
   "ZMW",
   "ZWL",
 ];
+
+export function calculateElapsedTime(fecha, language) {
+  const now = new Date();
+  const timeElapse = now - fecha;
+
+  const secondsElapsed = Math.floor(timeElapse / 1000);
+  const minutesElapsed = Math.floor(secondsElapsed / 60);
+  const hoursElapsed = Math.floor(minutesElapsed / 60);
+  const daysElapsed = Math.floor(hoursElapsed / 24);
+  const monthsElapsed = Math.floor(daysElapsed / 30);
+
+  if (monthsElapsed > 0) {
+    return language === "EN"
+      ? `${monthsElapsed} ${monthsElapsed === 1 ? "month ago" : "months ago"}`
+      : `Hace ${monthsElapsed} ${monthsElapsed === 1 ? "mes" : "meses"}`;
+  } else if (daysElapsed > 0) {
+    return language === "EN"
+      ? `${daysElapsed} ${daysElapsed === 1 ? "day ago" : "days ago"}`
+      : `Hace ${daysElapsed} ${daysElapsed === 1 ? "día" : "días"}`;
+  } else if (hoursElapsed > 0) {
+    return language === "EN"
+      ? `${hoursElapsed} ${hoursElapsed === 1 ? "hour ago" : "hours ago"}`
+      : `Hace ${hoursElapsed} ${hoursElapsed === 1 ? "hora" : "horas"}`;
+  } else if (minutesElapsed > 0) {
+    return language === "EN"
+      ? `${minutesElapsed} ${
+          minutesElapsed === 1 ? "minute ago" : "minutes ago"
+        }`
+      : `Hace ${minutesElapsed} ${minutesElapsed === 1 ? "minuto" : "minutos"}`;
+  } else {
+    return language === "EN" ? "Just now" : "Hace unos momentos";
+  }
+}

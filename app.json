@@ -39,7 +39,7 @@
       "expo-localization",
       "expo-notifications",
       {
-        "icon": "./assets/dark_icon.png",
+        "icon": "./assets/notification_icon.png",
         "color": "#242528",
         "sounds": ["./assets/notification.wav"]
       },

@@ -1,5 +1,11 @@
 import { Text, View, TouchableOpacity, Image } from "react-native";
-import React, { useMemo, useContext, forwardRef } from "react";
+import React, {
+  useMemo,
+  useContext,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { Icon, Badge } from "@rneui/themed";
 import i18n from "../utils/i18n";
@@ -11,7 +17,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
   const snapPoints = useMemo(() => ["75%"], []);
   const { colors } = useTheme();
   const navigation = useNavigation();
-  const { notifications } = useContext(UserContext);
+  const { unreadNotifications } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
   const icon = isDarkTheme
     ? require("../../assets/images/fehu_light.png")
@@ -78,7 +84,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
                   paddingBottom: 3,
                 }}
               ></Icon>
-              {notifications && notifications.length ? (
+              {unreadNotifications && unreadNotifications.length ? (
                 <Badge
                   status="warning"
                   containerStyle={{ position: "absolute", top: 0, right: -2 }}

@@ -5,18 +5,21 @@ import { Badge } from "@rneui/themed";
 import { NotificationContext } from "../context/NotificationContext";
 import { UserContext } from "../context/UserContext";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import { RectButton } from "react-native-gesture-handler";
-
+import { calculateElapsedTime } from "../utils/utils";
 export default memo(function NotificationComponent({ item }) {
   const { colors } = useTheme();
   const [fadeAnim] = useState(new Animated.Value(0));
   const { readNotification, deleteNotification } =
     useContext(NotificationContext);
-  const { handleNotifications } = useContext(UserContext);
+  const { handleNotifications, language } = useContext(UserContext);
   const [read, setRead] = useState(item.read);
 
-  const rightSwipeActions = () => {
-    return <View></View>;
+  const rightSwipeActions = (progress, dragX) => {
+    return (
+      <View
+        style={{ width: "100%" }}
+      ></View>
+    );
   };
 
   const readAndUpdateNotification = async () => {
@@ -25,6 +28,11 @@ export default memo(function NotificationComponent({ item }) {
       await readNotification(item._id);
       await handleNotifications();
     }
+  };
+
+  const handleDeleteNotification = async () => {
+    await deleteNotification(item._id);
+    await handleNotifications();
   };
 
   useEffect(() => {
@@ -37,61 +45,56 @@ export default memo(function NotificationComponent({ item }) {
 
   return (
     <Swipeable
-    renderRightActions={rightSwipeActions}
-      onSwipeableOpen={() => deleteNotification(item._id)}
+      renderRightActions={rightSwipeActions}
+      onSwipeableOpen={handleDeleteNotification}
     >
       <Animated.View
         style={{
-          flexDirection: "row",
           opacity: fadeAnim,
-          alignItems: "center",
-          justifyContent: "center",
-          columnGap: 22,
+          width: "100%",
         }}
         onTouchEnd={readAndUpdateNotification}
       >
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: "5%",
-          }}
-        >
-          {read ? (
-            <Badge
-              status="primary"
-              containerStyle={{ position: "absolute", top: 0, right: -2 }}
-            />
-          ) : (
-            <Badge
-              status="warning"
-              containerStyle={{ position: "absolute", top: 0, right: -2 }}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            width: "90%",
-          }}
-        >
-          <Text
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <View
             style={{
-              color: colors.text,
-              fontSize: 15,
-              fontFamily: "Poppins_500Medium",
+              width: "10%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            {item.title}
-          </Text>
-          <Text
-            style={{
-              color: colors.text,
-              fontSize: 12,
-              fontFamily: "Poppins_300Light",
-            }}
-          >
-            {item.body}
-          </Text>
+            {read ? <Badge status="primary" /> : <Badge status="warning" />}
+          </View>
+          <View style={{ width: "90%", padding: 5, rowGap: 5 }}>
+            <Text
+              style={{
+                color: colors.text,
+                fontSize: 14,
+                fontFamily: "Poppins_500Medium",
+              }}
+            >
+              {item.title}
+            </Text>
+            <Text
+              style={{
+                color: colors.text,
+                fontSize: 12,
+                fontFamily: "Poppins_300Light",
+              }}
+            >
+              {item.body}
+            </Text>
+            <Text
+              style={{
+                color: colors.text,
+                fontSize: 11,
+                fontFamily: "Poppins_300Light",
+                alignSelf: "flex-end",
+              }}
+            >
+              {calculateElapsedTime(new Date(item.createdAt), language)}
+            </Text>
+          </View>
         </View>
       </Animated.View>
     </Swipeable>

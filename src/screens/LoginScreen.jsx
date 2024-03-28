@@ -20,31 +20,22 @@ export default function LoginScreen({ navigation }) {
   const { colors } = useTheme();
   const { login, handleGoogleLogin } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
-  
+  const [error, setError] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
   // useEffect(() => {
-  //   GoogleSignin.configure();
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+  //   });
   // }, []);
 
-  // const googleLogin = async () => {
+  // const signin = async () => {
   //   try {
-  //     setLoading(true);
   //     const userInfo = await GoogleSignin.signIn();
-  //     const user = {
-  //       email: userInfo.email,
-  //       firstName: userInfo.givenName,
-  //       lastName: userInfo.familyName,
-  //       oauthuser: true,
-  //     };
-  //     await handleGoogleLogin(user);
-  //     setLoading(false);
-  //     navigation.navigate("Home");
-  //   } catch (error) {
-  //     setLoading(false);
-  //     if (error.response.data) {
-  //       setErrorMessage(error.response.data.Error);
-  //     } else {
-  //       setErrorMessage(error.message);
-  //     }
+  //     setUserInfo(userInfo);
+  //   } catch (err) {
+  //     setError(err);
   //   }
   // };
 
@@ -89,6 +80,8 @@ export default function LoginScreen({ navigation }) {
         >
           {i18n.t("signIn")}
         </Text>
+        {userInfo ? <Text>{JSON.stringify(userInfo)}</Text> : null}
+        {error ? <Text>{JSON.stringify(error)}</Text> : null}
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
           onValidSubmit={async (model) => {
@@ -256,9 +249,9 @@ export default function LoginScreen({ navigation }) {
                       ? GoogleSigninButton.Color.Dark
                       : GoogleSigninButton.Color.Dark
                   }
-                  onPress={googleLogin}
+                  onPress={signin}
                 /> */}
-                {/* <Icon
+                {/* {<Icon
                   name="google"
                   type="font-awesome-5"
                   iconStyle={{
@@ -270,10 +263,7 @@ export default function LoginScreen({ navigation }) {
                     alignSelf: "center",
                     maxWidth: "fit-content",
                   }}
-                  onPress={() => {
-                    promptAsync();
-                  }}
-                ></Icon> */}
+                ></Icon>} */}
               </View>
             </View>
           )}
