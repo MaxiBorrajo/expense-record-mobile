@@ -57,18 +57,16 @@ export default function ExpensesComponent({ route, navigation }) {
       <ExpensesHeaderComponent />
       <FlatList
         contentContainerStyle={{
+          minHeight: "100%",
+          minWidth: "100%",
           alignItems: "center",
-          justifyContent: "center",
           paddingTop: 10,
           paddingBottom: 490,
+          justifyContent: expenses && expenses.length ? "flex-start" : "center",
         }}
         data={expenses}
         keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <ExpenseComponent
-            item={item}
-          />
-        )}
+        renderItem={({ item }) => <ExpenseComponent item={item} />}
         ListEmptyComponent={() =>
           !expenses ? (
             <View

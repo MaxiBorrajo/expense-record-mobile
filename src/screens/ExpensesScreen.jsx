@@ -620,7 +620,6 @@ export default function ExpensesScreen({ route, navigation }) {
           }}
           contentContainerStyle={{
             alignItems: "center",
-            justifyContent: "center",
             paddingBottom: 30,
           }}
           data={expenses}

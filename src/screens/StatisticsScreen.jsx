@@ -10,7 +10,6 @@ import TabBarIcon from "../components/TabBarIcon";
 
 const Tab = createBottomTabNavigator();
 export default function StatisticsScreen() {
-  const { colors } = useTheme();
   const screenOptions = {
     tabBarShowLabel: false,
     headerShown: false,

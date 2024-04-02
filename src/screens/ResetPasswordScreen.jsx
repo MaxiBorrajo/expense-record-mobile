@@ -1,6 +1,6 @@
 import { Text, View, SafeAreaView, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Input, Icon } from "@rneui/themed";
@@ -55,7 +55,7 @@ export default function ResetPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          {i18n.t('resetPassword')}
+          {i18n.t("resetPassword")}
         </Text>
         <Text
           style={{
@@ -64,7 +64,7 @@ export default function ResetPasswordScreen({ navigation }) {
             color: colors.text,
           }}
         >
-          {i18n.t('resetPasswordDescription')}
+          {i18n.t("resetPasswordDescription")}
         </Text>
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
@@ -84,7 +84,7 @@ export default function ResetPasswordScreen({ navigation }) {
               >
                 {(control) => (
                   <Input
-                    placeholder={i18n.t('password')}
+                    placeholder={i18n.t("password")}
                     rightIcon={
                       <Icon
                         name={showPassword ? "eye-slash" : "eye"}
@@ -110,27 +110,22 @@ export default function ResetPasswordScreen({ navigation }) {
                       paddingLeft: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
+                      marginBottom: control.isValid ? 20 : 0,
                     }}
-                    onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? i18n.t('passwordError')
+                        ? i18n.t("passwordError")
                         : control.isInvalid && control.errors.pattern
-                        ? i18n.t('passwordValidError')
+                        ? i18n.t("passwordValidError")
                         : null
                     }
                     errorStyle={{
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop:
-                        (control.isInvalid && control.errors.required) ||
-                        (control.isInvalid && control.errors.pattern)
-                          ? 5
-                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -146,7 +141,7 @@ export default function ResetPasswordScreen({ navigation }) {
               >
                 {(control) => (
                   <Input
-                    placeholder={i18n.t('confirmPassword')}
+                    placeholder={i18n.t("confirmPassword")}
                     secureTextEntry={true}
                     inputStyle={{
                       color: colors.text,
@@ -162,27 +157,22 @@ export default function ResetPasswordScreen({ navigation }) {
                       paddingHorizontal: 20,
                       borderRadius: 5,
                       elevation: 3,
-                      borderBottomWidth:0
+                      borderBottomWidth: 0,
+                      marginBottom: control.isValid ? 30 : 0,
                     }}
-                    onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
                     value={control.value}
                     errorMessage={
                       control.isInvalid && control.errors.required
-                        ? i18n.t('confirmPasswordError')
+                        ? i18n.t("confirmPasswordError")
                         : control.isInvalid && control.errors.equalToControl
-                        ? i18n.t('passwordsNotMatch')
+                        ? i18n.t("passwordsNotMatch")
                         : null
                     }
                     errorStyle={{
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop:
-                        (control.isInvalid && control.errors.required) ||
-                        (control.isInvalid && control.errors.equalToControl)
-                          ? 5
-                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -192,7 +182,7 @@ export default function ResetPasswordScreen({ navigation }) {
                 )}
               </Foect.Control>
               <ButtonComponent
-                label={i18n.t('reset')}
+                label={i18n.t("reset")}
                 action={() => form.submit()}
                 loading={loading}
                 disabled={form.isInvalid}

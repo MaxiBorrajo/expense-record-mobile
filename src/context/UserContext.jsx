@@ -84,7 +84,7 @@ export function UserContextProvider(props) {
   };
 
   const getUnreadNotifications = (notifications) => {
-    return notifications.map((notification) => !notification.read);
+    return notifications.filter((notification) => !notification.read);
   };
 
   const handleNotifications = async () => {

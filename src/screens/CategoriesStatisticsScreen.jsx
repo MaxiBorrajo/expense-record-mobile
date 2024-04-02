@@ -10,12 +10,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
 import SelectDropdown from "react-native-select-dropdown";
-import { PieChart, BarChart } from "react-native-chart-kit";
+import { PieChart } from "react-native-chart-kit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
-export default function CategoriesStatisticsScreen() {
+
+export default function CategoriesStatisticsScreen({ navigation }) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [type, setType] = useState(1);
@@ -67,6 +68,34 @@ export default function CategoriesStatisticsScreen() {
     });
   }, [year, month, type]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", (e) => {
+      AsyncStorage.getItem("user").then((result) => {
+        const createdAt = JSON.parse(result).createdAt;
+        setFirstYear(new Date(createdAt).getFullYear());
+      });
+
+      getStatisticsByCategory(year, month, type).then((result) => {
+        setCategoryStatistics(
+          result.map((category) => {
+            return {
+              name: category.categoryInfo[0]
+                ? category.categoryInfo[0].user_id
+                  ? category.categoryInfo[0].category_name
+                  : i18n.t(category.categoryInfo[0].category_name)
+                : i18n.t("withoutCategory"),
+              total: category.total,
+              color: getRandomHexColor(),
+              legendFontSize: 15,
+            };
+          })
+        );
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {!categoryStatistics ? (
@@ -77,12 +106,11 @@ export default function CategoriesStatisticsScreen() {
             flex: 1,
             backgroundColor: colors.background,
             color: colors.text,
-            alignItems: "center",
             position: "relative",
             paddingHorizontal: 20,
             minHeight: Dimensions.get("window").height,
             rowGap: 10,
-            paddingTop: 130,
+            paddingTop: 120,
           }}
         >
           <Text
@@ -90,6 +118,7 @@ export default function CategoriesStatisticsScreen() {
               color: colors.text,
               fontSize: 16,
               fontFamily: "Poppins_300Light",
+              paddingBottom: 10,
             }}
           >
             {i18n.t("categoryStatistics")}
@@ -99,8 +128,8 @@ export default function CategoriesStatisticsScreen() {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "90%",
-              paddingVertical: 10,
+              width: "100%",
+              padding: 10,
             }}
           >
             <SelectDropdown

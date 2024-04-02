@@ -45,7 +45,7 @@ export default function RegisterScreen({ navigation }) {
               justifyContent: "center",
               minHeight: Dimensions.get("window").height,
               paddingTop: 120,
-              paddingBottom:50
+              paddingBottom: 50,
             }}
           >
             <GoBackButtonComponent />
@@ -78,6 +78,7 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
                           width: "100%",
+                          
                         }}
                         inputContainerStyle={{
                           width: "100%",
@@ -88,6 +89,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
+                          marginBottom: control.isValid ? 20 : 0
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
@@ -101,13 +103,9 @@ export default function RegisterScreen({ navigation }) {
                           color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
-                          marginTop:
-                            control.isInvalid && control.errors.required
-                              ? 5
-                              : 20,
                         }}
                         renderErrorMessage={
-                          control.isInvalid && control.errors.required
+                           control.isInvalid && control.errors.required
                         }
                       />
                     )}
@@ -131,6 +129,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
+                          marginBottom: control.isValid ? 20 : 0
                         }}
                         onBlur={control.markAsTouched}
                         value={control.value}
@@ -144,13 +143,9 @@ export default function RegisterScreen({ navigation }) {
                           color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
-                          marginTop:
-                            control.isInvalid && control.errors.required
-                              ? 5
-                              : 20,
                         }}
                         renderErrorMessage={
-                          control.isInvalid && control.errors.required
+                           control.isInvalid && control.errors.required
                         }
                       />
                     )}
@@ -175,6 +170,7 @@ export default function RegisterScreen({ navigation }) {
                             borderRadius: 5,
                             elevation: 3,
                             borderBottomWidth: 0,
+                            marginBottom: control.isValid ? 20 : 0
                           }}
                           onBlur={control.markAsTouched}
                           onChangeText={(text) => control.onChange(text)}
@@ -190,11 +186,6 @@ export default function RegisterScreen({ navigation }) {
                             color: "#ed2139",
                             fontSize: 12,
                             fontFamily: "Poppins_500Medium",
-                            marginTop:
-                              (control.isInvalid && control.errors.required) ||
-                              (control.isInvalid && control.errors.email)
-                                ? 5
-                                : 20,
                           }}
                           renderErrorMessage={
                             (control.isInvalid && control.errors.required) ||
@@ -230,6 +221,7 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
                           width: "100%",
+                          
                         }}
                         inputContainerStyle={{
                           width: "100%",
@@ -240,6 +232,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
+                          marginBottom: control.isValid ? 20 : 0
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
@@ -255,11 +248,6 @@ export default function RegisterScreen({ navigation }) {
                           color: "#ed2139",
                           fontSize: 12,
                           fontFamily: "Poppins_500Medium",
-                          marginTop:
-                            (control.isInvalid && control.errors.required) ||
-                            (control.isInvalid && control.errors.pattern)
-                              ? 5
-                              : 20,
                         }}
                         renderErrorMessage={
                           (control.isInvalid && control.errors.required) ||

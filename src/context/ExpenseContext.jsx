@@ -43,8 +43,7 @@ export function ExpenseContextProvider(props) {
   }
 
   async function getAmount(month, type) {
-    let url =
-      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/amount?`;
+    let url = `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/amount?`;
 
     if (month !== undefined && month !== null) {
       url = url + `month=${month}&`;
@@ -68,6 +67,21 @@ export function ExpenseContextProvider(props) {
   async function getBalance() {
     const result = await axios.get(
       `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/balance`,
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return result.data.resource;
+  }
+
+  async function getMonthExpenses() {
+    const result = await axios.get(
+      `${
+        process.env.EXPO_PUBLIC_URL_BACKEND
+      }/expenses/monthExpenses`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
@@ -208,6 +222,7 @@ export function ExpenseContextProvider(props) {
         getStatisticsByCategory,
         updateExpenseById,
         getBalance,
+        getMonthExpenses,
       }}
     >
       {props.children}

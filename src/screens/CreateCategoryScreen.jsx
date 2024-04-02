@@ -23,11 +23,20 @@ export default function CreateCategoryScreen({ navigation }) {
   const [actualIcon, setActualIcon] = useState(null);
 
   const submitCreateCategory = async (form) => {
-    setErrorMessage(null);
-    setLoading(true);
-    await createCategory(form);
-    setLoading(false);
-    navigation.navigate("Categories", { actionCompleted: true });
+    try {
+      setErrorMessage(null);
+      setLoading(true);
+      await createCategory(form);
+      setLoading(false);
+      navigation.navigate("Categories", { actionCompleted: true });
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   const next = () => {
@@ -112,7 +121,6 @@ export default function CreateCategoryScreen({ navigation }) {
                         borderRadius: 5,
                         elevation: 3,
                       }}
-                      onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
                       value={control.value}
                       placeholder={i18n.t("writeCategoryTitle")}

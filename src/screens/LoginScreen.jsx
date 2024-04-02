@@ -9,10 +9,10 @@ import { UserContext } from "../context/UserContext";
 import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-// import {
-//   GoogleSignin,
-//   GoogleSigninButton,
-// } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,21 +23,21 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
-  //   });
-  // }, []);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+    });
+  }, []);
 
-  // const signin = async () => {
-  //   try {
-  //     const userInfo = await GoogleSignin.signIn();
-  //     setUserInfo(userInfo);
-  //   } catch (err) {
-  //     setError(err);
-  //   }
-  // };
+  const signin = async () => {
+    try {
+      const userInfo = await GoogleSignin.signIn();
+      setUserInfo(userInfo);
+    } catch (err) {
+      setError(err);
+    }
+  };
 
   const loginUser = async (form) => {
     try {
@@ -110,8 +110,8 @@ export default function LoginScreen({ navigation }) {
                         borderRadius: 5,
                         elevation: 3,
                         borderBottomWidth: 0,
+                        marginBottom: control.isValid ? 20 : 0,
                       }}
-                      onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
                       value={control.value}
                       errorMessage={
@@ -125,11 +125,6 @@ export default function LoginScreen({ navigation }) {
                         color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
-                        marginTop:
-                          (control.isInvalid && control.errors.required) ||
-                          (control.isInvalid && control.errors.email)
-                            ? 5
-                            : 20,
                       }}
                       renderErrorMessage={
                         (control.isInvalid && control.errors.required) ||
@@ -175,8 +170,8 @@ export default function LoginScreen({ navigation }) {
                       borderRadius: 5,
                       elevation: 3,
                       borderBottomWidth: 0,
+                      marginBottom: control.isValid ? 20 : 0,
                     }}
-                    onBlur={control.markAsTouched}
                     onChangeText={(text) => control.onChange(text)}
                     value={control.value}
                     errorMessage={
@@ -190,11 +185,6 @@ export default function LoginScreen({ navigation }) {
                       color: "#ed2139",
                       fontSize: 12,
                       fontFamily: "Poppins_500Medium",
-                      marginTop:
-                        (control.isInvalid && control.errors.required) ||
-                        (control.isInvalid && control.errors.pattern)
-                          ? 5
-                          : 20,
                     }}
                     renderErrorMessage={
                       (control.isInvalid && control.errors.required) ||
@@ -242,7 +232,7 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
-                {/* <GoogleSigninButton
+                <GoogleSigninButton
                   size={GoogleSigninButton.Size.Standard}
                   color={
                     isDarkTheme
@@ -250,7 +240,7 @@ export default function LoginScreen({ navigation }) {
                       : GoogleSigninButton.Color.Dark
                   }
                   onPress={signin}
-                /> */}
+                />
                 {/* {<Icon
                   name="google"
                   type="font-awesome-5"

@@ -43,9 +43,7 @@ module.exports = {
     },
     notification: {
       icon: "./assets/dark_icon.png",
-      color: "#242528",
-      sounds: ["./assets/notification.wav"],
-      mode: "production",
+      color: "#242528"
     },
     android: {
       package: "com.maximilianoborrajo.expenserecordmobile",

@@ -91,9 +91,9 @@ export default function ForgotPasswordScreen({ navigation }) {
                         paddingHorizontal: 20,
                         borderRadius: 5,
                         elevation: 3,
-                        borderBottomWidth:0
+                        borderBottomWidth: 0,
+                        marginBottom: control.isValid ? 20 : 0,
                       }}
-                      onBlur={control.markAsTouched}
                       onChangeText={(text) => control.onChange(text)}
                       value={control.value}
                       errorMessage={
@@ -107,7 +107,6 @@ export default function ForgotPasswordScreen({ navigation }) {
                         color: "#ed2139",
                         fontSize: 12,
                         fontFamily: "Poppins_500Medium",
-                        marginTop: 10,
                       }}
                       renderErrorMessage={
                         (control.isInvalid && control.errors.required) ||

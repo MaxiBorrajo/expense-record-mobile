@@ -1,6 +1,5 @@
 import { Text, View, TextInput, SafeAreaView, Dimensions } from "react-native";
 import { useEffect, useState, useContext } from "react";
-import { Button } from "@rneui/themed";
 import { UserContext } from "../context/UserContext";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import ErrorComponent from "../components/ErrorComponent";
@@ -8,6 +7,17 @@ import Foect from "foect";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
+import ButtonComponent from "../components/ButtonComponent";
+
+Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
+  if (val >= 0) {
+    return null;
+  }
+
+  return val === control.form.getValue(controlName)
+    ? null
+    : { greaterThanZero: true };
+});
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -15,16 +25,26 @@ export default function ProfileScreen() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [userForm, setUserForm] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { updateCurrentUser, getCurrentUser, setReload } =
+  const { updateCurrentUser, getCurrentUser, setReload, loadConfiguration } =
     useContext(UserContext);
 
   const updateUser = async (form) => {
-    setLoading(true);
-    setErrorMessage(null);
-    await updateCurrentUser(form);
-    setLoading(false);
-    navigation.navigate("Main");
-    setReload(true);
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      await updateCurrentUser(form);
+      await loadConfiguration()
+      setLoading(false);
+      navigation.navigate("Main");
+      setReload(true);
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -67,8 +87,10 @@ export default function ProfileScreen() {
           {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
           <Foect.Form
             onValidSubmit={async (model) => {
-              model.budget = +model.budget;
-              model.budgetWarning = +model.budgetWarning;
+              model.budget = model.budget ? +model.budget : 0;
+              model.budgetWarning = model.budgetWarning
+                ? +model.budgetWarning
+                : 0;
               await updateUser(model);
             }}
             defaultValue={{
@@ -79,16 +101,13 @@ export default function ProfileScreen() {
             }}
           >
             {(form) => (
-              <View
-                style={{
-                  rowGap: form.isInvalid ? 10 : 20,
-                }}
-              >
+              <View>
                 <Foect.Control name="firstName" required>
                   {(control) => (
                     <View
                       style={{
                         rowGap: 10,
+                        marginBottom: control.isInvalid ? 10 : 20,
                       }}
                     >
                       <Text
@@ -121,21 +140,24 @@ export default function ProfileScreen() {
                           }}
                           onChangeText={(value) => {
                             control.onChange(value);
+                            control.markAsTouched();
                           }}
                           value={control.value}
                         />
                       </View>
-                      {control.isInvalid && control.errors.required && (
-                        <Text
-                          style={{
-                            color: "#ed2139",
-                            fontSize: 12,
-                            fontFamily: "Poppins_500Medium",
-                          }}
-                        >
-                          {i18n.t("firstNameError")}
-                        </Text>
-                      )}
+                      {control.isTouched &&
+                        control.isInvalid &&
+                        control.errors.required && (
+                          <Text
+                            style={{
+                              color: "#ed2139",
+                              fontSize: 12,
+                              fontFamily: "Poppins_500Medium",
+                            }}
+                          >
+                            {i18n.t("firstNameError")}
+                          </Text>
+                        )}
                     </View>
                   )}
                 </Foect.Control>
@@ -144,6 +166,7 @@ export default function ProfileScreen() {
                     <View
                       style={{
                         rowGap: 10,
+                        marginBottom: control.isInvalid ? 10 : 20,
                       }}
                     >
                       <Text
@@ -176,34 +199,33 @@ export default function ProfileScreen() {
                           }}
                           onChangeText={(value) => {
                             control.onChange(value);
+                            control.markAsTouched();
                           }}
                           value={control.value}
                         />
                       </View>
-                      {control.isInvalid && control.errors.required && (
-                        <Text
-                          style={{
-                            color: "#ed2139",
-                            fontSize: 12,
-                            fontFamily: "Poppins_500Medium",
-                          }}
-                        >
-                          {i18n.t("lastNameError")}
-                        </Text>
-                      )}
+                      {control.isTouched &&
+                        control.isInvalid &&
+                        control.errors.required && (
+                          <Text
+                            style={{
+                              color: "#ed2139",
+                              fontSize: 12,
+                              fontFamily: "Poppins_500Medium",
+                            }}
+                          >
+                            {i18n.t("lastNameError")}
+                          </Text>
+                        )}
                     </View>
                   )}
                 </Foect.Control>
-                <Foect.Control
-                  name="budget"
-                  callback={(value, control) => {
-                    return +value != 0;
-                  }}
-                >
+                <Foect.Control name="budget" greaterThanZero>
                   {(control) => (
                     <View
                       style={{
                         rowGap: 10,
+                        marginBottom: control.isValid || control.isUntouched ? 20 : 10,
                       }}
                     >
                       <Text
@@ -232,35 +254,34 @@ export default function ProfileScreen() {
                           }}
                           onChangeText={(value) => {
                             control.onChange(value);
+                            control.markAsTouched();
                           }}
                           value={control.value.toString()}
                           keyboardType="numeric"
                         />
                       </View>
-                      {control.isInvalid && control.errors.callback && (
-                        <Text
-                          style={{
-                            color: "#ed2139",
-                            fontSize: 12,
-                            fontFamily: "Poppins_500Medium",
-                          }}
-                        >
-                          {i18n.t("budgetError")}
-                        </Text>
-                      )}
+                      {control.isTouched &&
+                        control.isInvalid &&
+                        control.errors.greaterThanZero && (
+                          <Text
+                            style={{
+                              color: "#ed2139",
+                              fontSize: 12,
+                              fontFamily: "Poppins_500Medium",
+                            }}
+                          >
+                            {i18n.t("budgetError")}
+                          </Text>
+                        )}
                     </View>
                   )}
                 </Foect.Control>
-                <Foect.Control
-                  name="budgetWarning"
-                  callback={(value, control) => {
-                    return +value != 0;
-                  }}
-                >
+                <Foect.Control name="budgetWarning" greaterThanZero>
                   {(control) => (
                     <View
                       style={{
                         rowGap: 10,
+                        marginBottom: control.isInvalid ? 10 : 20,
                       }}
                     >
                       <Text
@@ -289,59 +310,38 @@ export default function ProfileScreen() {
                           }}
                           onChangeText={(value) => {
                             control.onChange(value);
+                            control.markAsTouched();
                           }}
                           value={control.value.toString()}
                           keyboardType="numeric"
                         />
                       </View>
-                      {control.isInvalid && control.errors.callback && (
-                        <Text
-                          style={{
-                            color: "#ed2139",
-                            fontSize: 12,
-                            fontFamily: "Poppins_500Medium",
-                          }}
-                        >
-                          {i18n.t("warningBudgetError")}
-                        </Text>
-                      )}
+                      {control.isTouched &&
+                        control.isInvalid &&
+                        control.errors.greaterThanZero && (
+                          <Text
+                            style={{
+                              color: "#ed2139",
+                              fontSize: 12,
+                              fontFamily: "Poppins_500Medium",
+                            }}
+                          >
+                            {i18n.t("warningBudgetError")}
+                          </Text>
+                        )}
                     </View>
                   )}
                 </Foect.Control>
                 <View
                   style={{
-                    width: "100%",
-                    rowGap: 20,
-                    paddingTop: form.isInvalid ? 20 : 0,
+                    paddingTop: form.isInvalid ? 20 : 10,
                   }}
                 >
-                  <Button
+                  <ButtonComponent
+                    label={i18n.t("save")}
                     loading={loading}
-                    loadingProps={{
-                      size: "small",
-                      color: colors.background,
-                    }}
-                    onPress={() => form.submit()}
-                    title={i18n.t("save")}
-                    titleStyle={{
-                      color: colors.background,
-                      fontSize: 15,
-                      fontFamily: "Poppins_500Medium",
-                    }}
-                    buttonStyle={{
-                      backgroundColor: colors.text,
-                      paddingVertical: 11.5,
-                      paddingHorizontal: 30,
-                      borderRadius: 5,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginTop:10
-                    }}
+                    action={() => form.submit()}
                     disabled={form.isInvalid}
-                    disabledStyle={{
-                      backgroundColor: colors.disabledColor,
-                      color: colors.disabledBackground,
-                    }}
                   />
                 </View>
               </View>

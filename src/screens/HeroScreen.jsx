@@ -23,7 +23,7 @@ Notifications.setNotificationHandler({
   }),
 });
 export default function HeroScreen({ navigation }) {
-  const { loadConfiguration } = useContext(UserContext);
+  const { loadConfiguration, handleNotifications } = useContext(UserContext);
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -36,8 +36,9 @@ export default function HeroScreen({ navigation }) {
     });
 
     notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
+      Notifications.addNotificationReceivedListener(async (notification) => {
         setNotification(notification);
+        await handleNotifications();
       });
 
     responseListener.current =
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     rowGap: 150,
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     minHeight: Dimensions.get("window").height,
-    paddingTop:50
+    paddingTop: 50,
   },
   safeArea: {
     flex: 1,

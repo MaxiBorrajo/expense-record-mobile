@@ -22,6 +22,7 @@ import { ExpenseContextProvider } from "./src/context/ExpenseContext";
 import { CategoryContextProvider } from "./src/context/CategoryContext";
 import { UserContextProvider } from "./src/context/UserContext";
 import { NotificationContextProvider } from "./src/context/NotificationContext";
+import { SavingGoalContextProvider } from "./src/context/SavingGoalContext";
 import { MenuProvider } from "react-native-popup-menu";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DarkTheme from "./src/theme/DarkTheme";
@@ -85,79 +86,82 @@ export default function App() {
           <CategoryContextProvider>
             <NotificationContextProvider>
               <UserContextProvider>
-                <MenuProvider>
-                  <NavigationContainer
-                    theme={isDarkTheme ? DarkTheme : LightTheme}
-                  >
-                    <AppContext.Provider
-                      value={{ isDarkTheme, setIsDarkTheme }}
+                <SavingGoalContextProvider>
+                  <MenuProvider>
+                    <NavigationContainer
+                      theme={isDarkTheme ? DarkTheme : LightTheme}
                     >
-                      <Stack.Navigator
-                        screenOptions={{
-                          headerShown: false,
-                          animation: "slide_from_bottom",
-                        }}
-                        initialRouteName={auth ? "Home" : "Hero"}
+                      <AppContext.Provider
+                        value={{ isDarkTheme, setIsDarkTheme }}
                       >
-                        <Stack.Screen name="Hero" component={HeroScreen} />
-                        <Stack.Screen name="Login" component={LoginScreen} />
-                        <Stack.Screen name="Home" component={HomeScreen} />
-                        <Stack.Screen
-                          name="Register"
-                          component={RegisterScreen}
-                        />
-                        <Stack.Screen
-                          name="ForgotPassword"
-                          component={ForgotPasswordScreen}
-                        />
-                        <Stack.Screen
-                          name="ResetPassword"
-                          component={ResetPasswordScreen}
-                        />
-                        <Stack.Screen
-                          name="VerifyCode"
-                          component={VerifyCodeScreen}
-                        />
-                        <Stack.Screen
-                          name="Expenses"
-                          component={ExpensesScreen}
-                        />
-                        <Stack.Screen
-                          name="Expense"
-                          component={ExpenseScreen}
-                        />
-                        <Stack.Screen
-                          name="Category"
-                          component={CategoryScreen}
-                        />
-                        <Stack.Screen
-                          name="CreateCategory"
-                          component={CreateCategoryScreen}
-                        />
-                        <Stack.Screen
-                          name="Profile"
-                          component={ProfileScreen}
-                        />
-                        <Stack.Screen
-                          name="Categories"
-                          component={CategoriesScreen}
-                        />
-                        <Stack.Screen
-                          name="AboutUs"
-                          component={AboutUsScreen}
-                        />
-                        <Stack.Screen
-                          name="Configuration"
-                          component={ConfigurationScreen}
-                        />
-                        <Stack.Screen
-                          name="Notifications"
-                          component={NotificationsScreen}
-                        />
-                      </Stack.Navigator>
-                    </AppContext.Provider>
-                  </NavigationContainer>
-                </MenuProvider>
+                        <Stack.Navigator
+                          screenOptions={{
+                            headerShown: false,
+                            animation: "slide_from_bottom",
+                          }}
+                          initialRouteName={auth ? "Home" : "Hero"}
+
+                        >
+                          <Stack.Screen name="Hero" component={HeroScreen}/>
+                          <Stack.Screen name="Login" component={LoginScreen} />
+                          <Stack.Screen name="Home" component={HomeScreen} />
+                          <Stack.Screen
+                            name="Register"
+                            component={RegisterScreen}
+                          />
+                          <Stack.Screen
+                            name="ForgotPassword"
+                            component={ForgotPasswordScreen}
+                          />
+                          <Stack.Screen
+                            name="ResetPassword"
+                            component={ResetPasswordScreen}
+                          />
+                          <Stack.Screen
+                            name="VerifyCode"
+                            component={VerifyCodeScreen}
+                          />
+                          <Stack.Screen
+                            name="Expenses"
+                            component={ExpensesScreen}
+                          />
+                          <Stack.Screen
+                            name="Expense"
+                            component={ExpenseScreen}
+                          />
+                          <Stack.Screen
+                            name="Category"
+                            component={CategoryScreen}
+                          />
+                          <Stack.Screen
+                            name="CreateCategory"
+                            component={CreateCategoryScreen}
+                          />
+                          <Stack.Screen
+                            name="Profile"
+                            component={ProfileScreen}
+                          />
+                          <Stack.Screen
+                            name="Categories"
+                            component={CategoriesScreen}
+                          />
+                          <Stack.Screen
+                            name="AboutUs"
+                            component={AboutUsScreen}
+                          />
+                          <Stack.Screen
+                            name="Configuration"
+                            component={ConfigurationScreen}
+                          />
+                          <Stack.Screen
+                            name="Notifications"
+                            component={NotificationsScreen}
+                          />
+                        </Stack.Navigator>
+                      </AppContext.Provider>
+                    </NavigationContainer>
+                  </MenuProvider>
+                </SavingGoalContextProvider>
               </UserContextProvider>
             </NotificationContextProvider>
           </CategoryContextProvider>

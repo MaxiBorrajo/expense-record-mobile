@@ -1,9 +1,4 @@
-import {
-  Text,
-  View,
-  Dimensions,
-  SafeAreaView,
-} from "react-native";
+import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { generateYearList, months, getRandomHexColor } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
@@ -15,7 +10,7 @@ import AnnualBalanceComponent from "../components/AnnualBalanceComponent";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
 import TooltipComponent from "../components/TooltipComponent";
-export default function ExpensesStatisticsScreen() {
+export default function ExpensesStatisticsScreen({ navigation }) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const { getStatistics } = useContext(ExpenseContext);
@@ -89,6 +84,29 @@ export default function ExpensesStatisticsScreen() {
     });
   }, [year, month]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", (e) => {
+      AsyncStorage.getItem("user").then((result) => {
+        const createdAt = JSON.parse(result).createdAt;
+        setFirstYear(new Date(createdAt).getFullYear());
+      });
+
+      getStatistics(year).then((result) => {
+        setStatistics(result);
+        setMonthStatistics({
+          labels: getMonths(),
+          datasets: [
+            {
+              data: getMonthsData(result),
+            },
+          ],
+        });
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {!statistics || !monthStatistics ? (
@@ -103,7 +121,7 @@ export default function ExpensesStatisticsScreen() {
             alignItems: "center",
             position: "relative",
             paddingHorizontal: 20,
-            minHeight: Dimensions.get("window").height
+            minHeight: Dimensions.get("window").height,
           }}
         >
           <View
@@ -174,9 +192,7 @@ export default function ExpensesStatisticsScreen() {
                   balance={statistics[0].total}
                   income={statistics[0].totalIncome}
                   loss={statistics[0].totalLoss}
-                  loading={
-                    !statistics || !monthStatistics
-                  }
+                  loading={!statistics || !monthStatistics}
                 />
               ) : (
                 <Text

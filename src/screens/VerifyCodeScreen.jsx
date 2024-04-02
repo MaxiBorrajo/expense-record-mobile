@@ -98,7 +98,7 @@ export default function VerifyCodeScreen({ navigation }) {
                         paddingTop: 3,
                       }}
                     />
-                    {control.isInvalid && control.errors.required && (
+                    {control.isTouched && control.isInvalid && control.errors.required && (
                       <Text
                         style={{
                           color: "#ed2139",
@@ -110,7 +110,7 @@ export default function VerifyCodeScreen({ navigation }) {
                         {i18n.t("codeError")}
                       </Text>
                     )}
-                    {control.isInvalid && control.errors.callback && (
+                    {control.isTouched && control.isInvalid && control.errors.callback && (
                       <Text
                         style={{
                           color: "#ed2139",

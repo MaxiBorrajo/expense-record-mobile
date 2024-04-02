@@ -29,16 +29,34 @@ export default function CategoryScreen({ route, navigation }) {
   const [actualIcon, setActualIcon] = useState(null);
 
   const editCategory = async (form) => {
-    setErrorMessage(null);
-    setLoading(true);
-    await updateCategoryById(category._id, form);
-    setLoading(false);
-    navigation.navigate("Categories", { actionCompleted: true });
+    try {
+      setErrorMessage(null);
+      setLoading(true);
+      await updateCategoryById(category._id, form);
+      setLoading(false);
+      navigation.navigate("Categories", { actionCompleted: true });
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   const deleteCategory = async () => {
-    await deleteCategoryById(category._id);
-    navigation.navigate("Categories", { actionCompleted: true });
+    try {
+      await deleteCategoryById(category._id);
+      navigation.navigate("Categories", { actionCompleted: true });
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   const next = () => {

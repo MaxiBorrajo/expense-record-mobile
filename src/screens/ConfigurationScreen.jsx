@@ -87,12 +87,15 @@ export default function ConfigurationScreen() {
             circleSize={25}
             activeText={""}
             inActiveText={""}
-            backgroundActive={"gray"}
+            backgroundActive={colors.attention}
             backgroundInactive={"gray"}
             value={isDarkTheme}
             onValueChange={() => {
               handleChangeTheme();
             }}
+            barHeight={28}
+                          switchLeftPx={3}
+                          switchRightPx={3}
           />
         </View>
         <View
@@ -116,12 +119,15 @@ export default function ConfigurationScreen() {
             circleSize={25}
             activeText={""}
             inActiveText={""}
-            backgroundActive={"gray"}
+            backgroundActive={colors.attention}
             backgroundInactive={"gray"}
             value={hideBalance}
             onValueChange={async (value) => {
               await handleHideBalance(value);
             }}
+            barHeight={28}
+                          switchLeftPx={3}
+                          switchRightPx={3}
           />
         </View>
         <View
@@ -145,12 +151,15 @@ export default function ConfigurationScreen() {
             circleSize={25}
             activeText={""}
             inActiveText={""}
-            backgroundActive={"gray"}
+            backgroundActive={colors.attention}
             backgroundInactive={"gray"}
             value={blockNotifications}
             onValueChange={async (value) => {
               await handleBlockNotifications(value);
             }}
+            barHeight={28}
+                          switchLeftPx={3}
+                          switchRightPx={3}
           />
         </View>
         <View
