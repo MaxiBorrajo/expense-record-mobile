@@ -41,7 +41,6 @@ import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
 import { StatusBar } from "react-native";
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -100,9 +99,8 @@ export default function App() {
                             animation: "slide_from_bottom",
                           }}
                           initialRouteName={auth ? "Home" : "Hero"}
-
                         >
-                          <Stack.Screen name="Hero" component={HeroScreen}/>
+                          <Stack.Screen name="Hero" component={HeroScreen} />
                           <Stack.Screen name="Login" component={LoginScreen} />
                           <Stack.Screen name="Home" component={HomeScreen} />
                           <Stack.Screen

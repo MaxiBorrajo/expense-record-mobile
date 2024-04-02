@@ -123,13 +123,13 @@ export default function ExpenseScreen({ route, navigation }) {
       frequency = 2;
       repeat = cronParts[2].replace("*/", "") / 7;
       selectedDays = dayOfWeek.split(",");
-      selectedDays = selectedDays.map((day)=>+day)
+      selectedDays = selectedDays.map((day) => +day);
     } else if (dayOfWeek === "*" && dayOfMonth != "1") {
       // Repeat every month
       frequency = 3;
       repeat = cronParts[3].replace("*/", "");
       selectedMonthDays = dayOfMonth.split(",");
-      selectedMonthDays = selectedMonthDays.map((day)=>+day)
+      selectedMonthDays = selectedMonthDays.map((day) => +day);
     } else {
       // Repeat every year
       frequency = 4;
@@ -191,8 +191,12 @@ export default function ExpenseScreen({ route, navigation }) {
       const details = getCronDetails(expense.cron);
       setFrequency((prev) => details.frequency);
       setRepeat((prev) => details.repeat);
-      setSelectedDays((prev) => details.selectedDays.length ? details.selectedDays : [1]);
-      setSelectedMonthDays((prev) => details.selectedMonthDays.length ? details.selectedMonthDays : [1]);
+      setSelectedDays((prev) =>
+        details.selectedDays.length ? details.selectedDays : [1]
+      );
+      setSelectedMonthDays((prev) =>
+        details.selectedMonthDays.length ? details.selectedMonthDays : [1]
+      );
     }
   }, []);
 
@@ -561,7 +565,9 @@ export default function ExpenseScreen({ route, navigation }) {
                                   flexDirection: "row",
                                   alignItems: "center",
                                   padding: 15,
-                                  justifyContent: "space-between",
+                                  flexWrap: "wrap",
+                                  rowGap: 10,
+                                  columnGap: 10,
                                 }}
                               >
                                 <View
@@ -746,8 +752,8 @@ export default function ExpenseScreen({ route, navigation }) {
                                     alignItems: "center",
                                     flexWrap: "wrap",
                                     paddingHorizontal: 15,
-                                    justifyContent: "space-between",
                                     rowGap: 10,
+                                    columnGap: 10,
                                   }}
                                 >
                                   {daysOfTheWeek.map((element, index) => (

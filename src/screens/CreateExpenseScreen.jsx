@@ -45,9 +45,7 @@ export default function CreateExpenseScreen() {
   const [frequency, setFrequency] = useState(1);
   const [selectedDays, setSelectedDays] = useState([1]);
   const [selectedMonthDays, setSelectedMonthDays] = useState([1]);
-  const [isAutomaticallyCreated, setIsAutomaticallyCreated] = useState(
-    false
-  );
+  const [isAutomaticallyCreated, setIsAutomaticallyCreated] = useState(false);
 
   const daysOfTheWeek = [
     {
@@ -128,14 +126,14 @@ export default function CreateExpenseScreen() {
           <View
             style={{
               flex: 1,
-                backgroundColor: colors.background,
-                color: colors.text,
-                paddingHorizontal: 30,
-                rowGap: 20,
-                justifyContent: "center",
-                minHeight: Dimensions.get("window").height,
-                position: "relative",
-                paddingVertical: isAutomaticallyCreated ? 120 : 0,
+              backgroundColor: colors.background,
+              color: colors.text,
+              paddingHorizontal: 30,
+              rowGap: 20,
+              justifyContent: "center",
+              minHeight: Dimensions.get("window").height,
+              position: "relative",
+              paddingVertical: isAutomaticallyCreated ? 120 : 0,
             }}
           >
             <View
@@ -480,6 +478,9 @@ export default function CreateExpenseScreen() {
                                   alignItems: "center",
                                   padding: 15,
                                   justifyContent: "space-between",
+                                  flexWrap: "wrap",
+                                  rowGap: 10,
+                                  columnGap: 10,
                                 }}
                               >
                                 <View
@@ -664,8 +665,8 @@ export default function CreateExpenseScreen() {
                                     alignItems: "center",
                                     flexWrap: "wrap",
                                     paddingHorizontal: 15,
-                                    justifyContent: "space-between",
                                     rowGap: 10,
+                                    columnGap: 10,
                                   }}
                                 >
                                   {daysOfTheWeek.map((element, index) => (
