@@ -147,7 +147,9 @@ async function registerForPushNotificationsAsync() {
       alert("Failed to get push token for push notification!");
       return;
     }
-    token = (await Notifications.getExpoPushTokenAsync()).data;
+    token = (await Notifications.getExpoPushTokenAsync({
+      projectId: '0854aae1-2b3d-4d3d-a448-00b41c05b3f0'
+    })).data;
     console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
@@ -159,7 +161,6 @@ async function registerForPushNotificationsAsync() {
       showBadge: true,
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FE9018",
       sound: "notification.wav",
       enableVibrate: true,
     });
