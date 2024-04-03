@@ -45,9 +45,7 @@ export default function CreateExpenseScreen() {
   const [frequency, setFrequency] = useState(1);
   const [selectedDays, setSelectedDays] = useState([1]);
   const [selectedMonthDays, setSelectedMonthDays] = useState([1]);
-  const [isAutomaticallyCreated, setIsAutomaticallyCreated] = useState(
-    false
-  );
+  const [isAutomaticallyCreated, setIsAutomaticallyCreated] = useState(false);
 
   const daysOfTheWeek = [
     {
@@ -128,14 +126,14 @@ export default function CreateExpenseScreen() {
           <View
             style={{
               flex: 1,
-                backgroundColor: colors.background,
-                color: colors.text,
-                paddingHorizontal: 30,
-                rowGap: 20,
-                justifyContent: "center",
-                minHeight: Dimensions.get("window").height,
-                position: "relative",
-                paddingVertical: isAutomaticallyCreated ? 120 : 0,
+              backgroundColor: colors.background,
+              color: colors.text,
+              paddingHorizontal: 30,
+              rowGap: 20,
+              justifyContent: "center",
+              minHeight: Dimensions.get("window").height,
+              position: "relative",
+              paddingVertical: isAutomaticallyCreated ? 100 : 0,
             }}
           >
             <View
@@ -183,9 +181,10 @@ export default function CreateExpenseScreen() {
                 defaultValue={{
                   title: "",
                   amount: expenseForm?.amount,
-                  description: "",
+                  description: null,
                   isAutomaticallyCreated: false,
                   cron: 1,
+                  category_id: null,
                 }}
                 onValidSubmit={async (model) => {
                   if (model.cron) {
@@ -375,6 +374,11 @@ export default function CreateExpenseScreen() {
                         <SelectDropdown
                           data={categories}
                           onSelect={(selectedItem) => {
+                            setExpenseForm((prev) => ({
+                              ...prev,
+                              category_id: selectedItem._id,
+                            }));
+                            setIcon((prev) => selectedItem.icon_id.icon);
                             control.onChange(selectedItem._id);
                           }}
                           buttonTextAfterSelection={(selectedItem) => {
@@ -431,7 +435,8 @@ export default function CreateExpenseScreen() {
                               alignItems: "center",
                               justifyContent: "space-between",
                               width: "100%",
-                              padding: 15,
+                              paddingHorizontal: 15,
+                              paddingTop: 15,
                             }}
                           >
                             <Text
@@ -471,7 +476,8 @@ export default function CreateExpenseScreen() {
                             <View
                               style={{
                                 rowGap: 10,
-                                marginBottom: control.isInvalid ? 10 : 20,
+                                marginBottom:
+                                  frequency === 2 || frequency === 3 ? 10 : 0,
                               }}
                             >
                               <View
@@ -480,6 +486,8 @@ export default function CreateExpenseScreen() {
                                   alignItems: "center",
                                   padding: 15,
                                   justifyContent: "space-between",
+                                  flexWrap: "wrap",
+                                  rowGap: 10,
                                 }}
                               >
                                 <View
@@ -523,7 +531,7 @@ export default function CreateExpenseScreen() {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -545,7 +553,7 @@ export default function CreateExpenseScreen() {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -568,7 +576,7 @@ export default function CreateExpenseScreen() {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -591,7 +599,7 @@ export default function CreateExpenseScreen() {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -664,8 +672,8 @@ export default function CreateExpenseScreen() {
                                     alignItems: "center",
                                     flexWrap: "wrap",
                                     paddingHorizontal: 15,
-                                    justifyContent: "space-between",
                                     rowGap: 10,
+                                    columnGap: 10,
                                   }}
                                 >
                                   {daysOfTheWeek.map((element, index) => (
@@ -702,7 +710,7 @@ export default function CreateExpenseScreen() {
                                         height: 25,
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        paddingHorizontal: 7,
+                                        paddingHorizontal: 5,
                                         borderRadius: 50,
                                         borderWidth: 0,
                                       }}

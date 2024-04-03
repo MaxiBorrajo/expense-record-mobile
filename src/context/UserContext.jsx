@@ -97,7 +97,8 @@ export function UserContextProvider(props) {
     await setActualUser();
     getLanguage();
     getHideBalance();
-    handleNotifications();
+    await handleNotifications();
+    endLoading();
   };
 
   const getHideBalance = () => {

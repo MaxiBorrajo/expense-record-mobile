@@ -8,12 +8,36 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 export default function RegisterScreen({ navigation }) {
-  const { register } = useContext(UserContext);
+  const { register, handleGoogleLogin } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+    });
+  }, []);
+
+  const signin = async () => {
+    try {
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        firstName: userInfo.givenName,
+        lastName: userInfo.familyName,
+        email: userInfo.email,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+      navigation.navigate("Home");
+    } catch (err) {
+      setError(err);
+    }
+  };
 
   async function registerUser(form) {
     try {
@@ -78,7 +102,6 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
                           width: "100%",
-                          
                         }}
                         inputContainerStyle={{
                           width: "100%",
@@ -89,7 +112,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
-                          marginBottom: control.isValid ? 20 : 0
+                          marginBottom: control.isValid ? 20 : 0,
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
@@ -105,7 +128,7 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_500Medium",
                         }}
                         renderErrorMessage={
-                           control.isInvalid && control.errors.required
+                          control.isInvalid && control.errors.required
                         }
                       />
                     )}
@@ -129,7 +152,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
-                          marginBottom: control.isValid ? 20 : 0
+                          marginBottom: control.isValid ? 20 : 0,
                         }}
                         onBlur={control.markAsTouched}
                         value={control.value}
@@ -145,7 +168,7 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_500Medium",
                         }}
                         renderErrorMessage={
-                           control.isInvalid && control.errors.required
+                          control.isInvalid && control.errors.required
                         }
                       />
                     )}
@@ -170,7 +193,7 @@ export default function RegisterScreen({ navigation }) {
                             borderRadius: 5,
                             elevation: 3,
                             borderBottomWidth: 0,
-                            marginBottom: control.isValid ? 20 : 0
+                            marginBottom: control.isValid ? 20 : 0,
                           }}
                           onBlur={control.markAsTouched}
                           onChangeText={(text) => control.onChange(text)}
@@ -221,7 +244,6 @@ export default function RegisterScreen({ navigation }) {
                           fontFamily: "Poppins_300Light",
                           fontSize: 12,
                           width: "100%",
-                          
                         }}
                         inputContainerStyle={{
                           width: "100%",
@@ -232,7 +254,7 @@ export default function RegisterScreen({ navigation }) {
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
-                          marginBottom: control.isValid ? 20 : 0
+                          marginBottom: control.isValid ? 20 : 0,
                         }}
                         onBlur={control.markAsTouched}
                         onChangeText={(text) => control.onChange(text)}
@@ -284,7 +306,7 @@ export default function RegisterScreen({ navigation }) {
                     >
                       Or
                     </Text>
-                    {/* <Icon
+                    <Icon
                       name="google"
                       type="font-awesome-5"
                       iconStyle={{
@@ -296,10 +318,8 @@ export default function RegisterScreen({ navigation }) {
                         alignSelf: "center",
                         maxWidth: "fit-content",
                       }}
-                      onPress={() => {
-                        promptAsync();
-                      }}
-                    ></Icon> */}
+                      onPress={signin}
+                    />
                   </View>
                 </View>
               )}

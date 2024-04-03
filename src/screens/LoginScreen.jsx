@@ -9,19 +9,13 @@ import { UserContext } from "../context/UserContext";
 import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
   const { login, handleGoogleLogin } = useContext(UserContext);
-  const { isDarkTheme } = useContext(AppContext);
-  const [error, setError] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -33,7 +27,14 @@ export default function LoginScreen({ navigation }) {
   const signin = async () => {
     try {
       const userInfo = await GoogleSignin.signIn();
-      setUserInfo(userInfo);
+      const user = {
+        firstName: userInfo.user.givenName,
+        lastName: userInfo.user.familyName,
+        email: userInfo.user.email,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+      navigation.navigate("Home");
     } catch (err) {
       setError(err);
     }
@@ -80,8 +81,6 @@ export default function LoginScreen({ navigation }) {
         >
           {i18n.t("signIn")}
         </Text>
-        {userInfo ? <Text>{JSON.stringify(userInfo)}</Text> : null}
-        {error ? <Text>{JSON.stringify(error)}</Text> : null}
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <Foect.Form
           onValidSubmit={async (model) => {
@@ -232,16 +231,7 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
-                <GoogleSigninButton
-                  size={GoogleSigninButton.Size.Standard}
-                  color={
-                    isDarkTheme
-                      ? GoogleSigninButton.Color.Dark
-                      : GoogleSigninButton.Color.Dark
-                  }
-                  onPress={signin}
-                />
-                {/* {<Icon
+                <Icon
                   name="google"
                   type="font-awesome-5"
                   iconStyle={{
@@ -253,7 +243,8 @@ export default function LoginScreen({ navigation }) {
                     alignSelf: "center",
                     maxWidth: "fit-content",
                   }}
-                ></Icon>} */}
+                  onPress={signin}
+                />
               </View>
             </View>
           )}
