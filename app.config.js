@@ -61,7 +61,7 @@ module.exports = {
     userInterfaceStyle: "automatic",
     splash: {
       image: "./assets/dark_splash.png",
-      resizeMode: "contain",
+      resizeMode: "cover",
       backgroundColor: "#000000",
     },
     extra: {

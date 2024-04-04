@@ -9,9 +9,7 @@ import { UserContext } from "../context/UserContext";
 import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-// import {
-//   GoogleSignin,
-// } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -26,21 +24,23 @@ export default function LoginScreen({ navigation }) {
   //   });
   // }, []);
 
-  // const signin = async () => {
-  //   try {
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const user = {
-  //       firstName: userInfo.user.givenName,
-  //       lastName: userInfo.user.familyName,
-  //       email: userInfo.user.email,
-  //       oauthuser: true,
-  //     };
-  //     await handleGoogleLogin(user);
-  //     navigation.navigate("Home");
-  //   } catch (err) {
-  //     setError(err);
-  //   }
-  // };
+
+  const signin = async () => {
+    try {
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        firstName: userInfo.user.givenName,
+        lastName: userInfo.user.familyName,
+        email: userInfo.user.email,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+      navigation.navigate("Home");
+    } catch (err) {
+      setError(err);
+    }
+  };
+
 
   const loginUser = async (form) => {
     try {
@@ -233,7 +233,7 @@ export default function LoginScreen({ navigation }) {
                 >
                   Or
                 </Text>
-                {/* <Icon
+                <Icon
                   name="google"
                   type="font-awesome-5"
                   iconStyle={{
@@ -246,7 +246,8 @@ export default function LoginScreen({ navigation }) {
                     maxWidth: "fit-content",
                   }}
                   onPress={signin}
-                /> */}
+
+                />
               </View>
             </View>
           )}

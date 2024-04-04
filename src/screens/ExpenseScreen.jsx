@@ -517,7 +517,8 @@ export default function ExpenseScreen({ route, navigation }) {
                               alignItems: "center",
                               justifyContent: "space-between",
                               width: "100%",
-                              padding: 15,
+                              paddingHorizontal: 15,
+                              paddingTop: 15,
                             }}
                           >
                             <Text
@@ -557,7 +558,8 @@ export default function ExpenseScreen({ route, navigation }) {
                             <View
                               style={{
                                 rowGap: 10,
-                                marginBottom: control.isInvalid ? 10 : 20,
+                                marginBottom:
+                                  frequency === 2 || frequency === 3 ? 10 : 0,
                               }}
                             >
                               <View
@@ -565,9 +567,9 @@ export default function ExpenseScreen({ route, navigation }) {
                                   flexDirection: "row",
                                   alignItems: "center",
                                   padding: 15,
+                                  justifyContent: "space-between",
                                   flexWrap: "wrap",
                                   rowGap: 10,
-                                  columnGap: 10,
                                 }}
                               >
                                 <View
@@ -611,7 +613,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -633,7 +635,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -656,7 +658,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -679,7 +681,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                     height: 25,
                                     alignItems: "center",
                                     justifyContent: "center",
-                                    paddingHorizontal: 7,
+                                    paddingHorizontal: 5,
                                     borderRadius: 50,
                                     borderWidth: 0,
                                   }}
@@ -790,7 +792,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                         height: 25,
                                         alignItems: "center",
                                         justifyContent: "center",
-                                        paddingHorizontal: 7,
+                                        paddingHorizontal: 5,
                                         borderRadius: 50,
                                         borderWidth: 0,
                                       }}
