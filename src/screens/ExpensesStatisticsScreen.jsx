@@ -10,7 +10,9 @@ import AnnualBalanceComponent from "../components/AnnualBalanceComponent";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
 import TooltipComponent from "../components/TooltipComponent";
+
 export default function ExpensesStatisticsScreen({ navigation }) {
+  const [loading, setLoading] = useState(true);
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const { getStatistics } = useContext(ExpenseContext);
@@ -19,6 +21,7 @@ export default function ExpensesStatisticsScreen({ navigation }) {
   const [firstYear, setFirstYear] = useState(null);
   const [dataPoint, setDataPoint] = useState(null);
   const { colors } = useTheme();
+
   const monthData = (index) => {
     const monthDataFound = statistics[0].months.find(
       (month) => month.month === index + 1
@@ -73,14 +76,17 @@ export default function ExpensesStatisticsScreen({ navigation }) {
 
     getStatistics(year).then((result) => {
       setStatistics(result);
-      setMonthStatistics({
-        labels: getMonths(),
-        datasets: [
-          {
-            data: getMonthsData(result),
-          },
-        ],
-      });
+      if (result?.length) {
+        setMonthStatistics({
+          labels: getMonths(),
+          datasets: [
+            {
+              data: getMonthsData(result),
+            },
+          ],
+        });
+      }
+      setLoading((prev) => false);
     });
   }, [year, month]);
 
@@ -93,14 +99,17 @@ export default function ExpensesStatisticsScreen({ navigation }) {
 
       getStatistics(year).then((result) => {
         setStatistics(result);
-        setMonthStatistics({
-          labels: getMonths(),
-          datasets: [
-            {
-              data: getMonthsData(result),
-            },
-          ],
-        });
+        if (result?.length) {
+          setMonthStatistics({
+            labels: getMonths(),
+            datasets: [
+              {
+                data: getMonthsData(result),
+              },
+            ],
+          });
+        }
+        setLoading((prev) => false);
       });
     });
 
@@ -109,7 +118,7 @@ export default function ExpensesStatisticsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {!statistics || !monthStatistics ? (
+      {loading ? (
         <LoadingScreen />
       ) : (
         <View

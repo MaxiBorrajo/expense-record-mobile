@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ExpensesStatisticsScreen from "./ExpensesStatisticsScreen";
 import CategoriesStatisticsScreen from "./CategoriesStatisticsScreen";
@@ -7,9 +7,15 @@ import BudgetStatisticsScreen from "./BudgetStatisticsScreen";
 import SavingGoalStatisticsScreen from "./SavingGoalStatisticsScreen";
 import { useTheme } from "@react-navigation/native";
 import TabBarIcon from "../components/TabBarIcon";
-
+import { SavingGoalContext } from "../context/SavingGoalContext";
 const Tab = createBottomTabNavigator();
 export default function StatisticsScreen() {
+  const { getSavingGoal } = useContext(SavingGoalContext);
+
+  useEffect(() => {
+    getSavingGoal();
+  }, []);
+
   const screenOptions = {
     tabBarShowLabel: false,
     headerShown: false,
@@ -17,13 +23,13 @@ export default function StatisticsScreen() {
     tabBarStyle: {
       position: "absolute",
       height: 50,
-      backgroundColor: 'transparent',
-      width: '90%',
+      backgroundColor: "transparent",
+      width: "90%",
       borderRadius: 10,
       borderTopWidth: 0,
       left: Dimensions.get("window").width / 2 - 184,
       top: 45,
-      elevation:0
+      elevation: 0,
     },
   };
 
