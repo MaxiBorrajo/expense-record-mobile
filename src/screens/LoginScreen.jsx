@@ -50,7 +50,7 @@ export default function LoginScreen({ navigation }) {
       navigation.navigate("Home");
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);

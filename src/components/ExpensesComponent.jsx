@@ -5,44 +5,14 @@ import { Card } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
-import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
-export default function ExpensesComponent({ route, navigation }) {
-  const { getExpenses } = useContext(ExpenseContext);
-  const { reload } = useContext(UserContext);
-  const [expenses, setExpenses] = useState(null);
+export default function ExpensesComponent() {
+  const { lastExpenses, getLastExpenses } = useContext(ExpenseContext);
   const { colors } = useTheme();
-
-  const getLastExpenses = async () => {
-    const filters = [
-      {
-        filter: "year",
-        value: new Date().getFullYear(),
-      },
-      {
-        filter: "month",
-        value: new Date().getMonth(),
-      },
-    ];
-
-    getExpenses(null, null, filters).then((expenses) => {
-      setExpenses(expenses.splice(0, 5));
-    });
-  };
 
   useEffect(() => {
     getLastExpenses();
-  }, [reload]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        getLastExpenses();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
+  }, []);
 
   return (
     <Card
@@ -62,13 +32,14 @@ export default function ExpensesComponent({ route, navigation }) {
           alignItems: "center",
           paddingTop: 10,
           paddingBottom: 490,
-          justifyContent: expenses && expenses.length ? "flex-start" : "center",
+          justifyContent:
+            lastExpenses && lastExpenses.length ? "flex-start" : "center",
         }}
-        data={expenses}
+        data={lastExpenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => <ExpenseComponent item={item} />}
         ListEmptyComponent={() =>
-          !expenses ? (
+          !lastExpenses ? (
             <View
               style={{
                 alignItems: "center",
@@ -79,7 +50,7 @@ export default function ExpensesComponent({ route, navigation }) {
             >
               <ActivityIndicator color={colors.attention} size="large" />
             </View>
-          ) : expenses && expenses.length === 0 ? (
+          ) : lastExpenses && lastExpenses.length === 0 ? (
             <View
               style={{
                 alignItems: "center",

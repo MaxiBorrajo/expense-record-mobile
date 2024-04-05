@@ -20,7 +20,7 @@ export default function VerifyCodeScreen({ navigation }) {
       await verifyCode(form);
       navigation.navigate("ResetPassword");
     } catch (error) {
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -98,30 +98,34 @@ export default function VerifyCodeScreen({ navigation }) {
                         paddingTop: 3,
                       }}
                     />
-                    {control.isTouched && control.isInvalid && control.errors.required && (
-                      <Text
-                        style={{
-                          color: "#ed2139",
-                          fontSize: 12,
-                          fontFamily: "Poppins_500Medium",
-                          marginTop: 10,
-                        }}
-                      >
-                        {i18n.t("codeError")}
-                      </Text>
-                    )}
-                    {control.isTouched && control.isInvalid && control.errors.callback && (
-                      <Text
-                        style={{
-                          color: "#ed2139",
-                          fontSize: 12,
-                          fontFamily: "Poppins_500Medium",
-                          marginTop: 10,
-                        }}
-                      >
-                        {i18n.t("codeValidError")}
-                      </Text>
-                    )}
+                    {control.isTouched &&
+                      control.isInvalid &&
+                      control.errors.required && (
+                        <Text
+                          style={{
+                            color: "#ed2139",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                            marginTop: 10,
+                          }}
+                        >
+                          {i18n.t("codeError")}
+                        </Text>
+                      )}
+                    {control.isTouched &&
+                      control.isInvalid &&
+                      control.errors.callback && (
+                        <Text
+                          style={{
+                            color: "#ed2139",
+                            fontSize: 12,
+                            fontFamily: "Poppins_500Medium",
+                            marginTop: 10,
+                          }}
+                        >
+                          {i18n.t("codeValidError")}
+                        </Text>
+                      )}
                   </View>
                 )}
               </Foect.Control>

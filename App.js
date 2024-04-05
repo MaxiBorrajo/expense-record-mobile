@@ -81,11 +81,11 @@ export default function App() {
         translucent
       />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <ExpenseContextProvider>
-          <CategoryContextProvider>
-            <NotificationContextProvider>
-              <UserContextProvider>
-                <SavingGoalContextProvider>
+        <NotificationContextProvider>
+          <UserContextProvider>
+            <SavingGoalContextProvider>
+              <ExpenseContextProvider>
+                <CategoryContextProvider>
                   <MenuProvider>
                     <NavigationContainer
                       theme={isDarkTheme ? DarkTheme : LightTheme}
@@ -159,11 +159,11 @@ export default function App() {
                       </AppContext.Provider>
                     </NavigationContainer>
                   </MenuProvider>
-                </SavingGoalContextProvider>
-              </UserContextProvider>
-            </NotificationContextProvider>
-          </CategoryContextProvider>
-        </ExpenseContextProvider>
+                </CategoryContextProvider>
+              </ExpenseContextProvider>
+            </SavingGoalContextProvider>
+          </UserContextProvider>
+        </NotificationContextProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

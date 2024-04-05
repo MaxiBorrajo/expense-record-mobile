@@ -2,7 +2,6 @@ import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import i18n from "../utils/i18n";
-import { ExpenseContext } from "../context/ExpenseContext";
 import { NotificationContext } from "../context/NotificationContext";
 
 export const UserContext = createContext();
@@ -17,9 +16,22 @@ export function UserContextProvider(props) {
   const [currency, setCurrency] = useState(null);
   const [notifications, setNotifications] = useState(null);
   const [unreadNotifications, setUnreadNotifications] = useState(null);
-  const [reload, setReload] = useState(false);
-  const { applyConversion } = useContext(ExpenseContext);
+  const [budget, setBudget] = useState(null);
   const { getNotifications } = useContext(NotificationContext);
+
+  async function applyConversion(conversion) {
+    const result = await axios.put(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/conversion`,
+      conversion,
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    return result.data.message;
+  }
 
   const handleGoogleLogin = async (data) => {
     const response = await axios.post(
@@ -42,8 +54,6 @@ export function UserContextProvider(props) {
         old_currency: currency,
         new_currency: newCurrency,
       });
-
-      setReload(true);
       setCurrency(newCurrency);
     }
   };
@@ -53,7 +63,6 @@ export function UserContextProvider(props) {
       blockNotifications: value,
     });
     setBlockNotifications(value);
-    setReload(true);
   };
 
   const getLanguage = () => {
@@ -65,22 +74,21 @@ export function UserContextProvider(props) {
 
   const setActualUser = async () => {
     const user = await getCurrentUser();
-    setUser((prev) => user);
-    setCurrency(user.currency);
-    setBlockNotifications(user.blockNotifications);
+    setUser(() => user);
+    setCurrency(() => user.currency);
+    setBlockNotifications(() => user.blockNotifications);
+    setBudget(() => user.budget);
   };
 
   const handleHideBalance = async (value) => {
     setHideBalance(value);
     await AsyncStorage.setItem("hideBalance", `${value}`);
-    setReload(true);
   };
 
   const translate = async (newLanguage) => {
     i18n.locale = newLanguage;
     setLanguage(newLanguage);
     await AsyncStorage.setItem("language", newLanguage);
-    setReload(true);
   };
 
   const getUnreadNotifications = (notifications) => {
@@ -186,6 +194,8 @@ export function UserContextProvider(props) {
       }
     );
 
+    setActualUser();
+
     return result.data.resource;
   }
 
@@ -224,8 +234,6 @@ export function UserContextProvider(props) {
         handleHideBalance,
         updateCurrency,
         language,
-        reload,
-        setReload,
         currency,
         user,
         handleGoogleLogin,
@@ -236,6 +244,7 @@ export function UserContextProvider(props) {
         notifications,
         handleNotifications,
         unreadNotifications,
+        budget,
       }}
     >
       {props.children}

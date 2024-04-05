@@ -14,7 +14,6 @@ import { CategoryContext } from "../context/CategoryContext";
 import ExpenseComponent from "../components/ExpenseComponent";
 import SelectDropdown from "react-native-select-dropdown";
 import { months, generateYearList, getDaysOfTheMonth } from "../utils/utils";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import {
@@ -25,10 +24,10 @@ import {
 } from "react-native-popup-menu";
 import i18n from "../utils/i18n";
 
-export default function ExpensesScreen({ route, navigation }) {
-  const { getExpenses } = useContext(ExpenseContext);
-  const { getCategories } = useContext(CategoryContext);
-  const [expenses, setExpenses] = useState(null);
+export default function ExpensesScreen() {
+  const { user } = useContext(UserContext);
+  const { getExpenses, expenses } = useContext(ExpenseContext);
+  const { categories } = useContext(CategoryContext);
   const searchBar = useRef(null);
   const [keyword, setKeyword] = useState(null);
   const [sort, setSort] = useState(null);
@@ -38,9 +37,9 @@ export default function ExpensesScreen({ route, navigation }) {
   const [day, setDay] = useState(null);
   const [category, setCategory] = useState(null);
   const [type, setType] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const { reload, setReload } = useContext(UserContext);
-  const [firstYear, setFirstYear] = useState(null);
+  const [firstYear, setFirstYear] = useState(
+    new Date(user.createdAt).getFullYear()
+  );
   const { colors } = useTheme();
   const sortSelect = useRef({});
   const orderSelect = useRef({});
@@ -89,14 +88,7 @@ export default function ExpensesScreen({ route, navigation }) {
     setType(null);
   };
 
-  function expensesSetUp() {
-    setExpenses((prev) => null);
-    setReload(false);
-    AsyncStorage.getItem("user").then((result) => {
-      const createdAt = JSON.parse(result).createdAt;
-      setFirstYear(new Date(createdAt).getFullYear());
-    });
-
+  function changeExpenses() {
     const filters = [
       {
         filter: "year",
@@ -124,28 +116,12 @@ export default function ExpensesScreen({ route, navigation }) {
       },
     ];
 
-    getExpenses(sort, order, filters).then((expenses) => {
-      setExpenses(expenses);
-    });
-
-    getCategories().then((categories) => {
-      setCategories(categories);
-    });
+    getExpenses(sort, order, filters);
   }
 
   useEffect(() => {
-    expensesSetUp();
-  }, [sort, order, category, keyword, year, month, day, type, reload]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        expensesSetUp();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
+    changeExpenses();
+  }, [sort, order, category, keyword, year, month, day, type]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -193,7 +169,7 @@ export default function ExpensesScreen({ route, navigation }) {
                 optionsWrapper: {
                   borderRadius: 10,
                   right: 30,
-                  bottom:40
+                  bottom: 40,
                 },
               }}
               style={{ backgroundColor: colors.card, padding: 20, rowGap: 10 }}
@@ -624,9 +600,7 @@ export default function ExpensesScreen({ route, navigation }) {
           }}
           data={expenses}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <ExpenseComponent item={item} setReload={setReload} />
-          )}
+          renderItem={({ item }) => <ExpenseComponent item={item} />}
           ListEmptyComponent={() =>
             !expenses ? (
               <View

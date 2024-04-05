@@ -23,7 +23,7 @@ export default function ForgotPasswordScreen({ navigation }) {
       navigation.navigate("VerifyCode");
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);

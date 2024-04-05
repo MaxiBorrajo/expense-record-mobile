@@ -14,15 +14,14 @@ export default function MainScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
-  const { deleteCurrentUser, reload, setReload,  } = useContext(UserContext);
+  const { deleteCurrentUser } = useContext(UserContext);
 
   const toggleDialog = () => {
     setVisible(!visible);
   };
 
   const deleteAccount = async () => {
-    setVisible(false);
-    setErrorMessage(null);
+    toggleDialog();
     await deleteCurrentUser();
     await logout();
   };
@@ -33,10 +32,6 @@ export default function MainScreen({ route, navigation }) {
     await AsyncStorage.removeItem("token");
     navigation.navigate("Hero");
   };
-
-  useEffect(() => {
-    setReload(false);
-  }, [reload]);
 
   const openBottomSheet = () => {
     setOpened(!opened);
@@ -66,10 +61,7 @@ export default function MainScreen({ route, navigation }) {
           navigation={navigation}
           openBottomSheet={() => openBottomSheet()}
         />
-        <ExpensesComponent
-          route={route}
-          navigation={navigation}
-        />
+        <ExpensesComponent route={route} navigation={navigation} />
       </View>
       <BottomSheetMenuComponent
         ref={bottomSheetRef}

@@ -121,24 +121,3 @@ export default memo(function ExpenseComponent({ item }) {
     </TouchableOpacity>
   );
 });
-
-const styles = StyleSheet.create({
-  deleteButton: {
-    backgroundColor: "#ed2139",
-    justifyContent: "center",
-    alignItems: "center",
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    position: "relative",
-    height: "100%",
-    width: 50,
-  },
-  beforeComponent: {
-    position: "absolute",
-    top: 0,
-    left: -50,
-    width: 50,
-    height: "100%",
-    backgroundColor: "#ed2139",
-  },
-});

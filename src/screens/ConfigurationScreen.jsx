@@ -1,26 +1,16 @@
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  SafeAreaView,
-  Dimensions
-} from "react-native";
-import React, { useMemo, useContext, forwardRef } from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Text, View, SafeAreaView, Dimensions } from "react-native";
+import React, { useContext } from "react";
 import { Switch } from "react-native-switch";
 import SelectDropdown from "react-native-select-dropdown";
 import { currencies } from "../utils/utils";
 import { languages } from "../utils/utils";
-import { Icon } from "@rneui/themed";
 import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { AppContext } from "../context/AppContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 export default function ConfigurationScreen() {
-  const snapPoints = useMemo(() => ["80%"], []);
   const { colors } = useTheme();
   const {
     translate,
@@ -29,20 +19,14 @@ export default function ConfigurationScreen() {
     hideBalance,
     currency,
     language,
-    setReload,
     blockNotifications,
     handleBlockNotifications,
   } = useContext(UserContext);
-  const navigation = useNavigation();
   const { isDarkTheme, setIsDarkTheme } = useContext(AppContext);
-  const icon = isDarkTheme
-    ? require("../../assets/images/fehu_light.png")
-    : require("../../assets/images/fehu_dark.png");
 
   const handleChangeTheme = async () => {
     setIsDarkTheme(!isDarkTheme);
     AsyncStorage.setItem("theme", !isDarkTheme ? "dark" : "light");
-    setReload(true);
   };
 
   return (
@@ -94,8 +78,8 @@ export default function ConfigurationScreen() {
               handleChangeTheme();
             }}
             barHeight={28}
-                          switchLeftPx={3}
-                          switchRightPx={3}
+            switchLeftPx={3}
+            switchRightPx={3}
           />
         </View>
         <View
@@ -126,8 +110,8 @@ export default function ConfigurationScreen() {
               await handleHideBalance(value);
             }}
             barHeight={28}
-                          switchLeftPx={3}
-                          switchRightPx={3}
+            switchLeftPx={3}
+            switchRightPx={3}
           />
         </View>
         <View
@@ -158,8 +142,8 @@ export default function ConfigurationScreen() {
               await handleBlockNotifications(value);
             }}
             barHeight={28}
-                          switchLeftPx={3}
-                          switchRightPx={3}
+            switchLeftPx={3}
+            switchRightPx={3}
           />
         </View>
         <View

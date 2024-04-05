@@ -15,13 +15,12 @@ import WarningDialogComponent from "../components/WarningDialogComponent";
 export default function CategoryScreen({ route, navigation }) {
   const { category } = route.params;
   const { colors } = useTheme();
-  const { getIcons, updateCategoryById, deleteCategoryById } =
+  const { updateCategoryById, deleteCategoryById, icons } =
     useContext(CategoryContext);
   const [categoryForm, setCategoryForm] = useState({
-    category_name: "",
-    icon_id: "",
+    category_name: category.category_name,
+    icon_id: category.icon_id._id,
   });
-  const [icons, setIcons] = useState(null);
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,10 +33,10 @@ export default function CategoryScreen({ route, navigation }) {
       setLoading(true);
       await updateCategoryById(category._id, form);
       setLoading(false);
-      navigation.navigate("Categories", { actionCompleted: true });
+      navigation.navigate("Categories");
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -48,10 +47,10 @@ export default function CategoryScreen({ route, navigation }) {
   const deleteCategory = async () => {
     try {
       await deleteCategoryById(category._id);
-      navigation.navigate("Categories", { actionCompleted: true });
+      navigation.navigate("Categories");
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -84,19 +83,9 @@ export default function CategoryScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    setCategoryForm({
-      category_name: category.category_name,
-      icon_id: category.icon_id._id,
-    });
-
-    getIcons().then((icons) => {
-      setIcons(icons);
-
-      let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
-
-      setIndex(i);
-      setActualIcon(icons[i].icon);
-    });
+    let i = icons.findIndex((icon) => icon._id === category.icon_id._id);
+    setIndex(i);
+    setActualIcon(icons[i].icon);
   }, []);
 
   return (

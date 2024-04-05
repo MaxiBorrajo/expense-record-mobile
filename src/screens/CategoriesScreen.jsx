@@ -13,24 +13,15 @@ import CategoryComponent from "../components/CategoryComponent";
 import CreateCategoryButtonComponent from "../components/CreateCategoryButtonComponent";
 import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
-import { UserContext } from "../context/UserContext";
 import i18n from "../utils/i18n";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 
-export default function CategoriesScreen({ route, navigation }) {
+export default function CategoriesScreen({ navigation }) {
   const { colors } = useTheme();
-  const { getCategories, getIcons } = useContext(CategoryContext);
+  const { getCategories, categories } = useContext(CategoryContext);
   const searchBar = useRef(null);
   const [keyword, setKeyword] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const [icons, setIcons] = useState(null);
-  const [newCategory, setNewCategory] = useState({
-    icon_id: null,
-    category_name: null,
-  });
   const [errorMessage, setErrorMessage] = useState("");
-  const [actualIcon, setActualIcon] = useState(null);
-  const { reload, setReload } = useContext(UserContext);
 
   const cancelSearch = () => {
     if (searchBar.current) {
@@ -39,35 +30,9 @@ export default function CategoriesScreen({ route, navigation }) {
     }
   };
 
-  const categoriesSetUp = () => {
-    getCategories(keyword).then((categories) => {
-      setCategories(categories);
-    });
-
-    getIcons().then((icons) => {
-      setIcons(icons);
-      setActualIcon(icons[0].icon);
-      setNewCategory((prev) => ({
-        ...prev,
-        icon_id: icons[0]._id,
-      }));
-    });
-  };
-
   useEffect(() => {
-    setReload(false);
-    categoriesSetUp();
-  }, [keyword, reload]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        categoriesSetUp();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
+    getCategories(keyword)
+  }, [keyword]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -146,7 +111,6 @@ export default function CategoriesScreen({ route, navigation }) {
             <CategoryComponent
               item={item}
               setErrorMessage={setErrorMessage}
-              setReload={setReload}
             />
           )}
           ListEmptyComponent={() =>

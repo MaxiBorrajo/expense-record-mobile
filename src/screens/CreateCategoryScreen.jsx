@@ -11,16 +11,15 @@ import i18n from "../utils/i18n";
 
 export default function CreateCategoryScreen({ navigation }) {
   const { colors } = useTheme();
-  const { getIcons, createCategory } = useContext(CategoryContext);
+  const { getIcons, createCategory, icons } = useContext(CategoryContext);
+  const [index, setIndex] = useState(0);
   const [categoryForm, setCategoryForm] = useState({
     category_name: "",
-    icon_id: "",
+    icon_id: icons[index]?._id,
   });
-  const [icons, setIcons] = useState(null);
-  const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [actualIcon, setActualIcon] = useState(null);
+  const [actualIcon, setActualIcon] = useState(icons[index]?.icon);
 
   const submitCreateCategory = async (form) => {
     try {
@@ -28,10 +27,10 @@ export default function CreateCategoryScreen({ navigation }) {
       setLoading(true);
       await createCategory(form);
       setLoading(false);
-      navigation.navigate("Categories", { actionCompleted: true });
+      navigation.navigate("Categories", );
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -60,14 +59,7 @@ export default function CreateCategoryScreen({ navigation }) {
   };
 
   useEffect(() => {
-    getIcons().then((icons) => {
-      setIcons(icons);
-      setActualIcon(icons[index].icon);
-      setCategoryForm((prev) => ({
-        ...prev,
-        icon_id: icons[index]._id,
-      }));
-    });
+    getIcons();
   }, []);
 
   return (

@@ -1,13 +1,25 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { ExpenseContext } from "./ExpenseContext";
+
 export const CategoryContext = createContext();
 
 export function CategoryContextProvider(props) {
-  
+  const [categories, setCategories] = useState(null);
+  const [icons, setIcons] = useState(null);
+  const { getLastExpenses, getExpenses, getStatisticsByCategory } =
+    useContext(ExpenseContext);
+
+  function reloadInformation() {
+    getLastExpenses();
+    getExpenses();
+    getStatisticsByCategory();
+    getCategories();
+  }
+
   async function getCategories(keyword) {
-    let url =
-      `${process.env.EXPO_PUBLIC_URL_BACKEND}/categories?`;
+    let url = `${process.env.EXPO_PUBLIC_URL_BACKEND}/categories?`;
 
     url = keyword ? url + `&keyword=${keyword}` : url;
 
@@ -16,6 +28,8 @@ export function CategoryContextProvider(props) {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },
     });
+
+    setCategories(() => result.data.resource);
 
     return result.data.resource;
   }
@@ -28,6 +42,8 @@ export function CategoryContextProvider(props) {
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
       },
     });
+
+    setIcons(() => result.data.resource);
 
     return result.data.resource;
   }
@@ -56,6 +72,8 @@ export function CategoryContextProvider(props) {
       }
     );
 
+    reloadInformation();
+
     return result.data.resource;
   }
 
@@ -70,6 +88,8 @@ export function CategoryContextProvider(props) {
       }
     );
 
+    await reloadInformation();
+
     return result.data.resource;
   }
 
@@ -83,6 +103,8 @@ export function CategoryContextProvider(props) {
       }
     );
 
+    await reloadInformation();
+
     return result.data.message;
   }
   return (
@@ -94,6 +116,8 @@ export function CategoryContextProvider(props) {
         deleteCategoryById,
         updateCategoryById,
         getIcons,
+        categories,
+        icons,
       }}
     >
       {props.children}

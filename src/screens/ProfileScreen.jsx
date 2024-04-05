@@ -23,23 +23,27 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [errorMessage, setErrorMessage] = useState(null);
-  const [userForm, setUserForm] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const { updateCurrentUser, getCurrentUser, setReload, loadConfiguration } =
+  const { updateCurrentUser, setActualUser, loadConfiguration, user } =
     useContext(UserContext);
+  const [userForm, setUserForm] = useState({
+    firstName: user.firstName ? user.firstName : "",
+    lastName: user.lastName ? user.lastName : "",
+    budget: user.budget ? user.budget : 0,
+    budgetWarning: user.budgetWarning ? user.budgetWarning : 0,
+  });
+  const [loading, setLoading] = useState(false);
 
   const updateUser = async (form) => {
     try {
       setLoading(true);
       setErrorMessage(null);
       await updateCurrentUser(form);
-      await loadConfiguration()
+      await loadConfiguration();
       setLoading(false);
       navigation.navigate("Main");
-      setReload(true);
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -48,15 +52,7 @@ export default function ProfileScreen() {
   };
 
   useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUserForm({
-        ...userForm,
-        firstName: user.firstName ? user.firstName : "",
-        lastName: user.lastName ? user.lastName : "",
-        budget: user.budget ? user.budget : 0,
-        budgetWarning: user.budgetWarning ? user.budgetWarning : 0,
-      });
-    });
+    setActualUser();
   }, []);
 
   return (
@@ -225,7 +221,8 @@ export default function ProfileScreen() {
                     <View
                       style={{
                         rowGap: 10,
-                        marginBottom: control.isValid || control.isUntouched ? 20 : 10,
+                        marginBottom:
+                          control.isValid || control.isUntouched ? 20 : 10,
                       }}
                     >
                       <Text

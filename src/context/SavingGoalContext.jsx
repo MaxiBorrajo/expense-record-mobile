@@ -5,7 +5,7 @@ export const SavingGoalContext = createContext();
 
 export function SavingGoalContextProvider(props) {
   const [savingGoal, setSavingGoal] = useState(null);
-  
+
   async function getSavingGoal() {
     const result = await axios.get(
       `${process.env.EXPO_PUBLIC_URL_BACKEND}/savingGoals?`,
@@ -16,7 +16,7 @@ export function SavingGoalContextProvider(props) {
       }
     );
 
-    setSavingGoal(()=>result.data.resource);
+    setSavingGoal(() => result.data.resource);
   }
 
   async function createSavingGoal(data) {
@@ -29,6 +29,8 @@ export function SavingGoalContextProvider(props) {
         },
       }
     );
+
+    await getSavingGoal();
 
     return result.data.resource;
   }
@@ -44,6 +46,8 @@ export function SavingGoalContextProvider(props) {
       }
     );
 
+    await getSavingGoal();
+
     return result.data.resource;
   }
 
@@ -57,6 +61,8 @@ export function SavingGoalContextProvider(props) {
       }
     );
 
+    await getSavingGoal();
+
     return result.data.message;
   }
   return (
@@ -66,7 +72,7 @@ export function SavingGoalContextProvider(props) {
         deleteSavingGoal,
         updateSavingGoal,
         getSavingGoal,
-        savingGoal
+        savingGoal,
       }}
     >
       {props.children}

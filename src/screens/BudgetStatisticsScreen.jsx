@@ -1,6 +1,5 @@
 import { Text, View, Dimensions, SafeAreaView, FlatList } from "react-native";
-import React, { useState, useContext, useEffect } from "react";
-import { getRandomHexColor } from "../utils/utils";
+import React, { useContext, useEffect } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { UserContext } from "../context/UserContext";
 import { PieChart } from "react-native-chart-kit";
@@ -9,16 +8,16 @@ import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
 import { Badge, Icon } from "@rneui/themed";
 
-export default function BudgetStatisticsScreen({ navigation }) {
-  const { getMonthExpenses } = useContext(ExpenseContext);
-  const { getCurrentUser } = useContext(UserContext);
-  const [user, setUser] = useState(null);
-  const [budget, setBudget] = useState(null);
-  const [remainingBalance, setRemainingBalance] = useState(0);
-  const [monthExpenses, setMonthExpenses] = useState(null);
-  const [budgetStatistics, setBudgetStatistics] = useState(null);
+export default function BudgetStatisticsScreen() {
+  const {
+    getMonthExpenses,
+    monthExpenses,
+    remainingBalance,
+    budgetStatistics,
+    
+  } = useContext(ExpenseContext);
+  const { setActualUser, budget, user } = useContext(UserContext);
   const { colors } = useTheme();
-
   const chartConfig = {
     backgroundColor: colors.background,
     backgroundGradientFrom: colors.card,
@@ -33,58 +32,9 @@ export default function BudgetStatisticsScreen({ navigation }) {
   };
 
   useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUser((prev) => user);
-      setBudget((prev) => user.budget);
-    });
-    getMonthExpenses().then((result) => {
-      setMonthExpenses((prev) => result * -1);
-      setRemainingBalance((prev) => budget + result);
-      setBudgetStatistics([
-        {
-          name: i18n.t("monthExpenses"),
-          total: result * -1,
-          color: getRandomHexColor(),
-          legendFontSize: 15,
-        },
-        {
-          name: i18n.t("remainingBalance"),
-          total: budget + result,
-          color: getRandomHexColor(),
-          legendFontSize: 15,
-        },
-      ]);
-    });
+    setActualUser();
+    getMonthExpenses();
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", async (e) => {
-      getCurrentUser().then((user) => {
-        setUser((prev) => user);
-        setBudget((prev) => user.budget);
-      });
-      getMonthExpenses().then((result) => {
-        setMonthExpenses((prev) => result * -1);
-        setRemainingBalance((prev) => budget + result);
-        setBudgetStatistics([
-          {
-            name: i18n.t("monthExpenses"),
-            total: result * -1,
-            color: getRandomHexColor(),
-            legendFontSize: 15,
-          },
-          {
-            name: i18n.t("remainingBalance"),
-            total: budget + result,
-            color: getRandomHexColor(),
-            legendFontSize: 15,
-          },
-        ]);
-      });
-    });
-
-    return unsubscribe;
-  }, [navigation, user]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -177,12 +127,12 @@ export default function BudgetStatisticsScreen({ navigation }) {
               lineHeight: 30,
             }}
           >
-            {i18n.t("yourMonthlyBudget")} (${budget ? budget.toFixed(2) : 0} {user.currency}
-            ). {i18n.t("andYouExpent")} ($-{monthExpenses != 0 ? monthExpenses.toFixed(2) : 0}{" "}
-            {user.currency}). {i18n.t("yourRemainingBalance")} ($
-            {remainingBalance > 0
-              ? remainingBalance.toFixed(2)
-              : 0}{" "}
+            {i18n.t("yourMonthlyBudget")} (${budget ? budget.toFixed(2) : 0}{" "}
+            {user.currency}
+            ). {i18n.t("andYouExpent")} ($-
+            {monthExpenses != 0 ? monthExpenses.toFixed(2) : 0} {user.currency}
+            ). {i18n.t("yourRemainingBalance")} ($
+            {remainingBalance > 0 ? remainingBalance.toFixed(2) : 0}{" "}
             {user.currency})
           </Text>
           {budgetStatistics ? (

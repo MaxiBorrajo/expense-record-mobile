@@ -8,29 +8,30 @@ import i18n from "../utils/i18n";
 import { CountUp } from "use-count-up";
 
 export default function InfoComponent({ route, navigation, openBottomSheet }) {
-  const { getBalance, getAmount } = useContext(ExpenseContext);
-  const [balance, setBalance] = useState(null);
-  const [monthIncomeBalance, setMonthIncomeBalance] = useState(null);
-  const [monthLossBalance, setMonthLossBalance] = useState(null);
+  const {
+    getBalance,
+    balance,
+    getMonthIncome,
+    monthIncomeBalance,
+    getMonthLoss,
+    monthLossBalance,
+  } = useContext(ExpenseContext);
+
   const { colors } = useTheme();
   const {
     user,
     endLoading,
     loading,
     hideBalance,
-    reload,
     setActualUser,
     unreadNotifications,
   } = useContext(UserContext);
+
   const getMainInformation = async () => {
     await Promise.all([
-      getBalance().then((balance) => setBalance(balance)),
-      getAmount(new Date().getMonth(), 1).then((amount) =>
-        setMonthIncomeBalance(amount)
-      ),
-      getAmount(new Date().getMonth(), 0).then((amount) =>
-        setMonthLossBalance(amount)
-      ),
+      getBalance(),
+      getMonthIncome(),
+      getMonthLoss(),
       setActualUser(),
     ]);
     endLoading();
@@ -38,7 +39,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
 
   useEffect(() => {
     getMainInformation();
-  }, [reload]);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {

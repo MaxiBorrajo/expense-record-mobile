@@ -1,59 +1,26 @@
 import { Text, View, Dimensions, SafeAreaView } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { generateYearList, months, getRandomHexColor } from "../utils/utils";
+import { generateYearList, months } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
+import { UserContext } from "../context/UserContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { BarChart } from "react-native-chart-kit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import AnnualBalanceComponent from "../components/AnnualBalanceComponent";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
-import TooltipComponent from "../components/TooltipComponent";
 
-export default function ExpensesStatisticsScreen({ navigation }) {
+export default function ExpensesStatisticsScreen() {
   const [loading, setLoading] = useState(true);
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
-  const { getStatistics } = useContext(ExpenseContext);
-  const [statistics, setStatistics] = useState(null);
-  const [monthStatistics, setMonthStatistics] = useState(null);
-  const [firstYear, setFirstYear] = useState(null);
-  const [dataPoint, setDataPoint] = useState(null);
+  const { getStatistics, statistics, monthStatistics } =
+    useContext(ExpenseContext);
+  const { user } = useContext(UserContext);
+  const [firstYear, setFirstYear] = useState(
+    new Date(user.createdAt).getFullYear()
+  );
   const { colors } = useTheme();
-
-  const monthData = (index) => {
-    const monthDataFound = statistics[0].months.find(
-      (month) => month.month === index + 1
-    );
-
-    return monthDataFound;
-  };
-
-  const getMonths = () => {
-    const currentIndex = month ? month : new Date().getMonth();
-
-    if (currentIndex >= 0 && currentIndex <= 5) {
-      return months.map((month) => month.slice(0, 3)).slice(0, 6);
-    } else {
-      return months.map((month) => month.slice(0, 3)).slice(6);
-    }
-  };
-
-  const getMonthsData = (data) => {
-    const currentIndex = month !== undefined ? month : new Date().getMonth();
-
-    const monthlyTotals = Array.from({ length: 12 }, (_, i) => {
-      const monthData = data[0].months.find((item) => item.month === i + 1);
-      return monthData ? monthData.total.toFixed(2) : 0;
-    });
-
-    if (currentIndex >= 0 && currentIndex <= 5) {
-      return monthlyTotals.slice(0, 6);
-    } else {
-      return monthlyTotals.slice(6);
-    }
-  };
 
   const chartConfig = {
     backgroundColor: colors.background,
@@ -69,52 +36,11 @@ export default function ExpensesStatisticsScreen({ navigation }) {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("user").then((result) => {
-      const createdAt = JSON.parse(result).createdAt;
-      setFirstYear(new Date(createdAt).getFullYear());
-    });
-
-    getStatistics(year).then((result) => {
-      setStatistics(result);
-      if (result?.length) {
-        setMonthStatistics({
-          labels: getMonths(),
-          datasets: [
-            {
-              data: getMonthsData(result),
-            },
-          ],
-        });
-      }
+    setLoading((prev) => true);
+    getStatistics(year, month).then(() => {
       setLoading((prev) => false);
     });
   }, [year, month]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", (e) => {
-      AsyncStorage.getItem("user").then((result) => {
-        const createdAt = JSON.parse(result).createdAt;
-        setFirstYear(new Date(createdAt).getFullYear());
-      });
-
-      getStatistics(year).then((result) => {
-        setStatistics(result);
-        if (result?.length) {
-          setMonthStatistics({
-            labels: getMonths(),
-            datasets: [
-              {
-                data: getMonthsData(result),
-              },
-            ],
-          });
-        }
-        setLoading((prev) => false);
-      });
-    });
-
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -293,24 +219,6 @@ export default function ExpensesStatisticsScreen({ navigation }) {
                     }}
                     withHorizontalLabels={false}
                     withOuterLines={false}
-                    decorator={() => {
-                      return dataPoint ? (
-                        <TooltipComponent
-                          dataPoint={dataPoint}
-                          colors={colors}
-                          monthData={monthData}
-                        />
-                      ) : null;
-                    }}
-                    onDataPointClick={(index) => {
-                      dataPoint && index.index === dataPoint.index
-                        ? setDataPoint((prev) => null)
-                        : setDataPoint((prev) => ({
-                            index: index.index,
-                            x: index.x,
-                            y: index.y,
-                          }));
-                    }}
                     withInnerLines={false}
                     showBarTops={false}
                     showValuesOnTopOfBars

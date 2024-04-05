@@ -7,9 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { getRandomHexColor } from "../utils/utils";
-import { ExpenseContext } from "../context/ExpenseContext";
-import { UserContext } from "../context/UserContext";
 import { SavingGoalContext } from "../context/SavingGoalContext";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
@@ -46,16 +43,16 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
   const title = useRef(null);
   const description = useRef(null);
   const final_amount = useRef(null);
+
   const createGoal = async (data) => {
     try {
       setErrorMessage(null);
       setLoading(true);
       await createSavingGoal(data);
-      await getSavingGoal();
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -68,11 +65,10 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
       setErrorMessage(null);
       setLoading(true);
       await updateSavingGoal(data);
-      await getSavingGoal();
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -80,21 +76,24 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
     }
   };
 
+  const resetForm = () => {
+    form.current.setValue("title", null);
+    form.current.setValue("description", null);
+    form.current.setValue("final_amount", null);
+    title.current.markAsUntouched();
+    description.current.markAsUntouched();
+    final_amount.current.markAsUntouched();
+  };
+
   const deleteGoal = async () => {
     try {
       toggleDialog();
       setErrorMessage(null);
       await deleteSavingGoal();
-      await getSavingGoal();
-      form.current.setValue("title", null);
-      form.current.setValue("description", null);
-      form.current.setValue("final_amount", null);
-      title.current.markAsUntouched();
-      description.current.markAsUntouched();
-      final_amount.current.markAsUntouched();
+      resetForm();
     } catch (error) {
       setLoading(false);
-      if (error.response.data) {
+      if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);
       } else {
         setErrorMessage(error.message);
@@ -109,14 +108,6 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
   useEffect(() => {
     getSavingGoal();
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", async (e) => {
-      await getSavingGoal();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -160,8 +151,11 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
           <View style={{ width: "100%", alignItems: "center" }}>
             {savingGoal ? (
               <CircularProgress
-                value={(
-                  savingGoal.current_amount / savingGoal.final_amount
+                value={((savingGoal.current_amount / savingGoal.final_amount) *
+                  100 >
+                100
+                  ? 100
+                  : (savingGoal.current_amount / savingGoal.final_amount) * 100
                 )?.toFixed(2)}
                 duration={2000}
                 progressValueColor={colors.attention}

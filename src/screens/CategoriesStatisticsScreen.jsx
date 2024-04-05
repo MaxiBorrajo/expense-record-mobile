@@ -1,28 +1,23 @@
-import {
-  Text,
-  View,
-  Dimensions,
-  SafeAreaView,
-  FlatList,
-  StyleSheet,
-} from "react-native";
+import { Text, View, Dimensions, SafeAreaView, FlatList } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { generateYearList, months, getRandomHexColor } from "../utils/utils";
+import { generateYearList, months } from "../utils/utils";
 import { ExpenseContext } from "../context/ExpenseContext";
+import { UserContext } from "../context/UserContext";
 import SelectDropdown from "react-native-select-dropdown";
 import { PieChart } from "react-native-chart-kit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useTheme } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
-
-export default function CategoriesStatisticsScreen({ navigation }) {
+export default function CategoriesStatisticsScreen() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
   const [type, setType] = useState(1);
-  const { getStatisticsByCategory } = useContext(ExpenseContext);
-  const [categoryStatistics, setCategoryStatistics] = useState(null);
-  const [firstYear, setFirstYear] = useState(null);
+  const { getStatisticsByCategory, categoryStatistics } =
+    useContext(ExpenseContext);
+  const { user } = useContext(UserContext);
+  const [firstYear, setFirstYear] = useState(
+    new Date(user.createdAt).getFullYear()
+  );
   const { colors } = useTheme();
 
   const getTotal = (amounts) => {
@@ -45,56 +40,8 @@ export default function CategoriesStatisticsScreen({ navigation }) {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("user").then((result) => {
-      const createdAt = JSON.parse(result).createdAt;
-      setFirstYear(new Date(createdAt).getFullYear());
-    });
-
-    getStatisticsByCategory(year, month, type).then((result) => {
-      setCategoryStatistics(
-        result.map((category) => {
-          return {
-            name: category.categoryInfo[0]
-              ? category.categoryInfo[0].user_id
-                ? category.categoryInfo[0].category_name
-                : i18n.t(category.categoryInfo[0].category_name)
-              : i18n.t("withoutCategory"),
-            total: category.total,
-            color: getRandomHexColor(),
-            legendFontSize: 15,
-          };
-        })
-      );
-    });
+    getStatisticsByCategory(year, month, type);
   }, [year, month, type]);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", (e) => {
-      AsyncStorage.getItem("user").then((result) => {
-        const createdAt = JSON.parse(result).createdAt;
-        setFirstYear(new Date(createdAt).getFullYear());
-      });
-
-      getStatisticsByCategory(year, month, type).then((result) => {
-        setCategoryStatistics(
-          result.map((category) => {
-            return {
-              name: category.categoryInfo[0]
-                ? category.categoryInfo[0].user_id
-                  ? category.categoryInfo[0].category_name
-                  : i18n.t(category.categoryInfo[0].category_name)
-                : i18n.t("withoutCategory"),
-              total: category.total,
-              color: getRandomHexColor(),
-              legendFontSize: 15,
-            };
-          })
-        );
-      });
-    });
-
-    return unsubscribe;
-  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
