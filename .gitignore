@@ -35,6 +35,8 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-fehu-expense-tracker-firebase-adminsdk-hv2sa-94dd39dcd8.json
+
 google-services.json
 eas.json
+app.json
+app.config.js

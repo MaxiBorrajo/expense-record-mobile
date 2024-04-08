@@ -9,7 +9,6 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import React, { useContext, useEffect } from "react";
 import i18n from "../utils/i18n";
-
 const Tab = createBottomTabNavigator();
 
 export default function HomeScreen() {

@@ -10,7 +10,7 @@ import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);

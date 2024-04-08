@@ -1,6 +1,6 @@
 import { createContext, useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "../utils/axiosInterceptor";
+import axios from "axios";
 import { ExpenseContext } from "./ExpenseContext";
 
 export const CategoryContext = createContext();

@@ -1,9 +1,21 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "../utils/axiosInterceptor";
+import axios from "axios";
 import i18n from "../utils/i18n";
 import { NotificationContext } from "../context/NotificationContext";
 import { useAuth } from "./AuthContext";
+
+axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error?.response && error?.response?.status === 401) {
+      const { setAuth } = useAuth();
+      setAuth(() => false);
+    }
+  }
+);
 
 export const UserContext = createContext();
 

@@ -1,8 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "../utils/axiosInterceptor";
+import axios from "axios";
 export const NotificationContext = createContext();
-
 export function NotificationContextProvider(props) {
   async function getNotifications() {
     const result = await axios.get(

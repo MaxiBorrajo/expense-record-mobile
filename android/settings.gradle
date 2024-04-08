@@ -1,4 +1,4 @@
-rootProject.name = 'expense-record-mobile'
+rootProject.name = 'Fehu Expense Tracker'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -15,6 +15,7 @@ module.exports = {
     development: {
       android: {
         buildType: "apk",
+        userInterfaceStyle: "automatic",
       },
       env: {
         EXPO_PUBLIC_URL_BACKEND:
@@ -42,7 +43,7 @@ module.exports = {
         EXPO_PUBLIC_ANDROID_CLIENT_ID:
           "440036428069-sqko1un37nvkki6vm0uo1oe50bjcmc59.apps.googleusercontent.com",
         EXPO_PUBLIC_GOOGLE_SERVICES_JSON: "google-services.json",
-      },
+      }
     },
   },
   android: {
@@ -51,7 +52,7 @@ module.exports = {
       foregroundImage: "./assets/dark_adaptive_icon.png",
       backgroundColor: "#000000",
     },
-    package: "com.maximilianoborrajo.expenserecordmobile", 
+    package: "com.maximilianoborrajo.expenserecordmobile",
   },
   expo: {
     name: "Fehu: Expense Tracker",
@@ -80,6 +81,6 @@ module.exports = {
         backgroundColor: "#000000",
       },
       package: "com.maximilianoborrajo.expenserecordmobile",
-    }
+    },
   },
 };

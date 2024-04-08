@@ -1,13 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "../utils/axiosInterceptor";
+import axios from "axios";
 import i18n from "../utils/i18n";
 import { getRandomHexColor } from "../utils/utils";
 import { UserContext } from "./UserContext";
 import { SavingGoalContext } from "./SavingGoalContext";
 import { months } from "../utils/utils";
 export const ExpenseContext = createContext();
-
 export function ExpenseContextProvider(props) {
   const [lastExpenses, setLastExpenses] = useState(null);
   const [expenses, setExpenses] = useState(null);
@@ -24,9 +23,6 @@ export function ExpenseContextProvider(props) {
   const { getSavingGoal } = useContext(SavingGoalContext);
 
   const reloadInformation = async () => {
-    await getLastExpenses();
-    await getMonthLoss();
-    await getMonthIncome();
     await getExpenses(null, null, [
       {
         filter: "month",
@@ -37,11 +33,14 @@ export function ExpenseContextProvider(props) {
         value: new Date().getFullYear(),
       },
     ]);
+    await getLastExpenses();
+    await getMonthLoss();
+    await getMonthIncome();
     await getBalance();
-    await getMonthExpenses();
-    await getStatistics();
-    await getStatisticsByCategory();
-    await getSavingGoal();
+     getMonthExpenses();
+     getStatistics();
+     getStatisticsByCategory();
+     getSavingGoal();
   };
 
   const getMonthLoss = async () => {
@@ -300,11 +299,11 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
         },
       }
     );
-    reloadInformation();
+    await reloadInformation();
     return result.data.resource;
   }
 
@@ -315,7 +314,7 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
         },
       }
     );
@@ -329,7 +328,7 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          ExpoToken: `${await AsyncStorage.getItem("expoToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
         },
       }
     );

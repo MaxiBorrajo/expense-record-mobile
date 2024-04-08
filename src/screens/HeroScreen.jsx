@@ -11,60 +11,12 @@ import { Button } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { UserContext } from "../context/UserContext";
 import { useContext, useEffect, useState, useRef } from "react";
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
-
-export default function HeroScreen({ navigation }) {
+export default function HeroScreen({navigation}) {
   const { loadConfiguration, handleNotifications } = useContext(UserContext);
-  const [expoPushToken, setExpoPushToken] = useState("");
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
-      AsyncStorage.setItem("expoToken", token);
-    });
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener(async (notification) => {
-        setNotification(notification);
-        await handleNotifications();
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        const {
-          notification: {
-            request: {
-              content: {
-                data: { screen },
-              },
-            },
-          },
-        } = response;
-
-        if (screen) {
-          navigation.navigate(screen);
-        }
-      });
-
-    return () => {
-      Notifications.removeNotificationSubscription(
-        notificationListener.current
-      );
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
   }, []);
 
   useEffect(() => {
@@ -132,42 +84,3 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "0854aae1-2b3d-4d3d-a448-00b41c05b3f0",
-      })
-    ).data;
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      showBadge: true,
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      sound: "notification.wav",
-      enableVibrate: true,
-    });
-  }
-
-  return token;
-}

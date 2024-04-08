@@ -41,12 +41,24 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
-import { StatusBar } from "react-native";
+import { StatusBar, Alert } from "react-native";
+import messaging from "@react-native-firebase/messaging";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [auth, setAuth] = useState(null);
+
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      console.log("Authorization status:", authStatus);
+    }
+  };
 
   useEffect(() => {
     AsyncStorage.getItem("theme").then((theme) => {
@@ -55,6 +67,44 @@ export default function App() {
     AsyncStorage.getItem("token").then((token) => {
       setAuth(token ? token : null);
     });
+    if (requestUserPermission()) {
+      messaging()
+        .getToken()
+        .then((token) => {
+          console.log(token);
+          AsyncStorage.setItem("notificationToken", token);
+        });
+    } else {
+      console.log("Permission not granted", authStatus);
+    }
+
+    messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        if (remoteMessage) {
+          console.log(
+            "Notification caused app to open from quit state:",
+            remoteMessage
+          );
+        }
+      });
+
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "Notification caused app to open from background state:",
+        remoteMessage.notification
+      );
+    });
+
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Notification handle in background:", remoteMessage);
+    });
+
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
   }, []);
 
   let [fontsLoaded] = useFonts({
