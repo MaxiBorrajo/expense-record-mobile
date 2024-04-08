@@ -1,8 +1,9 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios from "../utils/axiosInterceptor";
 import i18n from "../utils/i18n";
 import { NotificationContext } from "../context/NotificationContext";
+import { useAuth } from "./AuthContext";
 
 export const UserContext = createContext();
 
@@ -18,6 +19,7 @@ export function UserContextProvider(props) {
   const [unreadNotifications, setUnreadNotifications] = useState(null);
   const [budget, setBudget] = useState(null);
   const { getNotifications } = useContext(NotificationContext);
+  const { auth, setAuth } = useAuth();
 
   async function applyConversion(conversion) {
     const result = await axios.put(
@@ -43,6 +45,7 @@ export function UserContextProvider(props) {
       "user",
       JSON.stringify(response.data.resource.user)
     );
+    setAuth(() => true);
   };
 
   const updateCurrency = async (newCurrency) => {
@@ -102,10 +105,12 @@ export function UserContextProvider(props) {
   };
 
   const loadConfiguration = async () => {
-    await setActualUser();
+    if (auth) {
+      await setActualUser();
+      await handleNotifications();
+    }
     getLanguage();
     getHideBalance();
-    await handleNotifications();
     endLoading();
   };
 
@@ -148,6 +153,7 @@ export function UserContextProvider(props) {
       "user",
       JSON.stringify(response.data.resource.user)
     );
+    setAuth(() => true);
   }
 
   async function login(data) {
@@ -160,6 +166,7 @@ export function UserContextProvider(props) {
       "user",
       JSON.stringify(response.data.resource.user)
     );
+    setAuth(() => true);
   }
 
   async function forgotPassword(data) {
@@ -245,6 +252,8 @@ export function UserContextProvider(props) {
         handleNotifications,
         unreadNotifications,
         budget,
+        auth,
+        setAuth,
       }}
     >
       {props.children}

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios from "../utils/axiosInterceptor";
 import i18n from "../utils/i18n";
 import { getRandomHexColor } from "../utils/utils";
 import { UserContext } from "./UserContext";
@@ -23,11 +23,11 @@ export function ExpenseContextProvider(props) {
   const { budget } = useContext(UserContext);
   const { getSavingGoal } = useContext(SavingGoalContext);
 
-  const reloadInformation = () => {
-    getLastExpenses();
-    getMonthLoss();
-    getMonthIncome();
-    getExpenses(null, null, [
+  const reloadInformation = async () => {
+    await getLastExpenses();
+    await getMonthLoss();
+    await getMonthIncome();
+    await getExpenses(null, null, [
       {
         filter: "month",
         value: new Date().getMonth(),
@@ -37,11 +37,11 @@ export function ExpenseContextProvider(props) {
         value: new Date().getFullYear(),
       },
     ]);
-    getBalance();
-    getMonthExpenses();
-    getStatistics();
-    getStatisticsByCategory();
-    getSavingGoal();
+    await getBalance();
+    await getMonthExpenses();
+    await getStatistics();
+    await getStatisticsByCategory();
+    await getSavingGoal();
   };
 
   const getMonthLoss = async () => {
@@ -67,7 +67,7 @@ export function ExpenseContextProvider(props) {
     ];
 
     getExpenses(null, null, filters).then((expenses) => {
-      setLastExpenses(expenses.splice(0, 5));
+      setLastExpenses(() => expenses.splice(0, 5));
     });
   };
 
@@ -106,7 +106,7 @@ export function ExpenseContextProvider(props) {
       },
     });
 
-    setExpenses(() => result.data.resource);
+    setExpenses((prev) => [...result.data.resource]);
 
     return result.data.resource;
   }
@@ -319,7 +319,7 @@ export function ExpenseContextProvider(props) {
         },
       }
     );
-    reloadInformation();
+    await reloadInformation();
     return result.data.resource;
   }
 
@@ -333,7 +333,7 @@ export function ExpenseContextProvider(props) {
         },
       }
     );
-    reloadInformation();
+    await reloadInformation();
     return result.data.message;
   }
 

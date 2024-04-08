@@ -7,16 +7,14 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
-import { NotificationContext } from "../context/NotificationContext";
 import { UserContext } from "../context/UserContext";
 import NotificationComponent from "../components/NotificationComponent";
-import ErrorComponent from "../components/ErrorComponent";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
+
 export default function NotificationsScreen() {
   const { colors } = useTheme();
-  const [errorMessage, setErrorMessage] = useState("");
   const { handleNotifications, notifications } = useContext(UserContext);
 
   useEffect(() => {
@@ -58,7 +56,6 @@ export default function NotificationsScreen() {
             {i18n.t("notifications")}
           </Text>
         </View>
-        {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <FlatList
           style={{ height: "100%" }}
           contentContainerStyle={{

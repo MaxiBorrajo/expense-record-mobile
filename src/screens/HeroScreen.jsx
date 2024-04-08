@@ -22,6 +22,7 @@ Notifications.setNotificationHandler({
     shouldSetBadge: true,
   }),
 });
+
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration, handleNotifications } = useContext(UserContext);
   const [expoPushToken, setExpoPushToken] = useState("");

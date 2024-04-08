@@ -1,5 +1,5 @@
 import { View, SafeAreaView, Dimensions } from "react-native";
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useContext, useRef } from "react";
 import InfoComponent from "../components/InfoComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
 import { useTheme } from "@react-navigation/native";
@@ -8,6 +8,8 @@ import WarningDialogComponent from "../components/WarningDialogComponent";
 import BottomSheetMenuComponent from "../components/BottomSheetMenuComponent";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../context/UserContext";
+import { useAuth } from "../context/AuthContext";
+import ErrorComponent from "../components/ErrorComponent";
 
 export default function MainScreen({ route, navigation }) {
   const { colors } = useTheme();
@@ -15,22 +17,33 @@ export default function MainScreen({ route, navigation }) {
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
   const { deleteCurrentUser } = useContext(UserContext);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const { setAuth } = useAuth();
 
   const toggleDialog = () => {
     setVisible(!visible);
   };
 
   const deleteAccount = async () => {
-    toggleDialog();
-    await deleteCurrentUser();
-    await logout();
+    try {
+      toggleDialog();
+      await deleteCurrentUser();
+      await logout();
+    } catch (error) {
+      setLoading(false);
+      if (error?.response?.data) {
+        setErrorMessage(error.response.data.Error);
+      } else {
+        setErrorMessage(error.message);
+      }
+    }
   };
 
   const logout = async () => {
     await AsyncStorage.removeItem("user");
     await AsyncStorage.removeItem("email");
     await AsyncStorage.removeItem("token");
-    navigation.navigate("Hero");
+    setAuth(() => null);
   };
 
   const openBottomSheet = () => {
@@ -61,6 +74,7 @@ export default function MainScreen({ route, navigation }) {
           navigation={navigation}
           openBottomSheet={() => openBottomSheet()}
         />
+        {errorMessage && <ErrorComponent errorMessage={errorMessage} />}
         <ExpensesComponent route={route} navigation={navigation} />
       </View>
       <BottomSheetMenuComponent

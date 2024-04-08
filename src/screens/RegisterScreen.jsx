@@ -11,7 +11,7 @@ import i18n from "../utils/i18n";
 // import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default function RegisterScreen({ navigation }) {
-  const { register, handleGoogleLogin } = useContext(UserContext);
+  const { register, handleGoogleLogin, setAuth } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -34,7 +34,7 @@ export default function RegisterScreen({ navigation }) {
   //       oauthuser: true,
   //     };
   //     await handleGoogleLogin(user);
-  //     navigation.navigate("Home");
+  //    setAuth(()=>false)
   //   } catch (err) {
   //     setError(err);
   //   }
@@ -45,8 +45,8 @@ export default function RegisterScreen({ navigation }) {
       setLoading(true);
       await register(form);
       setLoading(false);
-      navigation.navigate("Home");
     } catch (error) {
+      setAuth(() => false);
       setLoading(false);
       if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);

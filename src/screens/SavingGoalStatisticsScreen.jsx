@@ -12,10 +12,10 @@ import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
 import Foect from "foect";
 import ButtonComponent from "../components/ButtonComponent";
-import ErrorComponent from "../components/ErrorComponent";
 import CircularProgress from "react-native-circular-progress-indicator";
 import { Icon } from "@rneui/themed";
 import WarningDialogComponent from "../components/WarningDialogComponent";
+import ErrorComponent from "../components/ErrorComponent";
 
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0 && val != null && val != null) {
@@ -27,7 +27,7 @@ Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
     : { greaterThanZero: true };
 });
 
-export default function SavingGoalStatisticsScreen({ navigation }) {
+export default function SavingGoalStatisticsScreen() {
   const {
     createSavingGoal,
     deleteSavingGoal,
@@ -148,6 +148,7 @@ export default function SavingGoalStatisticsScreen({ navigation }) {
               />
             ) : null}
           </View>
+          {errorMessage && <ErrorComponent errorMessage={errorMessage} />}
           <View style={{ width: "100%", alignItems: "center" }}>
             {savingGoal ? (
               <CircularProgress

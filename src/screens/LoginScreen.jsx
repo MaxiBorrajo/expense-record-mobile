@@ -15,7 +15,7 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
-  const { login, handleGoogleLogin } = useContext(UserContext);
+  const { login, handleGoogleLogin, setAuth } = useContext(UserContext);
 
   // useEffect(() => {
   //   GoogleSignin.configure({
@@ -23,7 +23,6 @@ export default function LoginScreen({ navigation }) {
   //       "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
   //   });
   // }, []);
-
 
   // const signin = async () => {
   //   try {
@@ -35,20 +34,19 @@ export default function LoginScreen({ navigation }) {
   //       oauthuser: true,
   //     };
   //     await handleGoogleLogin(user);
-  //     navigation.navigate("Home");
   //   } catch (err) {
+  //setAuth(()=>false)
   //     setError(err);
   //   }
   // };
-
 
   const loginUser = async (form) => {
     try {
       setLoading(true);
       await login(form);
       setLoading(false);
-      navigation.navigate("Home");
     } catch (error) {
+      setAuth(() => false);
       setLoading(false);
       if (error?.response?.data) {
         setErrorMessage(error.response.data.Error);

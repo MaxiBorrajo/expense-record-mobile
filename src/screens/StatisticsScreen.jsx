@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ExpensesStatisticsScreen from "./ExpensesStatisticsScreen";
 import CategoriesStatisticsScreen from "./CategoriesStatisticsScreen";
 import BudgetStatisticsScreen from "./BudgetStatisticsScreen";
 import SavingGoalStatisticsScreen from "./SavingGoalStatisticsScreen";
-import { useTheme } from "@react-navigation/native";
 import TabBarIcon from "../components/TabBarIcon";
 import { SavingGoalContext } from "../context/SavingGoalContext";
 const Tab = createBottomTabNavigator();

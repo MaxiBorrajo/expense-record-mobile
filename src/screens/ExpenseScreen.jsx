@@ -150,7 +150,7 @@ export default function ExpenseScreen({ route, navigation }) {
       }
       setErrorMessage(null);
       setLoading(true);
-      await updateExpenseById(expense._id, updatedExpense);
+      updateExpenseById(expense._id, updatedExpense);
       setLoading(false);
       navigation.goBack();
     } catch (error) {
@@ -166,7 +166,7 @@ export default function ExpenseScreen({ route, navigation }) {
   const deleteExpense = async () => {
     try {
       setErrorMessage(null);
-      await deleteExpenseById(expense._id);
+      deleteExpenseById(expense._id);
       navigation.goBack();
     } catch (error) {
       setLoading(false);
@@ -179,7 +179,7 @@ export default function ExpenseScreen({ route, navigation }) {
   };
 
   useEffect(() => {
-    getCategories()
+    getCategories();
     if (expense.cron) {
       const details = getCronDetails(expense.cron);
       setFrequency((prev) => details.frequency);
