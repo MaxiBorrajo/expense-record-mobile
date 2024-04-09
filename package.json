@@ -35,7 +35,7 @@
     "date-fns": "^3.2.0",
     "deprecated-react-native-prop-types": "^5.0.0",
     "eas-cli": "^7.6.2",
-    "expo": "^50.0.14",
+    "expo": "~50.0.15",
     "expo-constants": "~15.4.5",
     "expo-dev-client": "~3.3.11",
     "expo-font": "~11.10.3",
