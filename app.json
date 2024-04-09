@@ -23,7 +23,8 @@
         "backgroundColor": "#000000"
       },
       "package": "com.maximilianoborrajo.expenserecordmobile",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/dark_favicon.ico"

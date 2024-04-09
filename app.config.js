@@ -3,6 +3,7 @@ module.exports = {
     preview: {
       android: {
         buildType: "apk",
+        package: "com.maximilianoborrajo.expenserecordmobile",
       },
       env: {
         EXPO_PUBLIC_URL_BACKEND:
@@ -16,6 +17,7 @@ module.exports = {
       android: {
         buildType: "apk",
         userInterfaceStyle: "automatic",
+        package: "com.maximilianoborrajo.expenserecordmobile",
       },
       env: {
         EXPO_PUBLIC_URL_BACKEND:
@@ -28,6 +30,7 @@ module.exports = {
     preview2: {
       android: {
         gradleCommand: ":app:assembleRelease",
+        package: "com.maximilianoborrajo.expenserecordmobile",
       },
     },
     preview3: {
@@ -43,7 +46,7 @@ module.exports = {
         EXPO_PUBLIC_ANDROID_CLIENT_ID:
           "440036428069-sqko1un37nvkki6vm0uo1oe50bjcmc59.apps.googleusercontent.com",
         EXPO_PUBLIC_GOOGLE_SERVICES_JSON: "google-services.json",
-      }
+      },
     },
   },
   android: {
