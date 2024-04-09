@@ -23,8 +23,7 @@
         "backgroundColor": "#000000"
       },
       "package": "com.maximilianoborrajo.expenserecordmobile",
-      "googleServicesFile": "./google-services.json",
-      "versionCode": 1
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/dark_favicon.ico"
@@ -38,16 +37,22 @@
     },
     "plugins": [
       "expo-localization",
-      "expo-notifications",
-      {
-        "icon": "./assets/notification_icon.png",
-        "color": "#242528",
-        "sounds": ["./assets/notification.wav"]
-      },
-      "expo-dev-launcher",
-      {
-        "launchModeExperimental": "most-recent"
-      }
+      "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "expo-dev-launcher",
+        {
+          "launchModeExperimental": "most-recent"
+        }
+      ]
     ],
     "notification": {
       "icon": "./assets/dark_icon.png",

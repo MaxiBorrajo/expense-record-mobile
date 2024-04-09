@@ -16,7 +16,7 @@ import CategoriesScreen from "./src/screens/CategoriesScreen";
 import AboutUsScreen from "./src/screens/AboutUsScreen";
 import ConfigurationScreen from "./src/screens/ConfigurationScreen";
 import NotificationsScreen from "./src/screens/NotificationsScreen";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ExpenseContextProvider } from "./src/context/ExpenseContext";
 import { CategoryContextProvider } from "./src/context/CategoryContext";
@@ -41,9 +41,19 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
-import { StatusBar, Alert } from "react-native";
+import { StatusBar, Alert, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 const Stack = createNativeStackNavigator();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 export default function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
@@ -101,10 +111,45 @@ export default function App() {
     });
 
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+      Notifications.scheduleNotificationAsync({
+        content: {
+          title: remoteMessage.notification.title,
+          body: remoteMessage.notification.body,
+        },
+        trigger: null,
+      });
+      //Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
+  }, []);
+
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   let [fontsLoaded] = useFonts({
@@ -236,4 +281,43 @@ export default function App() {
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+
+  if (Platform.OS === "android") {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    // Learn more about projectId:
+    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "your-project-id",
+      })
+    ).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
 }
