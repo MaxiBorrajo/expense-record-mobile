@@ -1,7 +1,6 @@
 import { Text, View, FlatList, ActivityIndicator } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
-import { Card } from "@rneui/themed";
 import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
@@ -15,26 +14,10 @@ export default function ExpensesComponent() {
   }, []);
 
   return (
-    <Card
-      containerStyle={{
-        width: "100%",
-        backgroundColor: "transparent",
-        elevation: 0,
-        borderWidth: 0,
-        marginTop: 0,
-      }}
-    >
-      <ExpensesHeaderComponent />
+    <View style={{ height: "65%", paddingTop: 10, paddingHorizontal: 15 }}>
       <FlatList
-        contentContainerStyle={{
-          minHeight: "100%",
-          minWidth: "100%",
-          alignItems: "center",
-          paddingTop: 10,
-          paddingBottom: 490,
-          justifyContent:
-            lastExpenses && lastExpenses.length ? "flex-start" : "center",
-        }}
+      stickyHeaderIndices={[0]}
+        contentContainerStyle={{ paddingBottom: 100 }}
         data={lastExpenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => <ExpenseComponent item={item} />}
@@ -71,10 +54,13 @@ export default function ExpensesComponent() {
             </View>
           ) : null
         }
+        ListHeaderComponent={() => <ExpensesHeaderComponent />}
+        ListHeaderComponentStyle={{backgroundColor:colors.background}}
         ItemSeparatorComponent={() => (
           <View style={{ height: 10, width: "100%" }}></View>
         )}
+        showsVerticalScrollIndicator={false}
       />
-    </Card>
+    </View>
   );
 }

@@ -5,8 +5,9 @@ import {
   SafeAreaView,
   Dimensions,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { CategoryContext } from "../context/CategoryContext";
 import SelectDropdown from "react-native-select-dropdown";
@@ -48,6 +49,24 @@ export default function ExpenseScreen({ route, navigation }) {
     expense.isAutomaticallyCreated
   );
   const [repeat, setRepeat] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getCategories();
+    if (expense.cron) {
+      const details = getCronDetails(expense.cron);
+      setFrequency((prev) => details.frequency);
+      setRepeat((prev) => details.repeat);
+      setSelectedDays((prev) =>
+        details.selectedDays.length ? details.selectedDays : [1]
+      );
+      setSelectedMonthDays((prev) =>
+        details.selectedMonthDays.length ? details.selectedMonthDays : [1]
+      );
+    }
+    setRefreshing(false);
+  };
 
   const daysOfTheWeek = [
     {
@@ -198,7 +217,18 @@ export default function ExpenseScreen({ route, navigation }) {
       {!expense || !categories ? (
         <LoadingScreen />
       ) : (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressBackgroundColor={colors.background}
+              tintColor={colors.attention}
+              titleColor={colors.attention}
+              colors={[colors.attention]}
+            />
+          }
+        >
           <View
             style={{
               flex: 1,

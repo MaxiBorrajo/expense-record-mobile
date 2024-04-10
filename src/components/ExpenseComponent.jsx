@@ -26,7 +26,8 @@ export default memo(function ExpenseComponent({ item }) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 5,
         alignItems: "center",
         width: "100%",
         borderRadius: 5,

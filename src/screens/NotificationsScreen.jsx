@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
@@ -16,6 +17,12 @@ import GoBackButtonComponent from "../components/GoBackButtonComponent";
 export default function NotificationsScreen() {
   const { colors } = useTheme();
   const { handleNotifications, notifications } = useContext(UserContext);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await handleNotifications();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     handleNotifications();
@@ -57,9 +64,20 @@ export default function NotificationsScreen() {
           </Text>
         </View>
         <FlatList
-          style={{ height: "100%" }}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              progressBackgroundColor={colors.background}
+              tintColor={colors.attention}
+              titleColor={colors.attention}
+              colors={[colors.attention]}
+            />
+          }
           contentContainerStyle={{
             paddingBottom: 50,
+            height: "100%",
           }}
           data={notifications}
           keyExtractor={(item) => item._id}
@@ -70,7 +88,7 @@ export default function NotificationsScreen() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: "100%",
+                  flex: 1,
                   minWidth: "100%",
                 }}
               >
@@ -81,8 +99,8 @@ export default function NotificationsScreen() {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: "100%",
                   minWidth: "100%",
+                  flex: 1,
                 }}
               >
                 <Text

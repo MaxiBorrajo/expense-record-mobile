@@ -14,7 +14,6 @@ export default function BudgetStatisticsScreen() {
     monthExpenses,
     remainingBalance,
     budgetStatistics,
-    
   } = useContext(ExpenseContext);
   const { setActualUser, budget, user } = useContext(UserContext);
   const { colors } = useTheme();
@@ -86,7 +85,7 @@ export default function BudgetStatisticsScreen() {
                 color: colors.text,
                 fontSize: 16,
                 fontFamily: "Poppins_300Light",
-                paddingBottom: 10,
+                paddingBottom: 0,
               }}
             >
               {i18n.t("budgetStatistics")}
@@ -123,7 +122,6 @@ export default function BudgetStatisticsScreen() {
               color: colors.text,
               fontSize: 13,
               fontFamily: "Poppins_300Light",
-              paddingBottom: 10,
               lineHeight: 30,
             }}
           >
@@ -142,7 +140,6 @@ export default function BudgetStatisticsScreen() {
                 alignItems: "center",
                 justifyContent: "center",
                 rowGap: 10,
-                paddingTop: 10,
               }}
             >
               {monthExpenses <= budget ? (
@@ -253,6 +250,17 @@ export default function BudgetStatisticsScreen() {
                   <View style={{ height: 10, width: "100%" }}></View>
                 )}
               />
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Poppins_300Light",
+                  color: colors.text,
+                  alignSelf: "flex-start",
+                  paddingTop: 15,
+                }}
+              >
+                *{i18n.t("budgetHelp")}
+              </Text>
             </View>
           ) : (
             <Text

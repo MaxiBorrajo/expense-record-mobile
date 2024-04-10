@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TextInput,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { SavingGoalContext } from "../context/SavingGoalContext";
@@ -43,6 +44,13 @@ export default function SavingGoalStatisticsScreen() {
   const title = useRef(null);
   const description = useRef(null);
   const final_amount = useRef(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getSavingGoal();
+    setRefreshing(false);
+  };
 
   const createGoal = async (data) => {
     try {
@@ -111,7 +119,18 @@ export default function SavingGoalStatisticsScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            progressBackgroundColor={colors.background}
+            tintColor={colors.attention}
+            titleColor={colors.attention}
+            colors={[colors.attention]}
+          />
+        }
+      >
         <View
           style={{
             flex: 1,

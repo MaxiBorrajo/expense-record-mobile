@@ -57,15 +57,14 @@ export default function MainScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ maxHeight: Dimensions.get("window").height, }}>
       <View
         style={{
-          flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
           alignItems: "center",
           position: "relative",
-          minHeight: Dimensions.get("window").height,
+          maxHeight:'100%',
           rowGap: 5,
         }}
       >

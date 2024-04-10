@@ -14,10 +14,7 @@ import { useContext, useEffect, useState, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function HeroScreen({navigation}) {
-  const { loadConfiguration, handleNotifications } = useContext(UserContext);
-
-  useEffect(() => {
-  }, []);
+  const { loadConfiguration } = useContext(UserContext);
 
   useEffect(() => {
     loadConfiguration();

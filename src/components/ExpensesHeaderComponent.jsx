@@ -15,6 +15,7 @@ export default function ExpensesHeaderComponent() {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        paddingBottom:10,
       }}
     >
       <Text

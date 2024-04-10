@@ -5,7 +5,6 @@ import i18n from "../utils/i18n";
 import { getRandomHexColor } from "../utils/utils";
 import { UserContext } from "./UserContext";
 import { SavingGoalContext } from "./SavingGoalContext";
-import { months } from "../utils/utils";
 export const ExpenseContext = createContext();
 export function ExpenseContextProvider(props) {
   const [lastExpenses, setLastExpenses] = useState(null);
@@ -18,7 +17,7 @@ export function ExpenseContextProvider(props) {
   const [budgetStatistics, setBudgetStatistics] = useState(null);
   const [categoryStatistics, setCategoryStatistics] = useState(null);
   const [statistics, setStatistics] = useState(null);
-  const [monthStatistics, setMonthStatistics] = useState(null);
+  const [monthStatistic, setMonthStatistic] = useState([]);
   const { budget } = useContext(UserContext);
   const { getSavingGoal } = useContext(SavingGoalContext);
 
@@ -37,10 +36,10 @@ export function ExpenseContextProvider(props) {
     await getMonthLoss();
     await getMonthIncome();
     await getBalance();
-     getMonthExpenses();
-     getStatistics();
-     getStatisticsByCategory();
-     getSavingGoal();
+    getMonthExpenses();
+    getStatistics();
+    getStatisticsByCategory();
+    getSavingGoal();
   };
 
   const getMonthLoss = async () => {
@@ -54,20 +53,18 @@ export function ExpenseContextProvider(props) {
   };
 
   const getLastExpenses = async () => {
-    const filters = [
+    const result = await axios.get(
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/expenses/recent`,
       {
-        filter: "year",
-        value: new Date().getFullYear(),
-      },
-      {
-        filter: "month",
-        value: new Date().getMonth(),
-      },
-    ];
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        },
+      }
+    );
 
-    getExpenses(null, null, filters).then((expenses) => {
-      setLastExpenses(() => expenses.splice(0, 5));
-    });
+    setLastExpenses((prev) => [...result.data.resource]);
+
+    return result.data.resource;
   };
 
   function applySorting(sort, order, url) {
@@ -177,30 +174,30 @@ export function ExpenseContextProvider(props) {
     return result.data.resource;
   }
 
-  const getMonths = (month) => {
-    const currentIndex = month ? month : new Date().getMonth();
+  // const getMonths = (month) => {
+  //   const currentIndex = month ? month : new Date().getMonth();
 
-    if (currentIndex >= 0 && currentIndex <= 5) {
-      return months.map((month) => month.slice(0, 3)).slice(0, 6);
-    } else {
-      return months.map((month) => month.slice(0, 3)).slice(6);
-    }
-  };
+  //   if (currentIndex >= 0 && currentIndex <= 5) {
+  //     return months.map((month) => month.slice(0, 3)).slice(0, 6);
+  //   } else {
+  //     return months.map((month) => month.slice(0, 3)).slice(6);
+  //   }
+  // };
 
-  const getMonthsData = (data, month) => {
-    const currentIndex = month !== undefined ? month : new Date().getMonth();
+  // const getMonthsData = (data, month) => {
+  //   const currentIndex = month !== undefined ? month : new Date().getMonth();
 
-    const monthlyTotals = Array.from({ length: 12 }, (_, i) => {
-      const monthData = data[0].months.find((item) => item.month === i + 1);
-      return monthData ? monthData.total.toFixed(2) : 0;
-    });
+  //   const monthlyTotals = Array.from({ length: 12 }, (_, i) => {
+  //     const monthData = data[0].months.find((item) => item.month === i + 1);
+  //     return monthData ? monthData.total.toFixed(2) : 0;
+  //   });
 
-    if (currentIndex >= 0 && currentIndex <= 5) {
-      return monthlyTotals.slice(0, 6);
-    } else {
-      return monthlyTotals.slice(6);
-    }
-  };
+  //   if (currentIndex >= 0 && currentIndex <= 5) {
+  //     return monthlyTotals.slice(0, 6);
+  //   } else {
+  //     return monthlyTotals.slice(6);
+  //   }
+  // };
 
   async function getStatistics(
     year = new Date().getFullYear(),
@@ -218,18 +215,13 @@ export function ExpenseContextProvider(props) {
       },
     });
 
-    setStatistics(() => result.data.resource);
+    setStatistics((prev) => result.data.resource);
 
-    if (result.data.resource?.length) {
-      setMonthStatistics(() => ({
-        labels: getMonths(month),
-        datasets: [
-          {
-            data: getMonthsData(result.data.resource, month),
-          },
-        ],
-      }));
-    }
+    const monthData = result.data.resource[0].months.find(
+      (monthStatistic) => monthStatistic.month === month + 1
+    );
+
+    setMonthStatistic((prev) => monthData);
 
     return result.data.resource;
   }
@@ -299,7 +291,9 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem(
+            "notificationToken"
+          )}`,
         },
       }
     );
@@ -314,7 +308,9 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem(
+            "notificationToken"
+          )}`,
         },
       }
     );
@@ -328,7 +324,9 @@ export function ExpenseContextProvider(props) {
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-          NotificationToken: `${await AsyncStorage.getItem("notificationToken")}`,
+          NotificationToken: `${await AsyncStorage.getItem(
+            "notificationToken"
+          )}`,
         },
       }
     );
@@ -362,7 +360,7 @@ export function ExpenseContextProvider(props) {
         categoryStatistics,
         expenses,
         statistics,
-        monthStatistics,
+        monthStatistic,
       }}
     >
       {props.children}

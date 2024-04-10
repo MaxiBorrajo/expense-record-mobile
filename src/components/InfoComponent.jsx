@@ -41,28 +41,19 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
     getMainInformation();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      if (route.params?.actionCompleted) {
-        getMainInformation();
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route.params?.actionCompleted]);
-
   return (
     <View
       style={{
-        paddingTop: 60,
-        paddingBottom: 30,
-        paddingHorizontal: 30,
         width: "100%",
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
-        rowGap: 30,
         elevation: 3,
+        height: "35%",
+        justifyContent: "center",
+        alignItems: "center",
+        rowGap: 35,
+        paddingTop: 10,
       }}
     >
       <View
@@ -71,6 +62,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
+          paddingHorizontal: 30,
         }}
       >
         <Text
@@ -177,7 +169,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              columnGap: 10,
+              columnGap: 7,
               flexDirection: "row",
             }}
           >
@@ -229,7 +221,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              columnGap: 10,
+              columnGap: 7,
               flexDirection: "row",
             }}
           >
@@ -241,7 +233,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 17,
+                fontSize: 15,
                 color: colors.text,
               }}
             >

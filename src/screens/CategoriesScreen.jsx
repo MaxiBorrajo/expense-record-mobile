@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { SearchBar } from "@rneui/themed";
@@ -22,6 +23,12 @@ export default function CategoriesScreen({ navigation }) {
   const searchBar = useRef(null);
   const [keyword, setKeyword] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getCategories(keyword);
+    setRefreshing(false);
+  };
 
   const cancelSearch = () => {
     if (searchBar.current) {
@@ -31,7 +38,7 @@ export default function CategoriesScreen({ navigation }) {
   };
 
   useEffect(() => {
-    getCategories(keyword)
+    getCategories(keyword);
   }, [keyword]);
 
   return (
@@ -45,8 +52,8 @@ export default function CategoriesScreen({ navigation }) {
           position: "relative",
           paddingHorizontal: 20,
           minHeight: Dimensions.get("window").height,
-          justifyContent:'center',
-          paddingTop:90
+          justifyContent: "center",
+          paddingTop: 90,
         }}
       >
         <GoBackButtonComponent />
@@ -100,6 +107,18 @@ export default function CategoriesScreen({ navigation }) {
         />
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <FlatList
+        showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              progressBackgroundColor={colors.background}
+              tintColor={colors.attention}
+              titleColor={colors.attention}
+              colors={[colors.attention]}
+            />
+          }
           style={{ height: "100%" }}
           contentContainerStyle={{
             paddingBottom: 50,
@@ -108,10 +127,7 @@ export default function CategoriesScreen({ navigation }) {
           data={categories}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
-            <CategoryComponent
-              item={item}
-              setErrorMessage={setErrorMessage}
-            />
+            <CategoryComponent item={item} setErrorMessage={setErrorMessage} />
           )}
           ListEmptyComponent={() =>
             !categories ? (
@@ -119,8 +135,8 @@ export default function CategoriesScreen({ navigation }) {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: '100%',
-                  minWidth: '100%'
+                  minHeight: "100%",
+                  minWidth: "100%",
                 }}
               >
                 <ActivityIndicator color={colors.attention} size="large" />
@@ -130,8 +146,8 @@ export default function CategoriesScreen({ navigation }) {
                 style={{
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: '100%',
-                  minWidth: '100%'
+                  minHeight: "100%",
+                  minWidth: "100%",
                 }}
               >
                 <Text

@@ -191,8 +191,10 @@ const translations = {
     Fri: "Fri",
     Sat: "Sat",
     Sun: "Sun",
+    budgetHelp: 'Savings are not taken into account as expenses'
   },
   es: {
+    budgetHelp: 'Los ahorros no son tenidos en cuenta como gastos',
     Mon: "Lun",
     Tues: "Mar",
     Wed: "Mier",

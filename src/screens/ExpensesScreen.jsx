@@ -5,8 +5,9 @@ import {
   SafeAreaView,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
-import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
 import { Icon, SearchBar } from "@rneui/themed";
 import { ExpenseContext } from "../context/ExpenseContext";
@@ -88,7 +89,7 @@ export default function ExpensesScreen() {
     setType(null);
   };
 
-  function changeExpenses() {
+  async function changeExpenses() {
     const filters = [
       {
         filter: "year",
@@ -116,8 +117,15 @@ export default function ExpensesScreen() {
       },
     ];
 
-    getExpenses(sort, order, filters);
+    await getExpenses(sort, order, filters);
   }
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await changeExpenses();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     changeExpenses();
@@ -591,6 +599,18 @@ export default function ExpensesScreen() {
           }}
         />
         <FlatList
+        showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              progressBackgroundColor={colors.background}
+              tintColor={colors.attention}
+              titleColor={colors.attention}
+              colors={[colors.attention]}
+            />
+          }
           style={{
             height: "100%",
           }}

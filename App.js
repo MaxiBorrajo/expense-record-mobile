@@ -81,7 +81,6 @@ export default function App() {
       messaging()
         .getToken()
         .then((token) => {
-          console.log(token);
           AsyncStorage.setItem("notificationToken", token);
         });
     } else {
@@ -118,7 +117,6 @@ export default function App() {
         },
         trigger: null,
       });
-      //Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
     });
 
     return unsubscribe;
