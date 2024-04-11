@@ -22,7 +22,11 @@ export function ExpenseContextProvider(props) {
   const { getSavingGoal } = useContext(SavingGoalContext);
 
   const reloadInformation = async () => {
-    await getExpenses(null, null, [
+    getLastExpenses();
+    getMonthLoss();
+    getMonthIncome();
+    getBalance();
+    getExpenses(null, null, [
       {
         filter: "month",
         value: new Date().getMonth(),
@@ -32,10 +36,6 @@ export function ExpenseContextProvider(props) {
         value: new Date().getFullYear(),
       },
     ]);
-    await getLastExpenses();
-    await getMonthLoss();
-    await getMonthIncome();
-    await getBalance();
     getMonthExpenses();
     getStatistics();
     getStatisticsByCategory();
@@ -174,31 +174,6 @@ export function ExpenseContextProvider(props) {
     return result.data.resource;
   }
 
-  // const getMonths = (month) => {
-  //   const currentIndex = month ? month : new Date().getMonth();
-
-  //   if (currentIndex >= 0 && currentIndex <= 5) {
-  //     return months.map((month) => month.slice(0, 3)).slice(0, 6);
-  //   } else {
-  //     return months.map((month) => month.slice(0, 3)).slice(6);
-  //   }
-  // };
-
-  // const getMonthsData = (data, month) => {
-  //   const currentIndex = month !== undefined ? month : new Date().getMonth();
-
-  //   const monthlyTotals = Array.from({ length: 12 }, (_, i) => {
-  //     const monthData = data[0].months.find((item) => item.month === i + 1);
-  //     return monthData ? monthData.total.toFixed(2) : 0;
-  //   });
-
-  //   if (currentIndex >= 0 && currentIndex <= 5) {
-  //     return monthlyTotals.slice(0, 6);
-  //   } else {
-  //     return monthlyTotals.slice(6);
-  //   }
-  // };
-
   async function getStatistics(
     year = new Date().getFullYear(),
     month = new Date().getMonth()
@@ -297,7 +272,7 @@ export function ExpenseContextProvider(props) {
         },
       }
     );
-    await reloadInformation();
+    reloadInformation();
     return result.data.resource;
   }
 
@@ -314,7 +289,7 @@ export function ExpenseContextProvider(props) {
         },
       }
     );
-    await reloadInformation();
+    reloadInformation();
     return result.data.resource;
   }
 
@@ -330,7 +305,7 @@ export function ExpenseContextProvider(props) {
         },
       }
     );
-    await reloadInformation();
+    reloadInformation();
     return result.data.message;
   }
 

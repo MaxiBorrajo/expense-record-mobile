@@ -19,7 +19,7 @@ export default function CreateCategoryScreen({ navigation }) {
   });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [actualIcon, setActualIcon] = useState(icons[index]?.icon);
+  const [actualIcon, setActualIcon] = useState( icons[index]?.icon);
 
   const submitCreateCategory = async (form) => {
     try {
@@ -27,7 +27,7 @@ export default function CreateCategoryScreen({ navigation }) {
       setLoading(true);
       await createCategory(form);
       setLoading(false);
-      navigation.navigate("Categories", );
+      navigation.navigate("Categories");
     } catch (error) {
       setLoading(false);
       if (error?.response?.data) {
@@ -57,10 +57,6 @@ export default function CreateCategoryScreen({ navigation }) {
       icon_id: icons ? icons[i]._id : null,
     }));
   };
-
-  useEffect(() => {
-    getIcons();
-  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -94,11 +90,11 @@ export default function CreateCategoryScreen({ navigation }) {
         >
           {(form) => (
             <View style={{ rowGap: 20 }}>
-              <IconCarouselComponent
+              {actualIcon && <IconCarouselComponent
                 icon={actualIcon}
                 next={next}
                 prev={prev}
-              />
+              />}
               <Foect.Control name="category_name" required>
                 {(control) => (
                   <View style={{ rowGap: 10, marginTop: 10 }}>

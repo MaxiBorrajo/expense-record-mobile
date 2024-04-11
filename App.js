@@ -41,10 +41,9 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
-import { StatusBar, Alert, Platform } from "react-native";
+import { StatusBar, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
 const Stack = createNativeStackNavigator();
 
 Notifications.setNotificationHandler({
@@ -74,9 +73,11 @@ export default function App() {
     AsyncStorage.getItem("theme").then((theme) => {
       setIsDarkTheme(!theme ? isDarkTheme : theme === "dark");
     });
+
     AsyncStorage.getItem("token").then((token) => {
       setAuth(token ? token : null);
     });
+
     if (requestUserPermission()) {
       messaging()
         .getToken()
@@ -87,28 +88,6 @@ export default function App() {
       console.log("Permission not granted", authStatus);
     }
 
-    messaging()
-      .getInitialNotification()
-      .then(async (remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            "Notification caused app to open from quit state:",
-            remoteMessage
-          );
-        }
-      });
-
-    messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        "Notification caused app to open from background state:",
-        remoteMessage.notification
-      );
-    });
-
-    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-      console.log("Notification handle in background:", remoteMessage);
-    });
-
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       Notifications.scheduleNotificationAsync({
         content: {
@@ -117,36 +96,26 @@ export default function App() {
         },
         trigger: null,
       });
+
+      setNotification(notification);
     });
 
     return unsubscribe;
   }, []);
 
-  const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
-  const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
-      });
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
       });
 
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
-      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
 
@@ -175,7 +144,9 @@ export default function App() {
         translucent
       />
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <AuthContext.Provider value={{ auth, setAuth }}>
+        <AuthContext.Provider
+          value={{ auth, setAuth, notification, setNotification }}
+        >
           <NotificationContextProvider>
             <UserContextProvider>
               <SavingGoalContextProvider>
@@ -279,43 +250,4 @@ export default function App() {
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
-}
-
-async function registerForPushNotificationsAsync() {
-  let token;
-
-  if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "default",
-      importance: Notifications.AndroidImportance.MAX,
-      vibrationPattern: [0, 250, 250, 250],
-      lightColor: "#FF231F7C",
-    });
-  }
-
-  if (Device.isDevice) {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-    if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
-      return;
-    }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "your-project-id",
-      })
-    ).data;
-    console.log(token);
-  } else {
-    alert("Must use physical device for Push Notifications");
-  }
-
-  return token;
 }

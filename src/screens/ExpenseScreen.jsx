@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   RefreshControl,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useEffect, useState, useContext } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
@@ -23,6 +24,11 @@ import i18n from "../utils/i18n";
 import WarningDialogComponent from "../components/WarningDialogComponent";
 import { Switch } from "react-native-switch";
 import { getDaysOfTheMonth } from "../utils/utils";
+import {
+  Collapse,
+  CollapseHeader,
+  CollapseBody,
+} from "accordion-collapse-react-native";
 
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0) {
@@ -50,6 +56,7 @@ export default function ExpenseScreen({ route, navigation }) {
   );
   const [repeat, setRepeat] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
+  const [isCollapsedOpen, setIsCollapsedOpen] = useState(false);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -217,173 +224,104 @@ export default function ExpenseScreen({ route, navigation }) {
       {!expense || !categories ? (
         <LoadingScreen />
       ) : (
-        <ScrollView
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              progressBackgroundColor={colors.background}
-              tintColor={colors.attention}
-              titleColor={colors.attention}
-              colors={[colors.attention]}
-            />
-          }
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: colors.background,
-              color: colors.text,
-              paddingHorizontal: 30,
-              rowGap: 20,
-              justifyContent: "center",
-              minHeight: Dimensions.get("window").height,
-              position: "relative",
-              paddingTop: isAutomaticallyCreated ? 120 : 0,
-              paddingBottom: isAutomaticallyCreated ? 50 : 0,
-            }}
+        <KeyboardAvoidingView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                progressBackgroundColor={colors.background}
+                tintColor={colors.attention}
+                titleColor={colors.attention}
+                colors={[colors.attention]}
+              />
+            }
           >
-            <GoBackButtonComponent />
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 23,
-                    fontFamily: "Poppins_500Medium",
-                    color: colors.text,
-                  }}
-                >
-                  {i18n.t("details")}
-                </Text>
-                <Icon
-                  name="trash-alt"
-                  type="font-awesome-5"
-                  iconStyle={{ fontSize: 20, color: "#ed2139" }}
-                  onPress={toggleDialog}
-                />
-              </View>
-              {expense ? (
-                <Text
-                  style={{
-                    color: colors.text,
-                    fontSize: 12,
-                    fontFamily: "Poppins_300Light",
-                  }}
-                >
-                  {formatDate(expense.createdAt)}
-                </Text>
-              ) : null}
-            </View>
-            {errorMessage ? (
-              <ErrorComponent errorMessage={errorMessage} />
-            ) : null}
-            <Foect.Form
-              defaultValue={{
-                title: expense?.title,
-                amount: +expense?.amount?.toFixed(2),
-                description: expense?.description,
-                category_id: expense?.category_id,
-                isAutomaticallyCreated: expense?.isAutomaticallyCreated,
-                cron: expense.cron ? repeat : 1,
-              }}
-              onValidSubmit={async (model) => {
-                model.category_id = model.category_id?._id
-                  ? model.category_id._id
-                  : model.category_id;
-                await updateExpense({ ...model });
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: colors.background,
+                color: colors.text,
+                paddingHorizontal: 30,
+                rowGap: 20,
+                justifyContent: "center",
+                minHeight: Dimensions.get("window").height,
+                position: "relative",
+                paddingTop: isAutomaticallyCreated ? 130 : 0,
+                paddingBottom: isAutomaticallyCreated ? 50 : 0,
               }}
             >
-              {(form) => (
-                <View>
-                  <Foect.Control name={"title"} required>
-                    {(control) => (
-                      <View
-                        style={{
-                          rowGap: 10,
-                          marginBottom: control.isInvalid ? 10 : 20,
-                        }}
-                      >
-                        <View
-                          style={{
-                            width: "100%",
-                            alignItems: "center",
-                            backgroundColor: colors.card,
-                            paddingVertical: 10,
-                            paddingHorizontal: 15,
-                            borderRadius: 5,
-                            elevation: 3,
-                          }}
-                        >
-                          <TextInput
-                            style={{
-                              color: colors.text,
-                              fontFamily: "Poppins_300Light",
-                              fontSize: 14,
-                              width: "100%",
-                              paddingRight: 15,
-                            }}
-                            onChangeText={(text) => {
-                              control.onChange(text);
-                              control.markAsTouched();
-                            }}
-                            value={control.value}
-                            placeholder={i18n.t("writeExpenseTitle")}
-                            placeholderTextColor={colors.text}
-                            name="title"
-                          />
-                        </View>
-                        {control.isTouched &&
-                          control.isInvalid &&
-                          control.errors.required && (
-                            <Text
-                              style={{
-                                color: "#ed2139",
-                                fontSize: 12,
-                                fontFamily: "Poppins_500Medium",
-                              }}
-                            >
-                              {i18n.t("expenseTitleError")}
-                            </Text>
-                          )}
-                      </View>
-                    )}
-                  </Foect.Control>
-                  <Foect.Control
-                    name="amount"
-                    required
-                    callback={(value, control) => {
-                      return +value != 0;
+              <GoBackButtonComponent />
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 23,
+                      fontFamily: "Poppins_500Medium",
+                      color: colors.text,
                     }}
                   >
-                    {(control) => (
-                      <View
-                        style={{
-                          rowGap: 10,
-                          marginBottom: control.isInvalid ? 10 : 20,
-                        }}
-                      >
+                    {i18n.t("details")}
+                  </Text>
+                  <Icon
+                    name="trash-alt"
+                    type="font-awesome-5"
+                    iconStyle={{ fontSize: 20, color: "#ed2139" }}
+                    onPress={toggleDialog}
+                  />
+                </View>
+                {expense ? (
+                  <Text
+                    style={{
+                      color: colors.text,
+                      fontSize: 12,
+                      fontFamily: "Poppins_300Light",
+                    }}
+                  >
+                    {formatDate(expense.createdAt)}
+                  </Text>
+                ) : null}
+              </View>
+              {errorMessage ? (
+                <ErrorComponent errorMessage={errorMessage} />
+              ) : null}
+              <Foect.Form
+                defaultValue={{
+                  title: expense?.title,
+                  amount: +expense?.amount?.toFixed(2),
+                  description: expense?.description,
+                  category_id: expense?.category_id,
+                  isAutomaticallyCreated: expense?.isAutomaticallyCreated,
+                  cron: expense.cron ? repeat : 1,
+                }}
+                onValidSubmit={async (model) => {
+                  model.category_id = model.category_id?._id
+                    ? model.category_id._id
+                    : model.category_id;
+                  await updateExpense({ ...model });
+                }}
+              >
+                {(form) => (
+                  <View>
+                    <Foect.Control name={"title"} required>
+                      {(control) => (
                         <View
                           style={{
-                            flexDirection: "row",
-                            width: "100%",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            columnGap: 10,
+                            rowGap: 10,
+                            marginBottom: control.isInvalid ? 10 : 20,
                           }}
                         >
                           <View
                             style={{
-                              flexDirection: "row",
                               width: "100%",
                               alignItems: "center",
-                              columnGap: 3,
                               backgroundColor: colors.card,
                               paddingVertical: 10,
                               paddingHorizontal: 15,
@@ -391,463 +329,587 @@ export default function ExpenseScreen({ route, navigation }) {
                               elevation: 3,
                             }}
                           >
-                            <Text
-                              style={{
-                                color: colors.text,
-                                fontFamily: "Poppins_500Medium",
-                                fontSize: 15,
-                              }}
-                            >
-                              $
-                            </Text>
                             <TextInput
                               style={{
                                 color: colors.text,
                                 fontFamily: "Poppins_300Light",
                                 fontSize: 14,
                                 width: "100%",
-                                paddingRight: 20,
+                                paddingRight: 15,
                               }}
                               onChangeText={(text) => {
-                                control.onChange(+text);
+                                control.onChange(text);
                                 control.markAsTouched();
                               }}
-                              value={control.value.toString()}
-                              keyboardType="numeric"
-                              name="amount"
+                              value={control.value}
+                              placeholder={i18n.t("writeExpenseTitle")}
+                              placeholderTextColor={colors.text}
+                              name="title"
                             />
                           </View>
-                        </View>
-                        {control.isTouched &&
-                          control.isInvalid &&
-                          control.errors.required && (
-                            <Text
-                              style={{
-                                color: "#ed2139",
-                                fontSize: 12,
-                                fontFamily: "Poppins_500Medium",
-                              }}
-                            >
-                              {i18n.t("expenseAmountError")}
-                            </Text>
-                          )}
-                        {control.isTouched &&
-                          control.isInvalid &&
-                          control.errors.callback && (
-                            <Text
-                              style={{
-                                color: "#ed2139",
-                                fontSize: 12,
-                                fontFamily: "Poppins_500Medium",
-                              }}
-                            >
-                              {i18n.t("expenseZeroError")}
-                            </Text>
-                          )}
-                      </View>
-                    )}
-                  </Foect.Control>
-                  <Foect.Control name="description">
-                    {(control) => (
-                      <TextInput
-                        multiline
-                        numberOfLines={5}
-                        placeholderTextColor={colors.text}
-                        style={{
-                          width: "100%",
-                          color: colors.text,
-                          fontFamily: "Poppins_300Light",
-                          fontSize: 14,
-                          paddingVertical: 10,
-                          paddingHorizontal: 14,
-                          backgroundColor: colors.card,
-                          borderRadius: 5,
-                          elevation: 3,
-                          textAlignVertical: "top",
-                          marginBottom: control.isValid ? 20 : 0,
-                        }}
-                        onChangeText={(value) => {
-                          control.onChange(value);
-                        }}
-                        value={control.value}
-                        placeholder={i18n.t("descriptionExpense")}
-                        name="description"
-                      />
-                    )}
-                  </Foect.Control>
-                  <Foect.Control name="category_id">
-                    {(control) => (
-                      <SelectDropdown
-                        data={categories}
-                        onSelect={(selectedItem) => {
-                          control.onChange(selectedItem._id);
-                        }}
-                        buttonTextAfterSelection={(selectedItem) => {
-                          return selectedItem?.user_id
-                            ? selectedItem?.category_name
-                            : i18n.t(selectedItem?.category_name);
-                        }}
-                        rowTextForSelection={(item) => {
-                          return item?.user_id
-                            ? item?.category_name
-                            : i18n.t(item?.category_name);
-                        }}
-                        defaultButtonText={i18n.t("selectCategory")}
-                        defaultValue={control.value}
-                        buttonStyle={{
-                          borderRadius: 5,
-                          backgroundColor: colors.card,
-                          color: colors.text,
-                          fontSize: 14,
-                          elevation: 3,
-                          width: "100%",
-                          marginBottom: 20,
-                        }}
-                        buttonTextStyle={{
-                          fontFamily: "Poppins_300Light",
-                          color: colors.text,
-                          fontSize: 14,
-                          elevation: 3,
-                          textAlign: "left",
-                          paddingLeft: 1,
-                        }}
-                        rowTextStyle={{
-                          fontFamily: "Poppins_300Light",
-                          fontSize: 14,
-                          elevation: 3,
-                        }}
-                      />
-                    )}
-                  </Foect.Control>
-                  <View
-                    style={{
-                      backgroundColor: colors.card,
-                      borderRadius: 5,
-                      elevation: 3,
-                      marginBottom: 20,
-                      paddingBottom: 15,
-                    }}
-                  >
-                    <Foect.Control name="isAutomaticallyCreated">
-                      {(control) => (
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            width: "100%",
-                            paddingHorizontal: 15,
-                            paddingTop: 15,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              fontFamily: "Poppins_300Light",
-                              color: colors.text,
-                            }}
-                          >
-                            {i18n.t("repeatEvery")}
-                          </Text>
-                          <Switch
-                            circleSize={25}
-                            activeText={""}
-                            inActiveText={""}
-                            backgroundActive={colors.attention}
-                            backgroundInactive={"gray"}
-                            value={Boolean(control.value)}
-                            onValueChange={(value) => {
-                              control.onChange(value);
-                              setIsAutomaticallyCreated((prev) => value);
-                            }}
-                            barHeight={28}
-                            switchLeftPx={3}
-                            switchRightPx={3}
-                          />
+                          {control.isTouched &&
+                            control.isInvalid &&
+                            control.errors.required && (
+                              <Text
+                                style={{
+                                  color: "#ed2139",
+                                  fontSize: 12,
+                                  fontFamily: "Poppins_500Medium",
+                                }}
+                              >
+                                {i18n.t("expenseTitleError")}
+                              </Text>
+                            )}
                         </View>
                       )}
                     </Foect.Control>
-                    {isAutomaticallyCreated ? (
-                      <Foect.Control
-                        name="cron"
-                        required={isAutomaticallyCreated}
-                        greaterThanZero
-                      >
-                        {(control) => (
+                    <Foect.Control
+                      name="amount"
+                      required
+                      callback={(value, control) => {
+                        return +value != 0;
+                      }}
+                    >
+                      {(control) => (
+                        <View
+                          style={{
+                            rowGap: 10,
+                            marginBottom: control.isInvalid ? 10 : 20,
+                          }}
+                        >
                           <View
                             style={{
-                              rowGap: 10,
-                              marginBottom:
-                                frequency === 2 || frequency === 3 ? 10 : 0,
+                              flexDirection: "row",
+                              width: "100%",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              columnGap: 10,
                             }}
                           >
                             <View
                               style={{
                                 flexDirection: "row",
+                                width: "100%",
                                 alignItems: "center",
-                                padding: 15,
-                                justifyContent: "space-between",
-                                flexWrap: "wrap",
-                                rowGap: 10,
+                                columnGap: 3,
+                                backgroundColor: colors.card,
+                                paddingVertical: 10,
+                                paddingHorizontal: 15,
+                                borderRadius: 5,
+                                elevation: 3,
                               }}
                             >
-                              <View
+                              <Text
                                 style={{
-                                  backgroundColor: colors.softCard,
-                                  paddingVertical: 7,
-                                  borderRadius: 5,
-                                  elevation: 3,
-                                  paddingHorizontal: 15,
+                                  color: colors.text,
+                                  fontFamily: "Poppins_500Medium",
+                                  fontSize: 15,
                                 }}
                               >
-                                <TextInput
-                                  style={{
-                                    color: colors.text,
-                                    fontFamily: "Poppins_300Light",
-                                    fontSize: 15,
-                                    textAlign: "right",
-                                  }}
-                                  onChangeText={(value) => {
-                                    control.onChange(value <= 0 ? 1 : value);
-                                    control.markAsTouched();
-                                  }}
-                                  value={control.value.toString()}
-                                  keyboardType="numeric"
-                                />
-                              </View>
-                              <Badge
-                                textStyle={{
+                                $
+                              </Text>
+                              <TextInput
+                                style={{
+                                  color: colors.text,
                                   fontFamily: "Poppins_300Light",
-                                  fontSize: 12,
+                                  fontSize: 14,
+                                  width: "100%",
+                                  paddingRight: 20,
                                 }}
-                                value={i18n.t("days")}
-                                onPress={() => {
-                                  setFrequency((prev) => 1);
+                                onChangeText={(text) => {
+                                  control.onChange(+text);
+                                  control.markAsTouched();
                                 }}
-                                badgeStyle={{
-                                  backgroundColor:
-                                    frequency === 1
-                                      ? colors.attention
-                                      : colors.disabledBackground,
-                                  height: 25,
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  paddingHorizontal: 5,
-                                  borderRadius: 50,
-                                  borderWidth: 0,
-                                }}
-                              />
-                              <Badge
-                                textStyle={{
-                                  fontFamily: "Poppins_300Light",
-                                  fontSize: 12,
-                                }}
-                                value={i18n.t("weeks")}
-                                onPress={() => {
-                                  setFrequency((prev) => 2);
-                                }}
-                                badgeStyle={{
-                                  backgroundColor:
-                                    frequency === 2
-                                      ? colors.attention
-                                      : colors.disabledBackground,
-                                  height: 25,
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  paddingHorizontal: 5,
-                                  borderRadius: 50,
-                                  borderWidth: 0,
-                                }}
-                              />
-                              <Badge
-                                textStyle={{
-                                  fontFamily: "Poppins_300Light",
-                                  fontSize: 12,
-                                }}
-                                containerStyle={{}}
-                                value={i18n.t("months")}
-                                onPress={() => {
-                                  setFrequency((prev) => 3);
-                                }}
-                                badgeStyle={{
-                                  backgroundColor:
-                                    frequency === 3
-                                      ? colors.attention
-                                      : colors.disabledBackground,
-                                  height: 25,
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  paddingHorizontal: 5,
-                                  borderRadius: 50,
-                                  borderWidth: 0,
-                                }}
-                              />
-                              <Badge
-                                textStyle={{
-                                  fontFamily: "Poppins_300Light",
-                                  fontSize: 12,
-                                }}
-                                containerStyle={{ borderWidth: 0 }}
-                                value={i18n.t("years")}
-                                onPress={() => {
-                                  setFrequency((prev) => 4);
-                                }}
-                                badgeStyle={{
-                                  backgroundColor:
-                                    frequency === 4
-                                      ? colors.attention
-                                      : colors.disabledBackground,
-                                  height: 25,
-                                  alignItems: "center",
-                                  justifyContent: "center",
-                                  paddingHorizontal: 5,
-                                  borderRadius: 50,
-                                  borderWidth: 0,
-                                }}
+                                value={control.value.toString()}
+                                keyboardType="numeric"
+                                name="amount"
                               />
                             </View>
-                            {frequency === 3 ? (
+                          </View>
+                          {control.isTouched &&
+                            control.isInvalid &&
+                            control.errors.required && (
+                              <Text
+                                style={{
+                                  color: "#ed2139",
+                                  fontSize: 12,
+                                  fontFamily: "Poppins_500Medium",
+                                }}
+                              >
+                                {i18n.t("expenseAmountError")}
+                              </Text>
+                            )}
+                          {control.isTouched &&
+                            control.isInvalid &&
+                            control.errors.callback && (
+                              <Text
+                                style={{
+                                  color: "#ed2139",
+                                  fontSize: 12,
+                                  fontFamily: "Poppins_500Medium",
+                                }}
+                              >
+                                {i18n.t("expenseZeroError")}
+                              </Text>
+                            )}
+                        </View>
+                      )}
+                    </Foect.Control>
+                    <ButtonComponent
+                      label={i18n.t("save")}
+                      loading={loading}
+                      action={() => form.submit()}
+                      disabled={form.isInvalid}
+                    />
+                    <Collapse
+                      isExpanded={isCollapsedOpen}
+                      onToggle={() => setIsCollapsedOpen(!isCollapsedOpen)}
+                      style={{ paddingTop: 20 }}
+                    >
+                      <CollapseHeader>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            borderRadius: 5,
+                            backgroundColor: colors.card,
+                            elevation: 3,
+                            paddingVertical: 15,
+                            paddingHorizontal: 20,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              fontFamily: "Poppins_300Light",
+                              color: colors.text,
+                            }}
+                          >
+                            {i18n.t("moreOptions")}
+                          </Text>
+                          <Icon
+                            name={
+                              isCollapsedOpen ? "chevron-up" : "chevron-down"
+                            }
+                            type="font-awesome-5"
+                            iconStyle={{ fontSize: 15, color: colors.text }}
+                          ></Icon>
+                        </View>
+                      </CollapseHeader>
+                      <CollapseBody style={{ rowGap: 20, paddingTop: 20 }}>
+                        <Foect.Control name="category_id">
+                          {(control) => (
+                            <SelectDropdown
+                              data={categories}
+                              onSelect={(selectedItem) => {
+                                control.onChange(selectedItem._id);
+                              }}
+                              buttonTextAfterSelection={(selectedItem) => {
+                                return selectedItem?.user_id
+                                  ? selectedItem?.category_name
+                                  : i18n.t(selectedItem?.category_name);
+                              }}
+                              rowTextForSelection={(item) => {
+                                return item?.user_id
+                                  ? item?.category_name
+                                  : i18n.t(item?.category_name);
+                              }}
+                              defaultButtonText={i18n.t("selectCategory")}
+                              defaultValue={control.value}
+                              buttonStyle={{
+                                borderRadius: 5,
+                                backgroundColor: colors.card,
+                                color: colors.text,
+                                fontSize: 14,
+                                elevation: 3,
+                                width: "100%",
+                              }}
+                              buttonTextStyle={{
+                                fontFamily: "Poppins_300Light",
+                                color: colors.text,
+                                fontSize: 14,
+                                elevation: 3,
+                                textAlign: "left",
+                                paddingLeft: 1,
+                              }}
+                              rowTextStyle={{
+                                fontFamily: "Poppins_300Light",
+                                fontSize: 14,
+                                elevation: 3,
+                              }}
+                            />
+                          )}
+                        </Foect.Control>
+                        <Foect.Control name="description">
+                          {(control) => (
+                            <TextInput
+                              multiline
+                              numberOfLines={5}
+                              placeholderTextColor={colors.text}
+                              style={{
+                                width: "100%",
+                                color: colors.text,
+                                fontFamily: "Poppins_300Light",
+                                fontSize: 14,
+                                paddingVertical: 10,
+                                paddingHorizontal: 14,
+                                backgroundColor: colors.card,
+                                borderRadius: 5,
+                                elevation: 3,
+                                textAlignVertical: "top",
+                              }}
+                              onChangeText={(value) => {
+                                control.onChange(value);
+                              }}
+                              value={control.value}
+                              placeholder={i18n.t("descriptionExpense")}
+                              name="description"
+                            />
+                          )}
+                        </Foect.Control>
+                        <View
+                          style={{
+                            backgroundColor: colors.card,
+                            borderRadius: 5,
+                            elevation: 3,
+                            marginBottom: 20,
+                            paddingBottom: 15,
+                          }}
+                        >
+                          <Foect.Control name="isAutomaticallyCreated">
+                            {(control) => (
                               <View
                                 style={{
                                   flexDirection: "row",
-                                  width: "100%",
                                   alignItems: "center",
-                                  flexWrap: "wrap",
-                                  rowGap: 10,
-                                  justifyContent: "center",
-                                  columnGap: 10,
+                                  justifyContent: "space-between",
+                                  width: "100%",
                                   paddingHorizontal: 15,
+                                  paddingTop: 15,
                                 }}
                               >
-                                {getDaysOfTheMonth(
-                                  new Date().getFullYear(),
-                                  new Date().getMonth()
-                                ).map((element, index) => (
-                                  <Badge
-                                    key={index}
-                                    textStyle={{
-                                      fontFamily: "Poppins_300Light",
-                                      fontSize: 15,
-                                    }}
-                                    containerStyle={{ borderWidth: 0 }}
-                                    value={element}
-                                    onPress={() => {
-                                      if (
-                                        !selectedMonthDays.includes(element)
-                                      ) {
-                                        setSelectedMonthDays((prev) => [
-                                          ...prev,
-                                          element,
-                                        ]);
-                                      } else if (selectedMonthDays.length > 1) {
-                                        setSelectedMonthDays((prev) =>
-                                          prev.filter(
-                                            (item) => item !== element
-                                          )
-                                        );
-                                      }
-                                    }}
-                                    badgeStyle={{
-                                      backgroundColor:
-                                        selectedMonthDays.includes(element)
-                                          ? colors.attention
-                                          : colors.disabledBackground,
-                                      height: 30,
-                                      width: 30,
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      borderRadius: 50,
-                                      borderWidth: 0,
-                                    }}
-                                  />
-                                ))}
-                              </View>
-                            ) : null}
-                            {frequency === 2 ? (
-                              <View
-                                style={{
-                                  flexDirection: "row",
-                                  width: "100%",
-                                  alignItems: "center",
-                                  flexWrap: "wrap",
-                                  paddingHorizontal: 15,
-                                  rowGap: 10,
-                                  columnGap: 10,
-                                }}
-                              >
-                                {daysOfTheWeek.map((element, index) => (
-                                  <Badge
-                                    key={index}
-                                    textStyle={{
-                                      fontFamily: "Poppins_300Light",
-                                      fontSize: 12,
-                                    }}
-                                    containerStyle={{ borderWidth: 0 }}
-                                    value={element.name}
-                                    onPress={() => {
-                                      if (
-                                        !selectedDays.includes(element.value)
-                                      ) {
-                                        setSelectedDays((prev) => [
-                                          ...prev,
-                                          element.value,
-                                        ]);
-                                      } else if (selectedDays.length > 1) {
-                                        setSelectedDays((prev) =>
-                                          prev.filter(
-                                            (item) => item !== element.value
-                                          )
-                                        );
-                                      }
-                                    }}
-                                    badgeStyle={{
-                                      backgroundColor: selectedDays.includes(
-                                        element.value
-                                      )
-                                        ? colors.attention
-                                        : colors.disabledBackground,
-                                      height: 25,
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      paddingHorizontal: 5,
-                                      borderRadius: 50,
-                                      borderWidth: 0,
-                                    }}
-                                  />
-                                ))}
-                              </View>
-                            ) : null}
-                            {control.isTouched &&
-                              control.isInvalid &&
-                              control.errors.required && (
                                 <Text
                                   style={{
-                                    color: "#ed2139",
-                                    fontSize: 12,
-                                    fontFamily: "Poppins_500Medium",
-                                    paddingHorizontal: 20,
-                                    marginBottom: 10,
+                                    fontSize: 14,
+                                    fontFamily: "Poppins_300Light",
+                                    color: colors.text,
                                   }}
                                 >
-                                  {i18n.t("repeatRequiredError")}
+                                  {i18n.t("repeatEvery")}
                                 </Text>
+                                <Switch
+                                  circleSize={25}
+                                  activeText={""}
+                                  inActiveText={""}
+                                  backgroundActive={colors.attention}
+                                  backgroundInactive={"gray"}
+                                  value={Boolean(control.value)}
+                                  onValueChange={(value) => {
+                                    control.onChange(value);
+                                    setIsAutomaticallyCreated((prev) => value);
+                                  }}
+                                  barHeight={28}
+                                  switchLeftPx={3}
+                                  switchRightPx={3}
+                                />
+                              </View>
+                            )}
+                          </Foect.Control>
+                          {isAutomaticallyCreated ? (
+                            <Foect.Control
+                              name="cron"
+                              required={isAutomaticallyCreated}
+                              greaterThanZero
+                            >
+                              {(control) => (
+                                <View
+                                  style={{
+                                    rowGap: 10,
+                                    marginBottom:
+                                      frequency === 2 || frequency === 3
+                                        ? 10
+                                        : 0,
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      padding: 15,
+                                      justifyContent: "space-between",
+                                      flexWrap: "wrap",
+                                      rowGap: 10,
+                                    }}
+                                  >
+                                    <View
+                                      style={{
+                                        backgroundColor: colors.softCard,
+                                        paddingVertical: 7,
+                                        borderRadius: 5,
+                                        elevation: 3,
+                                        paddingHorizontal: 15,
+                                      }}
+                                    >
+                                      <TextInput
+                                        style={{
+                                          color: colors.text,
+                                          fontFamily: "Poppins_300Light",
+                                          fontSize: 15,
+                                          textAlign: "right",
+                                        }}
+                                        onChangeText={(value) => {
+                                          control.onChange(
+                                            value <= 0 ? 1 : value
+                                          );
+                                          control.markAsTouched();
+                                        }}
+                                        value={control.value.toString()}
+                                        keyboardType="numeric"
+                                      />
+                                    </View>
+                                    <Badge
+                                      textStyle={{
+                                        fontFamily: "Poppins_300Light",
+                                        fontSize: 12,
+                                      }}
+                                      value={i18n.t("days")}
+                                      onPress={() => {
+                                        setFrequency((prev) => 1);
+                                      }}
+                                      badgeStyle={{
+                                        backgroundColor:
+                                          frequency === 1
+                                            ? colors.attention
+                                            : colors.disabledBackground,
+                                        height: 25,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        paddingHorizontal: 5,
+                                        borderRadius: 50,
+                                        borderWidth: 0,
+                                      }}
+                                    />
+                                    <Badge
+                                      textStyle={{
+                                        fontFamily: "Poppins_300Light",
+                                        fontSize: 12,
+                                      }}
+                                      value={i18n.t("weeks")}
+                                      onPress={() => {
+                                        setFrequency((prev) => 2);
+                                      }}
+                                      badgeStyle={{
+                                        backgroundColor:
+                                          frequency === 2
+                                            ? colors.attention
+                                            : colors.disabledBackground,
+                                        height: 25,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        paddingHorizontal: 5,
+                                        borderRadius: 50,
+                                        borderWidth: 0,
+                                      }}
+                                    />
+                                    <Badge
+                                      textStyle={{
+                                        fontFamily: "Poppins_300Light",
+                                        fontSize: 12,
+                                      }}
+                                      containerStyle={{}}
+                                      value={i18n.t("months")}
+                                      onPress={() => {
+                                        setFrequency((prev) => 3);
+                                      }}
+                                      badgeStyle={{
+                                        backgroundColor:
+                                          frequency === 3
+                                            ? colors.attention
+                                            : colors.disabledBackground,
+                                        height: 25,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        paddingHorizontal: 5,
+                                        borderRadius: 50,
+                                        borderWidth: 0,
+                                      }}
+                                    />
+                                    <Badge
+                                      textStyle={{
+                                        fontFamily: "Poppins_300Light",
+                                        fontSize: 12,
+                                      }}
+                                      containerStyle={{ borderWidth: 0 }}
+                                      value={i18n.t("years")}
+                                      onPress={() => {
+                                        setFrequency((prev) => 4);
+                                      }}
+                                      badgeStyle={{
+                                        backgroundColor:
+                                          frequency === 4
+                                            ? colors.attention
+                                            : colors.disabledBackground,
+                                        height: 25,
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        paddingHorizontal: 5,
+                                        borderRadius: 50,
+                                        borderWidth: 0,
+                                      }}
+                                    />
+                                  </View>
+                                  {frequency === 3 ? (
+                                    <View
+                                      style={{
+                                        flexDirection: "row",
+                                        width: "100%",
+                                        alignItems: "center",
+                                        flexWrap: "wrap",
+                                        rowGap: 10,
+                                        justifyContent: "center",
+                                        columnGap: 10,
+                                        paddingHorizontal: 15,
+                                      }}
+                                    >
+                                      {getDaysOfTheMonth(
+                                        new Date().getFullYear(),
+                                        new Date().getMonth()
+                                      ).map((element, index) => (
+                                        <Badge
+                                          key={index}
+                                          textStyle={{
+                                            fontFamily: "Poppins_300Light",
+                                            fontSize: 15,
+                                          }}
+                                          containerStyle={{ borderWidth: 0 }}
+                                          value={element}
+                                          onPress={() => {
+                                            if (
+                                              !selectedMonthDays.includes(
+                                                element
+                                              )
+                                            ) {
+                                              setSelectedMonthDays((prev) => [
+                                                ...prev,
+                                                element,
+                                              ]);
+                                            } else if (
+                                              selectedMonthDays.length > 1
+                                            ) {
+                                              setSelectedMonthDays((prev) =>
+                                                prev.filter(
+                                                  (item) => item !== element
+                                                )
+                                              );
+                                            }
+                                          }}
+                                          badgeStyle={{
+                                            backgroundColor:
+                                              selectedMonthDays.includes(
+                                                element
+                                              )
+                                                ? colors.attention
+                                                : colors.disabledBackground,
+                                            height: 30,
+                                            width: 30,
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            borderRadius: 50,
+                                            borderWidth: 0,
+                                          }}
+                                        />
+                                      ))}
+                                    </View>
+                                  ) : null}
+                                  {frequency === 2 ? (
+                                    <View
+                                      style={{
+                                        flexDirection: "row",
+                                        width: "100%",
+                                        alignItems: "center",
+                                        flexWrap: "wrap",
+                                        paddingHorizontal: 15,
+                                        rowGap: 10,
+                                        columnGap: 10,
+                                      }}
+                                    >
+                                      {daysOfTheWeek.map((element, index) => (
+                                        <Badge
+                                          key={index}
+                                          textStyle={{
+                                            fontFamily: "Poppins_300Light",
+                                            fontSize: 12,
+                                          }}
+                                          containerStyle={{ borderWidth: 0 }}
+                                          value={element.name}
+                                          onPress={() => {
+                                            if (
+                                              !selectedDays.includes(
+                                                element.value
+                                              )
+                                            ) {
+                                              setSelectedDays((prev) => [
+                                                ...prev,
+                                                element.value,
+                                              ]);
+                                            } else if (
+                                              selectedDays.length > 1
+                                            ) {
+                                              setSelectedDays((prev) =>
+                                                prev.filter(
+                                                  (item) =>
+                                                    item !== element.value
+                                                )
+                                              );
+                                            }
+                                          }}
+                                          badgeStyle={{
+                                            backgroundColor:
+                                              selectedDays.includes(
+                                                element.value
+                                              )
+                                                ? colors.attention
+                                                : colors.disabledBackground,
+                                            height: 25,
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            paddingHorizontal: 5,
+                                            borderRadius: 50,
+                                            borderWidth: 0,
+                                          }}
+                                        />
+                                      ))}
+                                    </View>
+                                  ) : null}
+                                  {control.isTouched &&
+                                    control.isInvalid &&
+                                    control.errors.required && (
+                                      <Text
+                                        style={{
+                                          color: "#ed2139",
+                                          fontSize: 12,
+                                          fontFamily: "Poppins_500Medium",
+                                          paddingHorizontal: 20,
+                                          marginBottom: 10,
+                                        }}
+                                      >
+                                        {i18n.t("repeatRequiredError")}
+                                      </Text>
+                                    )}
+                                </View>
                               )}
-                          </View>
-                        )}
-                      </Foect.Control>
-                    ) : null}
+                            </Foect.Control>
+                          ) : null}
+                        </View>
+                      </CollapseBody>
+                    </Collapse>
                   </View>
-                  <ButtonComponent
-                    label={i18n.t("save")}
-                    loading={loading}
-                    action={() => form.submit()}
-                    disabled={form.isInvalid}
-                  />
-                </View>
-              )}
-            </Foect.Form>
-          </View>
-        </ScrollView>
+                )}
+              </Foect.Form>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       )}
       <WarningDialogComponent
         dialogObject={{

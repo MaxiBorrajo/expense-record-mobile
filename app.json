@@ -52,13 +52,16 @@
         {
           "launchModeExperimental": "most-recent"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification_launcher.png.png",
+          "color": "#D7AD57",
+          "sounds": ["./assets/notification.wav"]
+        }
       ]
-    ],
-    "notification": {
-      "icon": "./assets/dark_icon.png",
-      "color": "#242528",
-      "sounds": ["./assets/notification.wav"]
-    }
+    ]
   },
   "owner": "maxiborrajo"
 }

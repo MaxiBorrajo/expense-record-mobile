@@ -18,6 +18,7 @@ export default function NotificationsScreen() {
   const { colors } = useTheme();
   const { handleNotifications, notifications } = useContext(UserContext);
   const [refreshing, setRefreshing] = useState(false);
+
   const onRefresh = async () => {
     setRefreshing(true);
     await handleNotifications();
@@ -77,7 +78,8 @@ export default function NotificationsScreen() {
           }
           contentContainerStyle={{
             paddingBottom: 50,
-            height: "100%",
+            height:
+              notifications && notifications.length === 0 ? "100%" : "auto",
           }}
           data={notifications}
           keyExtractor={(item) => item._id}

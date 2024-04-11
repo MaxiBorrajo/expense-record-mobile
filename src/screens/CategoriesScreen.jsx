@@ -19,7 +19,7 @@ import GoBackButtonComponent from "../components/GoBackButtonComponent";
 
 export default function CategoriesScreen({ navigation }) {
   const { colors } = useTheme();
-  const { getCategories, categories } = useContext(CategoryContext);
+  const { getCategories, categories, getIcons } = useContext(CategoryContext);
   const searchBar = useRef(null);
   const [keyword, setKeyword] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,6 +39,7 @@ export default function CategoriesScreen({ navigation }) {
 
   useEffect(() => {
     getCategories(keyword);
+    getIcons();
   }, [keyword]);
 
   return (
@@ -107,7 +108,7 @@ export default function CategoriesScreen({ navigation }) {
         />
         {errorMessage ? <ErrorComponent errorMessage={errorMessage} /> : null}
         <FlatList
-        showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           refreshing={refreshing}
           onRefresh={onRefresh}
           refreshControl={

@@ -104,6 +104,7 @@ export function UserContextProvider(props) {
     i18n.locale = newLanguage;
     setLanguage(newLanguage);
     await AsyncStorage.setItem("language", newLanguage);
+    updateCurrentUser({language: newLanguage})
   };
 
   const getUnreadNotifications = (notifications) => {

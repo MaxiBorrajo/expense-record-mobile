@@ -1,5 +1,5 @@
 import { View, SafeAreaView, Dimensions } from "react-native";
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import InfoComponent from "../components/InfoComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
 import { useTheme } from "@react-navigation/native";
@@ -16,9 +16,16 @@ export default function MainScreen({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const [opened, setOpened] = useState(false);
   const bottomSheetRef = useRef(null);
-  const { deleteCurrentUser } = useContext(UserContext);
+  const { deleteCurrentUser, handleNotifications } = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState(null);
-  const { setAuth } = useAuth();
+  const { setAuth, notification, setNotification } = useAuth();
+
+  useEffect(() => {
+    if (notification) {
+      handleNotifications();
+      setNotification(null);
+    }
+  }, [notification]);
 
   const toggleDialog = () => {
     setVisible(!visible);
@@ -57,14 +64,14 @@ export default function MainScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ maxHeight: Dimensions.get("window").height, }}>
+    <SafeAreaView style={{ maxHeight: Dimensions.get("window").height }}>
       <View
         style={{
           backgroundColor: colors.background,
           color: colors.text,
           alignItems: "center",
           position: "relative",
-          maxHeight:'100%',
+          maxHeight: "100%",
           rowGap: 5,
         }}
       >
