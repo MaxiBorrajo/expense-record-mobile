@@ -167,7 +167,7 @@ export default function CreateExpenseScreen({ navigation }) {
   }, []);
 
   return (
-    <KeyboardAvoidingView>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
           <View
@@ -180,8 +180,8 @@ export default function CreateExpenseScreen({ navigation }) {
               justifyContent: "center",
               minHeight: Dimensions.get("window").height,
               position: "relative",
-              paddingTop: isAutomaticallyCreated ? 100 : 0,
-              paddingBottom: isAutomaticallyCreated ? 120 : 0,
+              paddingTop: isCollapsedOpen ? 100 : 0,
+              paddingBottom: isCollapsedOpen ? 120 : 0,
             }}
           >
             <View
@@ -406,13 +406,13 @@ export default function CreateExpenseScreen({ navigation }) {
                             borderRadius: 5,
                             backgroundColor: colors.card,
                             elevation: 3,
-                            paddingVertical: 15,
-                            paddingHorizontal: 20,
+                            paddingVertical: 12,
+                            paddingHorizontal: 17,
                           }}
                         >
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 14,
                               fontFamily: "Poppins_300Light",
                               color: colors.text,
                             }}
@@ -478,40 +478,11 @@ export default function CreateExpenseScreen({ navigation }) {
                             />
                           )}
                         </Foect.Control>
-                        <Foect.Control name="description" ref={description}>
-                          {(control) => (
-                            <TextInput
-                              multiline
-                              numberOfLines={5}
-                              placeholderTextColor={colors.text}
-                              style={{
-                                width: "100%",
-                                color: colors.text,
-                                fontFamily: "Poppins_300Light",
-                                fontSize: 14,
-                                padding: 10,
-                                backgroundColor: colors.card,
-                                borderRadius: 5,
-                                elevation: 3,
-                                textAlignVertical: "top",
-                                paddingRight: 15,
-                              }}
-                              onChangeText={(value) => {
-                                control.onChange(value);
-                              }}
-                              value={control.value}
-                              placeholder={i18n.t("descriptionExpense")}
-                              name="description"
-                            />
-                          )}
-                        </Foect.Control>
-
                         <View
                           style={{
                             backgroundColor: colors.card,
                             borderRadius: 5,
                             elevation: 3,
-                            marginBottom: 20,
                             paddingBottom: 15,
                           }}
                         >
@@ -540,7 +511,7 @@ export default function CreateExpenseScreen({ navigation }) {
                                   {i18n.t("repeatEvery")}
                                 </Text>
                                 <Switch
-                                  circleSize={25}
+                                  circleSize={20}
                                   activeText={""}
                                   inActiveText={""}
                                   backgroundActive={colors.attention}
@@ -550,7 +521,7 @@ export default function CreateExpenseScreen({ navigation }) {
                                     control.onChange(value);
                                     setIsAutomaticallyCreated((prev) => value);
                                   }}
-                                  barHeight={28}
+                                  barHeight={22}
                                   switchLeftPx={3}
                                   switchRightPx={3}
                                 />
@@ -845,6 +816,33 @@ export default function CreateExpenseScreen({ navigation }) {
                             </Foect.Control>
                           ) : null}
                         </View>
+                        <Foect.Control name="description" ref={description}>
+                          {(control) => (
+                            <TextInput
+                              multiline
+                              numberOfLines={5}
+                              placeholderTextColor={colors.text}
+                              style={{
+                                width: "100%",
+                                color: colors.text,
+                                fontFamily: "Poppins_300Light",
+                                fontSize: 14,
+                                padding: 10,
+                                backgroundColor: colors.card,
+                                borderRadius: 5,
+                                elevation: 3,
+                                textAlignVertical: "top",
+                                paddingRight: 15,
+                              }}
+                              onChangeText={(value) => {
+                                control.onChange(value);
+                              }}
+                              value={control.value}
+                              placeholder={i18n.t("descriptionExpense")}
+                              name="description"
+                            />
+                          )}
+                        </Foect.Control>
                       </CollapseBody>
                     </Collapse>
                   </View>

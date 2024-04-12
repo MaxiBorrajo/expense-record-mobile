@@ -5,16 +5,22 @@ import {
   SafeAreaView,
   ImageBackground,
   Dimensions,
-  Platform,
 } from "react-native";
 import { Button } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { UserContext } from "../context/UserContext";
-import { useContext, useEffect, useState, useRef } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export default function HeroScreen({navigation}) {
+import { useContext, useEffect } from "react";
+import { AppContext } from "../context/AppContext";
+import { useTheme } from "@react-navigation/native";
+import ButtonComponent from "../components/ButtonComponent";
+export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
+  const { isDarkTheme } = useContext(AppContext);
+  const { colors } = useTheme();
+
+  const splashScreen = isDarkTheme
+    ? require("../../assets/dark_splash.png")
+    : require("../../assets/splash.png");
 
   useEffect(() => {
     loadConfiguration();
@@ -23,30 +29,44 @@ export default function HeroScreen({navigation}) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
-        source={require("../../assets/images/pexels-todd-trapani-1461996.jpg")}
+        source={splashScreen}
         resizeMode="cover"
         style={{ flex: 1 }}
       >
-        <View style={styles.container}>
-          <Text style={styles.title}>Fehu: Expense Tracker</Text>
+        <View
+          style={{
+            flex: 1,
+            color: colors.text,
+            padding: 30,
+            justifyContent: "space-between",
+            rowGap: 150,
+            minHeight: Dimensions.get("window").height,
+            paddingTop: 50,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Poppins_500Medium",
+              fontSize: 15,
+              color: colors.text,
+            }}
+          >
+            Fehu: Expense Tracker
+          </Text>
           <View>
-            <Text style={styles.subtitle}>{i18n.t("phrase")}</Text>
-            <Button
-              title={i18n.t("getStarted")}
-              buttonStyle={{
-                backgroundColor: "white",
-                paddingVertical: 10,
-                paddingHorizontal: 30,
-                borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
+            <Text
+              style={{
+                fontFamily: "Poppins_300Light",
+                fontSize: 25,
+                color: colors.text,
+                paddingBottom: 20,
               }}
-              titleStyle={{
-                color: "black",
-                fontSize: 15,
-                fontFamily: "Poppins_500Medium",
-              }}
-              onPress={() => navigation.navigate("Login")}
+            >
+              {i18n.t("phrase")}
+            </Text>
+            <ButtonComponent
+              action={() => navigation.navigate("Login")}
+              label={i18n.t("getStarted")}
             />
           </View>
         </View>
@@ -54,30 +74,3 @@ export default function HeroScreen({navigation}) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    color: "fff",
-    padding: 30,
-    justifyContent: "space-between",
-    rowGap: 150,
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    minHeight: Dimensions.get("window").height,
-    paddingTop: 50,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  title: {
-    fontFamily: "Poppins_500Medium",
-    fontSize: 15,
-    color: "#fff",
-  },
-  subtitle: {
-    fontFamily: "Poppins_300Light",
-    fontSize: 30,
-    color: "#fff",
-    paddingBottom: 30,
-  },
-});

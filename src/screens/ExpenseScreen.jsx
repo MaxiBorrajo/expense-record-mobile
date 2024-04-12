@@ -247,8 +247,8 @@ export default function ExpenseScreen({ route, navigation }) {
                 justifyContent: "center",
                 minHeight: Dimensions.get("window").height,
                 position: "relative",
-                paddingTop: isAutomaticallyCreated ? 130 : 0,
-                paddingBottom: isAutomaticallyCreated ? 50 : 0,
+                paddingTop: isCollapsedOpen ? 130 : 0,
+                paddingBottom: isCollapsedOpen ? 50 : 0,
               }}
             >
               <GoBackButtonComponent />
@@ -475,13 +475,13 @@ export default function ExpenseScreen({ route, navigation }) {
                             borderRadius: 5,
                             backgroundColor: colors.card,
                             elevation: 3,
-                            paddingVertical: 15,
-                            paddingHorizontal: 20,
+                            paddingVertical: 12,
+                            paddingHorizontal: 17,
                           }}
                         >
                           <Text
                             style={{
-                              fontSize: 15,
+                              fontSize: 14,
                               fontFamily: "Poppins_300Light",
                               color: colors.text,
                             }}
@@ -541,39 +541,11 @@ export default function ExpenseScreen({ route, navigation }) {
                             />
                           )}
                         </Foect.Control>
-                        <Foect.Control name="description">
-                          {(control) => (
-                            <TextInput
-                              multiline
-                              numberOfLines={5}
-                              placeholderTextColor={colors.text}
-                              style={{
-                                width: "100%",
-                                color: colors.text,
-                                fontFamily: "Poppins_300Light",
-                                fontSize: 14,
-                                paddingVertical: 10,
-                                paddingHorizontal: 14,
-                                backgroundColor: colors.card,
-                                borderRadius: 5,
-                                elevation: 3,
-                                textAlignVertical: "top",
-                              }}
-                              onChangeText={(value) => {
-                                control.onChange(value);
-                              }}
-                              value={control.value}
-                              placeholder={i18n.t("descriptionExpense")}
-                              name="description"
-                            />
-                          )}
-                        </Foect.Control>
                         <View
                           style={{
                             backgroundColor: colors.card,
                             borderRadius: 5,
                             elevation: 3,
-                            marginBottom: 20,
                             paddingBottom: 15,
                           }}
                         >
@@ -599,7 +571,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                   {i18n.t("repeatEvery")}
                                 </Text>
                                 <Switch
-                                  circleSize={25}
+                                  circleSize={20}
                                   activeText={""}
                                   inActiveText={""}
                                   backgroundActive={colors.attention}
@@ -609,7 +581,7 @@ export default function ExpenseScreen({ route, navigation }) {
                                     control.onChange(value);
                                     setIsAutomaticallyCreated((prev) => value);
                                   }}
-                                  barHeight={28}
+                                  barHeight={22}
                                   switchLeftPx={3}
                                   switchRightPx={3}
                                 />
@@ -902,6 +874,33 @@ export default function ExpenseScreen({ route, navigation }) {
                             </Foect.Control>
                           ) : null}
                         </View>
+                        <Foect.Control name="description">
+                          {(control) => (
+                            <TextInput
+                              multiline
+                              numberOfLines={5}
+                              placeholderTextColor={colors.text}
+                              style={{
+                                width: "100%",
+                                color: colors.text,
+                                fontFamily: "Poppins_300Light",
+                                fontSize: 14,
+                                paddingVertical: 10,
+                                paddingHorizontal: 14,
+                                backgroundColor: colors.card,
+                                borderRadius: 5,
+                                elevation: 3,
+                                textAlignVertical: "top",
+                              }}
+                              onChangeText={(value) => {
+                                control.onChange(value);
+                              }}
+                              value={control.value}
+                              placeholder={i18n.t("descriptionExpense")}
+                              name="description"
+                            />
+                          )}
+                        </Foect.Control>
                       </CollapseBody>
                     </Collapse>
                   </View>
