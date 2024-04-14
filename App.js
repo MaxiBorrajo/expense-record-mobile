@@ -44,6 +44,7 @@ import { AppContext } from "./src/context/AppContext";
 import { StatusBar, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
+import mobileAds from "react-native-google-mobile-ads";
 const Stack = createNativeStackNavigator();
 
 Notifications.setNotificationHandler({
@@ -77,6 +78,12 @@ export default function App() {
     AsyncStorage.getItem("token").then((token) => {
       setAuth(token ? token : null);
     });
+
+    mobileAds()
+      .initialize()
+      .then((adapterStatuses) => {
+        // Initialization complete!
+      });
 
     if (requestUserPermission()) {
       messaging()

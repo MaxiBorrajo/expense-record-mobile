@@ -63,5 +63,8 @@
       ]
     ]
   },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-5123415331806704~3076080624"
+  },
   "owner": "maxiborrajo"
 }
