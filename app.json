@@ -23,6 +23,7 @@
         "backgroundColor": "#000000"
       },
       "package": "com.maximilianoborrajo.expenserecordmobile",
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
@@ -62,6 +63,9 @@
         }
       ]
     ]
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-5123415331806704~3076080624"
   },
   "owner": "maxiborrajo"
 }

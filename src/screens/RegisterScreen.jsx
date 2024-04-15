@@ -8,7 +8,7 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export default function RegisterScreen({ navigation }) {
   const { register, handleGoogleLogin, setAuth } = useContext(UserContext);
@@ -17,28 +17,28 @@ export default function RegisterScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState(null);
   const { colors } = useTheme();
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
-  //   });
-  // }, []);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+    });
+  }, []);
 
-  // const signin = async () => {
-  //   try {
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const user = {
-  //       firstName: userInfo.givenName,
-  //       lastName: userInfo.familyName,
-  //       email: userInfo.email,
-  //       oauthuser: true,
-  //     };
-  //     await handleGoogleLogin(user);
-  //    setAuth(()=>false)
-  //   } catch (err) {
-  //     setError(err);
-  //   }
-  // };
+  const signin = async () => {
+    try {
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        firstName: userInfo.givenName,
+        lastName: userInfo.familyName,
+        email: userInfo.email,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+      setAuth(() => false);
+    } catch (err) {
+      setError(err);
+    }
+  };
 
   async function registerUser(form) {
     try {
@@ -304,20 +304,20 @@ export default function RegisterScreen({ navigation }) {
                   >
                     Or
                   </Text>
-                  {/* <Icon
-                      name="google"
-                      type="font-awesome-5"
-                      iconStyle={{
-                        color: colors.text,
-                        fontSize: 25,
-                        padding: 15,
-                        backgroundColor: colors.card,
-                        borderRadius: 10,
-                        alignSelf: "center",
-                        maxWidth: "fit-content",
-                      }}
-                      onPress={signin}
-                    />  */}
+                  <Icon
+                    name="google"
+                    type="font-awesome-5"
+                    iconStyle={{
+                      color: colors.text,
+                      fontSize: 25,
+                      padding: 15,
+                      backgroundColor: colors.card,
+                      borderRadius: 10,
+                      alignSelf: "center",
+                      maxWidth: "fit-content",
+                    }}
+                    onPress={signin}
+                  />
                 </View>
               </View>
             )}

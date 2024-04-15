@@ -9,7 +9,7 @@ import { UserContext } from "../context/UserContext";
 import { AppContext } from "../context/AppContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-// import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,28 +17,28 @@ export default function LoginScreen() {
   const { colors } = useTheme();
   const { login, handleGoogleLogin, setAuth } = useContext(UserContext);
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
-  //   });
-  // }, []);
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+    });
+  }, []);
 
-  // const signin = async () => {
-  //   try {
-  //     const userInfo = await GoogleSignin.signIn();
-  //     const user = {
-  //       firstName: userInfo.user.givenName,
-  //       lastName: userInfo.user.familyName,
-  //       email: userInfo.user.email,
-  //       oauthuser: true,
-  //     };
-  //     await handleGoogleLogin(user);
-  //   } catch (err) {
-  //setAuth(()=>false)
-  //     setError(err);
-  //   }
-  // };
+  const signin = async () => {
+    try {
+      const userInfo = await GoogleSignin.signIn();
+      const user = {
+        firstName: userInfo.user.givenName,
+        lastName: userInfo.user.familyName,
+        email: userInfo.user.email,
+        oauthuser: true,
+      };
+      await handleGoogleLogin(user);
+    } catch (err) {
+      setAuth(() => false);
+      setError(err);
+    }
+  };
 
   const loginUser = async (form) => {
     try {
@@ -231,7 +231,7 @@ export default function LoginScreen() {
                 >
                   Or
                 </Text>
-                {/* <Icon
+                <Icon
                   name="google"
                   type="font-awesome-5"
                   iconStyle={{
@@ -244,8 +244,7 @@ export default function LoginScreen() {
                     maxWidth: "fit-content",
                   }}
                   onPress={signin}
-
-                /> */}
+                />
               </View>
             </View>
           )}

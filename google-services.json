@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "440036428069",
+    "project_id": "fehu-expense-tracker",
+    "storage_bucket": "fehu-expense-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440036428069:android:2c71d60259731aafb472cc",
+        "android_client_info": {
+          "package_name": "com.maximilianoborrajo.expenserecordmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440036428069-0jbvmliv68ko79pqoq9pcn3j8qfqs2fq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maximilianoborrajo.expenserecordmobile",
+            "certificate_hash": "bce772e7a107ab283f41166ba43eea87f63aa76d"
+          }
+        },
+        {
+          "client_id": "440036428069-sqko1un37nvkki6vm0uo1oe50bjcmc59.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maximilianoborrajo.expenserecordmobile",
+            "certificate_hash": "a0e700d9cc06f6b0ee827551787b664d1208b599"
+          }
+        },
+        {
+          "client_id": "440036428069-q9ecs17on0dg5m5ms6vc7tnmvcr44kqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2fACFIouj3os9KCZYS670nzOPSR7Gfo8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440036428069-kv6fu3c1msq08kdd6qsqahb453malgdq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

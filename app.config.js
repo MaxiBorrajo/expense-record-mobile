@@ -1,9 +1,6 @@
 module.exports = ({ config }) => {
   return {
     ...config,
-    "react-native-google-mobile-ads": {
-      android_app_id: process.env.EXPO_PUBLIC_APP_ADD,
-    },
     build: {
       preview: {
         android: {
@@ -26,7 +23,9 @@ module.exports = ({ config }) => {
       preview4: {
         distribution: "internal",
       },
-      production: {},
+      production: {
+       
+      },
     },
   };
 };

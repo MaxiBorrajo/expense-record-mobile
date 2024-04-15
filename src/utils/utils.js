@@ -239,24 +239,24 @@ export function calculateElapsedTime(fecha, language) {
   const monthsElapsed = Math.floor(daysElapsed / 30);
 
   if (monthsElapsed > 0) {
-    return language === "EN"
+    return language === "en"
       ? `${monthsElapsed} ${monthsElapsed === 1 ? "month ago" : "months ago"}`
       : `Hace ${monthsElapsed} ${monthsElapsed === 1 ? "mes" : "meses"}`;
   } else if (daysElapsed > 0) {
-    return language === "EN"
+    return language === "en"
       ? `${daysElapsed} ${daysElapsed === 1 ? "day ago" : "days ago"}`
       : `Hace ${daysElapsed} ${daysElapsed === 1 ? "día" : "días"}`;
   } else if (hoursElapsed > 0) {
-    return language === "EN"
+    return language === "en"
       ? `${hoursElapsed} ${hoursElapsed === 1 ? "hour ago" : "hours ago"}`
       : `Hace ${hoursElapsed} ${hoursElapsed === 1 ? "hora" : "horas"}`;
   } else if (minutesElapsed > 0) {
-    return language === "EN"
+    return language === "en"
       ? `${minutesElapsed} ${
           minutesElapsed === 1 ? "minute ago" : "minutes ago"
         }`
       : `Hace ${minutesElapsed} ${minutesElapsed === 1 ? "minuto" : "minutos"}`;
   } else {
-    return language === "EN" ? "Just now" : "Hace unos momentos";
+    return language === "en" ? "Just now" : "Hace unos momentos";
   }
 }
