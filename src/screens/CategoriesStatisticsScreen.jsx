@@ -3,7 +3,6 @@ import {
   View,
   Dimensions,
   SafeAreaView,
-  FlatList,
   ScrollView,
   RefreshControl,
 } from "react-native";
@@ -16,6 +15,12 @@ import { PieChart } from "react-native-chart-kit";
 import { useTheme } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 export default function CategoriesStatisticsScreen() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth());
@@ -323,6 +328,23 @@ export default function CategoriesStatisticsScreen() {
                 {i18n.t("dataNotFound")}
               </Text>
             )}
+
+            <View style={{
+                  paddingTop: 30,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  rowGap: 10,
+                }}>
+              <BannerAd
+                unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              />
+              <BannerAd
+                unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              />
+            </View>
           </View>
         </ScrollView>
       )}

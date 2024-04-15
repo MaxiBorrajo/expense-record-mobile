@@ -29,7 +29,12 @@ import {
   CollapseHeader,
   CollapseBody,
 } from "accordion-collapse-react-native";
-
+import {
+  BannerAd,
+  BannerAdSize,
+  useInterstitialAd,
+  TestIds,
+} from "react-native-google-mobile-ads";
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0) {
     return null;
@@ -57,6 +62,19 @@ export default function ExpenseScreen({ route, navigation }) {
   const [repeat, setRepeat] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [isCollapsedOpen, setIsCollapsedOpen] = useState(false);
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(
+    process.env.EXPO_PUBLIC_INTERSTIAL_ADD
+  );
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    if (isClosed) {
+      navigation.goBack();
+    }
+  }, [isClosed, navigation]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -178,7 +196,11 @@ export default function ExpenseScreen({ route, navigation }) {
       setLoading(true);
       updateExpenseById(expense._id, updatedExpense);
       setLoading(false);
-      navigation.goBack();
+      if (isLoaded) {
+        show();
+      } else {
+        navigation.goBack();
+      }
     } catch (error) {
       setLoading(false);
       if (error?.response?.data) {
@@ -193,7 +215,11 @@ export default function ExpenseScreen({ route, navigation }) {
     try {
       setErrorMessage(null);
       deleteExpenseById(expense._id);
-      navigation.goBack();
+      if (isLoaded) {
+        show();
+      } else {
+        navigation.goBack();
+      }
     } catch (error) {
       setLoading(false);
       if (error?.response?.data) {
@@ -252,6 +278,22 @@ export default function ExpenseScreen({ route, navigation }) {
               }}
             >
               <GoBackButtonComponent />
+              {!isCollapsedOpen && (
+                <View style={{ position: "absolute", top: 90, left: 0 }}>
+                  <BannerAd
+                    unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                    size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                  />
+                </View>
+              )}
+              {!isCollapsedOpen && (
+                <View style={{ position: "absolute", top: 170, left: 0 }}>
+                  <BannerAd
+                    unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                    size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                  />
+                </View>
+              )}
               <View>
                 <View
                   style={{

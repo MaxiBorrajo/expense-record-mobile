@@ -7,7 +7,11 @@ import { useTheme } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
 import { Badge, Icon } from "@rneui/themed";
-
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 export default function BudgetStatisticsScreen() {
   const {
     getMonthExpenses,
@@ -261,6 +265,24 @@ export default function BudgetStatisticsScreen() {
               >
                 *{i18n.t("budgetHelp")}
               </Text>
+              <View
+                style={{
+                  paddingTop: 30,
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  rowGap: 10,
+                }}
+              >
+                <BannerAd
+                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                />
+                <BannerAd
+                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                />
+              </View>
             </View>
           ) : (
             <Text

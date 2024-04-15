@@ -24,6 +24,13 @@ import {
   CollapseHeader,
   CollapseBody,
 } from "accordion-collapse-react-native";
+import {
+  BannerAd,
+  BannerAdSize,
+  useInterstitialAd,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0) {
     return null;
@@ -67,23 +74,42 @@ export default function CreateExpenseScreen({ navigation }) {
   const repeat = useRef(null);
   const cron = useRef(null);
   const category_dropdown = useRef(null);
+  const { isLoaded, isClosed, load, show } = useInterstitialAd(
+    process.env.EXPO_PUBLIC_INTERSTIAL_ADD
+  );
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  useEffect(() => {
+    if (isClosed) {
+      // Action after the ad is closed
+      navigation.navigate("Main");
+    }
+  }, [isClosed, navigation]);
 
   const resetForm = () => {
-    category_dropdown.current.reset();
-    form.current.setValue("title", null);
-    form.current.setValue("description", null);
-    form.current.setValue("amount", 100);
-    form.current.setValue("category_id", null);
-    form.current.setValue("isAutomaticallyCreated", false);
-    title.current.markAsUntouched();
-    description.current.markAsUntouched();
-    amount.current.markAsUntouched();
-    category.current.markAsUntouched();
-    repeat.current.markAsUntouched();
-    if (isAutomaticallyCreated) {
-      form.current.setValue("cron", 1);
-      cron.current.markAsUntouched();
+    form?.current?.setValue("title", null);
+    form?.current?.setValue("amount", 100);
+    title?.current?.markAsUntouched();
+    amount?.current?.markAsUntouched();
+
+    if (isCollapsedOpen) {
+      form?.current?.setValue("isAutomaticallyCreated", false);
+      form?.current?.setValue("category_id", null);
+      category_dropdown?.current?.reset();
+      form?.current?.setValue("description", null);
+      description?.current?.markAsUntouched();
+      category?.current?.markAsUntouched();
+      repeat?.current?.markAsUntouched();
     }
+
+    if (isAutomaticallyCreated) {
+      form?.current?.setValue("cron", 1);
+      cron?.current?.markAsUntouched();
+    }
+
     setIcon(() => null);
     setFrequency(() => 1);
     setSelectedDays(() => [1]);
@@ -151,7 +177,11 @@ export default function CreateExpenseScreen({ navigation }) {
       await createExpense(data);
       setLoading(false);
       resetForm();
-      navigation.navigate("Main");
+      if (isLoaded) {
+        show();
+      } else {
+        navigation.navigate("Main");
+      }
     } catch (error) {
       setLoading(false);
       if (error?.response?.data) {
@@ -184,6 +214,22 @@ export default function CreateExpenseScreen({ navigation }) {
               paddingBottom: isCollapsedOpen ? 120 : 0,
             }}
           >
+            {!isCollapsedOpen && (
+              <View style={{ position: "absolute", top: 50, left: 0 }}>
+                <BannerAd
+                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                />
+              </View>
+            )}
+            {!isCollapsedOpen && (
+              <View style={{ position: "absolute", top: 150, left: 0 }}>
+                <BannerAd
+                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                />
+              </View>
+            )}
             <View
               style={{
                 flex: 1,
