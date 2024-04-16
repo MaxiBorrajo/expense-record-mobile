@@ -95,6 +95,8 @@ export default function ProfileScreen() {
               minHeight: Dimensions.get("window").height,
               position: "relative",
               justifyContent: "center",
+              paddingTop:110,
+              paddingBottom:50,
             }}
           >
             <GoBackButtonComponent />

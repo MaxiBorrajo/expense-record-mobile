@@ -75,7 +75,7 @@ export default function CreateExpenseScreen({ navigation }) {
   const cron = useRef(null);
   const category_dropdown = useRef(null);
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
-    process.env.EXPO_PUBLIC_INTERSTIAL_ADD
+    "ca-app-pub-5123415331806704/6924730256"
   );
 
   useEffect(() => {
@@ -217,15 +217,7 @@ export default function CreateExpenseScreen({ navigation }) {
             {!isCollapsedOpen && (
               <View style={{ position: "absolute", top: 50, left: 0 }}>
                 <BannerAd
-                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
-                  size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-                />
-              </View>
-            )}
-            {!isCollapsedOpen && (
-              <View style={{ position: "absolute", top: 150, left: 0 }}>
-                <BannerAd
-                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  unitId={"ca-app-pub-5123415331806704/8763258243"}
                   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 />
               </View>

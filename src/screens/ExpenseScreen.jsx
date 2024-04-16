@@ -63,7 +63,7 @@ export default function ExpenseScreen({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [isCollapsedOpen, setIsCollapsedOpen] = useState(false);
   const { isLoaded, isClosed, load, show } = useInterstitialAd(
-    process.env.EXPO_PUBLIC_INTERSTIAL_ADD
+    "ca-app-pub-5123415331806704/5836360932"
   );
 
   useEffect(() => {
@@ -194,7 +194,7 @@ export default function ExpenseScreen({ route, navigation }) {
       }
       setErrorMessage(null);
       setLoading(true);
-      updateExpenseById(expense._id, updatedExpense);
+      await updateExpenseById(expense._id, updatedExpense);
       setLoading(false);
       if (isLoaded) {
         show();
@@ -214,7 +214,8 @@ export default function ExpenseScreen({ route, navigation }) {
   const deleteExpense = async () => {
     try {
       setErrorMessage(null);
-      deleteExpenseById(expense._id);
+      await deleteExpenseById(expense._id);
+      toggleDialog()
       if (isLoaded) {
         show();
       } else {
@@ -279,17 +280,9 @@ export default function ExpenseScreen({ route, navigation }) {
             >
               <GoBackButtonComponent />
               {!isCollapsedOpen && (
-                <View style={{ position: "absolute", top: 90, left: 0 }}>
+                <View style={{ position: "absolute", top: 70, left: 0 }}>
                   <BannerAd
-                    unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
-                    size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-                  />
-                </View>
-              )}
-              {!isCollapsedOpen && (
-                <View style={{ position: "absolute", top: 170, left: 0 }}>
-                  <BannerAd
-                    unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                    unitId={"ca-app-pub-5123415331806704/4490138605"}
                     size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                   />
                 </View>

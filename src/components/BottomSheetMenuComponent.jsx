@@ -14,7 +14,7 @@ import { AppContext } from "../context/AppContext";
 import { UserContext } from "../context/UserContext";
 
 const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
-  const snapPoints = useMemo(() => ["75%"], []);
+  const snapPoints = useMemo(() => ["90%"], []);
   const { colors } = useTheme();
   const navigation = useNavigation();
   const { unreadNotifications } = useContext(UserContext);

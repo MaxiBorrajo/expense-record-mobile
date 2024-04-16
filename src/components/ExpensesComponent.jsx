@@ -17,7 +17,7 @@ export default function ExpensesComponent() {
     <View style={{ height: "65%", paddingTop: 10, paddingHorizontal: 15 }}>
       <FlatList
       stickyHeaderIndices={[0]}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 200 }}
         data={lastExpenses}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => <ExpenseComponent item={item} />}

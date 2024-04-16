@@ -49,7 +49,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
         elevation: 3,
-        height: "35%",
+        height: 300,
         justifyContent: "center",
         alignItems: "center",
         rowGap: 35,

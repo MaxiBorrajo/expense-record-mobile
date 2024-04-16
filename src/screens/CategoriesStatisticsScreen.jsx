@@ -337,11 +337,11 @@ export default function CategoriesStatisticsScreen() {
                   rowGap: 10,
                 }}>
               <BannerAd
-                unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                unitId={'ca-app-pub-5123415331806704/4838974038'}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
               />
               <BannerAd
-                unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                unitId={'ca-app-pub-5123415331806704/3525892363'}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
               />
             </View>

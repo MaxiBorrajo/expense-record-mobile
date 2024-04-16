@@ -8,7 +8,7 @@ export function SavingGoalContextProvider(props) {
 
   async function getSavingGoal() {
     const result = await axios.get(
-      `${process.env.EXPO_PUBLIC_URL_BACKEND}/savingGoals?`,
+      `${process.env.EXPO_PUBLIC_URL_BACKEND}/savingGoals`,
       {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,

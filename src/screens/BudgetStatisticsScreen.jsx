@@ -275,11 +275,11 @@ export default function BudgetStatisticsScreen() {
                 }}
               >
                 <BannerAd
-                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  unitId={'ca-app-pub-5123415331806704/9550893595'}
                   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 />
                 <BannerAd
-                  unitId={process.env.EXPO_PUBLIC_BANNER_ADD}
+                  unitId={'ca-app-pub-5123415331806704/1264042171'}
                   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 />
               </View>
