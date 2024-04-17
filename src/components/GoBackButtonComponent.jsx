@@ -1,7 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
-
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize,
+} from "react-native-responsive-dimensions";
 export default function GoBackButtonComponent() {
   const navigation = useNavigation();
   const { colors } = useTheme();
@@ -12,7 +16,7 @@ export default function GoBackButtonComponent() {
     >
       <Text
         style={{
-          fontSize: 12,
+          fontSize: responsiveScreenFontSize(1.5),
           color: colors.text,
           fontFamily: "Poppins_300Light",
         }}
@@ -26,8 +30,8 @@ export default function GoBackButtonComponent() {
 const styles = StyleSheet.create({
   backButton: {
     position: "absolute",
-    top: 50,
-    left: 15,
+    top: responsiveScreenHeight(2),
+    left: responsiveScreenWidth(4),
     zIndex: 100,
   },
 });

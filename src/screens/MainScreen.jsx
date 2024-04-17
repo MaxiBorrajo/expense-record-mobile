@@ -10,7 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../context/UserContext";
 import { useAuth } from "../context/AuthContext";
 import ErrorComponent from "../components/ErrorComponent";
-
+import {
+  responsiveScreenHeight,
+} from "react-native-responsive-dimensions";
 export default function MainScreen({ route, navigation }) {
   const { colors } = useTheme();
   const [visible, setVisible] = useState(false);
@@ -71,8 +73,7 @@ export default function MainScreen({ route, navigation }) {
           color: colors.text,
           alignItems: "center",
           position: "relative",
-          maxHeight: "100%",
-          rowGap: 5,
+          rowGap: responsiveScreenHeight(1),
         }}
       >
         <InfoComponent

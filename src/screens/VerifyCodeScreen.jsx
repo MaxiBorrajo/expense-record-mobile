@@ -1,4 +1,4 @@
-import { Text, View, Dimensions } from "react-native";
+import { Text, View } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -9,6 +9,12 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize,
+  responsiveWidth,
+} from "react-native-responsive-dimensions";
 
 export default function VerifyCodeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -34,18 +40,17 @@ export default function VerifyCodeScreen({ navigation }) {
         flex: 1,
         backgroundColor: colors.background,
         color: colors.text,
-        paddingHorizontal: 30,
+        paddingHorizontal: responsiveScreenWidth(10),
         justifyContent: "center",
         position: "relative",
-        rowGap: 20,
-        minHeight: Dimensions.get("window").height,
+        rowGap: responsiveScreenHeight(2),
       }}
     >
       <GoBackButtonComponent />
       <Text
         style={{
           fontFamily: "Poppins_500Medium",
-          fontSize: 30,
+          fontSize: responsiveScreenFontSize(3),
           color: colors.text,
         }}
       >
@@ -54,7 +59,7 @@ export default function VerifyCodeScreen({ navigation }) {
       <Text
         style={{
           fontFamily: "Poppins_300Light",
-          fontSize: 15,
+          fontSize: responsiveScreenFontSize(1.7),
           color: colors.text,
         }}
       >
@@ -68,7 +73,7 @@ export default function VerifyCodeScreen({ navigation }) {
         }}
       >
         {(form) => (
-          <View>
+          <View style={{ width: "100%" }}>
             <Foect.Control
               name="code"
               required
@@ -77,7 +82,7 @@ export default function VerifyCodeScreen({ navigation }) {
               }}
             >
               {(control) => (
-                <View>
+                <View style={{ width: "100%" }}>
                   <OTPTextInput
                     handleTextChange={(text) => control.onChange(text)}
                     inputCount={6}
@@ -94,7 +99,7 @@ export default function VerifyCodeScreen({ navigation }) {
                       borderWidth: 1,
                       borderStyle: "solid",
                       borderBottomWidth: 1,
-                      paddingTop: 3,
+                      width: responsiveWidth(10),
                     }}
                   />
                   {control.isTouched &&
@@ -103,9 +108,9 @@ export default function VerifyCodeScreen({ navigation }) {
                       <Text
                         style={{
                           color: "#ed2139",
-                          fontSize: 12,
+                          fontSize: responsiveScreenFontSize(1.5),
                           fontFamily: "Poppins_500Medium",
-                          marginTop: 10,
+                          marginTop: responsiveScreenHeight(2),
                         }}
                       >
                         {i18n.t("codeError")}
@@ -117,9 +122,9 @@ export default function VerifyCodeScreen({ navigation }) {
                       <Text
                         style={{
                           color: "#ed2139",
-                          fontSize: 12,
+                          fontSize: responsiveScreenFontSize(1.5),
                           fontFamily: "Poppins_500Medium",
-                          marginTop: 10,
+                          marginTop: responsiveScreenHeight(2),
                         }}
                       >
                         {i18n.t("codeValidError")}
@@ -131,9 +136,9 @@ export default function VerifyCodeScreen({ navigation }) {
             <Text
               style={{
                 fontFamily: "Poppins_300Light",
-                fontSize: 15,
+                fontSize: responsiveScreenFontSize(1.7),
                 color: colors.text,
-                paddingVertical: 20,
+                paddingVertical: responsiveScreenHeight(2),
               }}
               onPress={() => navigation.navigate("ForgotPassword")}
             >

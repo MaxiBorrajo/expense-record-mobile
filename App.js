@@ -17,6 +17,7 @@ import AboutUsScreen from "./src/screens/AboutUsScreen";
 import ConfigurationScreen from "./src/screens/ConfigurationScreen";
 import NotificationsScreen from "./src/screens/NotificationsScreen";
 import { useEffect, useRef, useState } from "react";
+import { StatusBar } from "react-native";
 import { ExpenseContextProvider } from "./src/context/ExpenseContext";
 import { CategoryContextProvider } from "./src/context/CategoryContext";
 import { UserContextProvider } from "./src/context/UserContext";
@@ -40,7 +41,6 @@ import {
 import { useFonts } from "expo-font";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppContext } from "./src/context/AppContext";
-import { StatusBar, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import mobileAds from "react-native-google-mobile-ads";
@@ -105,8 +105,7 @@ export default function App() {
   }, []);
 
   const requestUserPermission = async () => {
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
 
     let finalStatus = existingStatus;
 
@@ -141,6 +140,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar />
       <AuthContext.Provider
         value={{ auth, setAuth, notification, setNotification }}
       >

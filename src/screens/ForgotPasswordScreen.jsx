@@ -1,4 +1,4 @@
-import { Text, View, Dimensions } from "react-native";
+import { Text, View, KeyboardAvoidingView } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useContext, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -8,6 +8,11 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize,
+} from "react-native-responsive-dimensions";
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
@@ -32,23 +37,23 @@ export default function ForgotPasswordScreen({ navigation }) {
   };
 
   return (
+    <KeyboardAvoidingView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
-          paddingHorizontal: 30,
+          paddingHorizontal: responsiveScreenWidth(10),
           justifyContent: "center",
           position: "relative",
-          rowGap: 20,
-          minHeight: Dimensions.get("window").height,
+          rowGap: responsiveScreenHeight(2),
         }}
       >
         <GoBackButtonComponent />
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: 30,
+            fontSize: responsiveScreenFontSize(3),
             color: colors.text,
           }}
         >
@@ -57,7 +62,7 @@ export default function ForgotPasswordScreen({ navigation }) {
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: 15,
+            fontSize: responsiveScreenFontSize(1.7),
             color: colors.text,
           }}
         >
@@ -79,19 +84,20 @@ export default function ForgotPasswordScreen({ navigation }) {
                       inputStyle={{
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: 12,
-                        width: "100%",
+                        fontSize: responsiveScreenFontSize(1.5),
+                        width: responsiveScreenWidth(100),
                       }}
                       inputContainerStyle={{
-                        width: "100%",
                         alignItems: "center",
                         backgroundColor: colors.card,
-                        paddingVertical: 10,
-                        paddingHorizontal: 20,
+                        paddingVertical: responsiveScreenHeight(1),
+                        paddingHorizontal: responsiveScreenWidth(5),
                         borderRadius: 5,
                         elevation: 3,
                         borderBottomWidth: 0,
-                        marginBottom: control.isValid ? 20 : 0,
+                        marginBottom: control.isValid
+                          ? responsiveScreenHeight(20)
+                          : 0,
                       }}
                       onChangeText={(text) => control.onChange(text)}
                       value={control.value}
@@ -104,7 +110,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                       }
                       errorStyle={{
                         color: "#ed2139",
-                        fontSize: 12,
+                        fontSize: responsiveScreenFontSize(1.5),
                         fontFamily: "Poppins_500Medium",
                       }}
                       renderErrorMessage={
@@ -118,9 +124,9 @@ export default function ForgotPasswordScreen({ navigation }) {
               <Text
                 style={{
                   fontFamily: "Poppins_300Light",
-                  fontSize: 15,
+                  fontSize: responsiveScreenFontSize(1.7),
                   color: colors.text,
-                  paddingBottom: 20,
+                  paddingBottom: responsiveScreenHeight(3),
                 }}
                 onPress={() => navigation.navigate("VerifyCode")}
               >
@@ -136,5 +142,6 @@ export default function ForgotPasswordScreen({ navigation }) {
           )}
         </Foect.Form>
       </View>
+    </KeyboardAvoidingView>
   );
 }
