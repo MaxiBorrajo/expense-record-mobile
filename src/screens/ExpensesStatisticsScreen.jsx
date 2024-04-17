@@ -42,7 +42,7 @@ export default function ExpensesStatisticsScreen() {
   }, [year, month]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       {loading ? (
         <LoadingScreen />
       ) : (
@@ -238,6 +238,6 @@ export default function ExpensesStatisticsScreen() {
           </View>
         </ScrollView>
       )}
-    </SafeAreaView>
+    </>
   );
 }

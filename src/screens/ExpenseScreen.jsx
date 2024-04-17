@@ -2,7 +2,6 @@ import {
   Text,
   View,
   TextInput,
-  SafeAreaView,
   Dimensions,
   ScrollView,
   RefreshControl,
@@ -33,8 +32,8 @@ import {
   BannerAd,
   BannerAdSize,
   useInterstitialAd,
-  TestIds,
 } from "react-native-google-mobile-ads";
+
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0) {
     return null;
@@ -247,7 +246,7 @@ export default function ExpenseScreen({ route, navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       {!expense || !categories ? (
         <LoadingScreen />
       ) : (
@@ -955,6 +954,6 @@ export default function ExpenseScreen({ route, navigation }) {
           action: () => deleteExpense(),
         }}
       />
-    </SafeAreaView>
+    </>
   );
 }

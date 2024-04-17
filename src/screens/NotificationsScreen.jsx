@@ -2,7 +2,6 @@ import {
   Text,
   View,
   FlatList,
-  SafeAreaView,
   Dimensions,
   ActivityIndicator,
   RefreshControl,
@@ -30,7 +29,6 @@ export default function NotificationsScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -122,6 +120,5 @@ export default function NotificationsScreen() {
           )}
         />
       </View>
-    </SafeAreaView>
   );
 }

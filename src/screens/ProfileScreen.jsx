@@ -2,7 +2,6 @@ import {
   Text,
   View,
   TextInput,
-  SafeAreaView,
   Dimensions,
   ScrollView,
   RefreshControl,
@@ -71,7 +70,7 @@ export default function ProfileScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       {userForm ? (
         <ScrollView
           refreshControl={
@@ -95,8 +94,8 @@ export default function ProfileScreen() {
               minHeight: Dimensions.get("window").height,
               position: "relative",
               justifyContent: "center",
-              paddingTop:110,
-              paddingBottom:50,
+              paddingTop: 110,
+              paddingBottom: 50,
             }}
           >
             <GoBackButtonComponent />
@@ -380,6 +379,6 @@ export default function ProfileScreen() {
       ) : (
         <LoadingScreen />
       )}
-    </SafeAreaView>
+    </>
   );
 }

@@ -27,10 +27,9 @@ export default function HeroScreen({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={splashScreen}
-        resizeMode="cover"
+        resizeMode="contain"
         style={{ flex: 1 }}
       >
         <View
@@ -71,6 +70,5 @@ export default function HeroScreen({ navigation }) {
           </View>
         </View>
       </ImageBackground>
-    </SafeAreaView>
   );
 }

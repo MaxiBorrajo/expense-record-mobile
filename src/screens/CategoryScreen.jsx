@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, TextInput, Dimensions } from "react-native";
+import { Text, View, TextInput, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -89,7 +89,7 @@ export default function CategoryScreen({ route, navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       {!categoryForm || !icons ? (
         <LoadingScreen />
       ) : (
@@ -205,6 +205,6 @@ export default function CategoryScreen({ route, navigation }) {
           action: () => deleteCategory(),
         }}
       />
-    </SafeAreaView>
+    </>
   );
 }

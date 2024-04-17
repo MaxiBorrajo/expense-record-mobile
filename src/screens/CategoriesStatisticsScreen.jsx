@@ -2,7 +2,6 @@ import {
   Text,
   View,
   Dimensions,
-  SafeAreaView,
   ScrollView,
   RefreshControl,
 } from "react-native";
@@ -64,7 +63,7 @@ export default function CategoriesStatisticsScreen() {
   }, [year, month, type]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       {!categoryStatistics ? (
         <LoadingScreen />
       ) : (
@@ -348,6 +347,6 @@ export default function CategoriesStatisticsScreen() {
           </View>
         </ScrollView>
       )}
-    </SafeAreaView>
+    </>
   );
 }

@@ -1,4 +1,10 @@
-import { Text, View, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  KeyboardAvoidingView,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useContext, useEffect, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -9,6 +15,7 @@ import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
 export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -56,8 +63,8 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+    <KeyboardAvoidingView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flex: 1 }} bounces={false}>
         <View
           style={{
             flex: 1,
@@ -68,7 +75,7 @@ export default function LoginScreen() {
             position: "relative",
             rowGap: 20,
             minHeight: Dimensions.get("window").height,
-            paddingTop:150,
+            paddingTop: 150,
             paddingBottom: 100,
           }}
         >
@@ -252,6 +259,6 @@ export default function LoginScreen() {
           </Foect.Form>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

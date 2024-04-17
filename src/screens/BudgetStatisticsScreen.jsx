@@ -1,4 +1,4 @@
-import { Text, View, Dimensions, SafeAreaView, FlatList } from "react-native";
+import { Text, View, Dimensions, ScrollView, FlatList } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { ExpenseContext } from "../context/ExpenseContext";
 import { UserContext } from "../context/UserContext";
@@ -7,11 +7,8 @@ import { useTheme } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import i18n from "../utils/i18n";
 import { Badge, Icon } from "@rneui/themed";
-import {
-  BannerAd,
-  BannerAdSize,
-  TestIds,
-} from "react-native-google-mobile-ads";
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
+
 export default function BudgetStatisticsScreen() {
   const {
     getMonthExpenses,
@@ -40,7 +37,7 @@ export default function BudgetStatisticsScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <ScrollView>
       {monthExpenses === null || monthExpenses === undefined ? (
         <LoadingScreen />
       ) : !budget ? (
@@ -275,11 +272,11 @@ export default function BudgetStatisticsScreen() {
                 }}
               >
                 <BannerAd
-                  unitId={'ca-app-pub-5123415331806704/9550893595'}
+                  unitId={"ca-app-pub-5123415331806704/9550893595"}
                   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 />
                 <BannerAd
-                  unitId={'ca-app-pub-5123415331806704/1264042171'}
+                  unitId={"ca-app-pub-5123415331806704/1264042171"}
                   size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 />
               </View>
@@ -300,6 +297,6 @@ export default function BudgetStatisticsScreen() {
           )}
         </View>
       )}
-    </SafeAreaView>
+    </ScrollView>
   );
 }

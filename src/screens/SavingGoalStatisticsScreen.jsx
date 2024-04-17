@@ -2,7 +2,6 @@ import {
   Text,
   View,
   Dimensions,
-  SafeAreaView,
   TextInput,
   ScrollView,
   RefreshControl,
@@ -118,7 +117,6 @@ export default function SavingGoalStatisticsScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
         refreshControl={
           <RefreshControl
@@ -444,6 +442,5 @@ export default function SavingGoalStatisticsScreen() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
   );
 }

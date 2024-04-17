@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, TextInput, Dimensions } from "react-native";
+import { Text, View, TextInput, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useState, useContext, useEffect } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -11,7 +11,7 @@ import i18n from "../utils/i18n";
 
 export default function CreateCategoryScreen({ navigation }) {
   const { colors } = useTheme();
-  const { getIcons, createCategory, icons } = useContext(CategoryContext);
+  const { createCategory, icons } = useContext(CategoryContext);
   const [index, setIndex] = useState(0);
   const [categoryForm, setCategoryForm] = useState({
     category_name: "",
@@ -19,7 +19,7 @@ export default function CreateCategoryScreen({ navigation }) {
   });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [actualIcon, setActualIcon] = useState( icons[index]?.icon);
+  const [actualIcon, setActualIcon] = useState(icons[index]?.icon);
 
   const submitCreateCategory = async (form) => {
     try {
@@ -59,7 +59,7 @@ export default function CreateCategoryScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       <View
         style={{
           flex: 1,
@@ -90,11 +90,13 @@ export default function CreateCategoryScreen({ navigation }) {
         >
           {(form) => (
             <View style={{ rowGap: 20 }}>
-              {actualIcon && <IconCarouselComponent
-                icon={actualIcon}
-                next={next}
-                prev={prev}
-              />}
+              {actualIcon && (
+                <IconCarouselComponent
+                  icon={actualIcon}
+                  next={next}
+                  prev={prev}
+                />
+              )}
               <Foect.Control name="category_name" required>
                 {(control) => (
                   <View style={{ rowGap: 10, marginTop: 10 }}>
@@ -142,6 +144,6 @@ export default function CreateCategoryScreen({ navigation }) {
           )}
         </Foect.Form>
       </View>
-    </SafeAreaView>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import { useContext, useState } from "react";
 import GoBackButtonComponent from "../components/GoBackButtonComponent";
@@ -32,7 +32,6 @@ export default function ForgotPasswordScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -137,6 +136,5 @@ export default function ForgotPasswordScreen({ navigation }) {
           )}
         </Foect.Form>
       </View>
-    </SafeAreaView>
   );
 }

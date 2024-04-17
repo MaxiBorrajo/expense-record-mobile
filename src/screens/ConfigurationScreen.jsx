@@ -1,4 +1,4 @@
-import { Text, View, SafeAreaView, Dimensions } from "react-native";
+import { Text, View, Dimensions } from "react-native";
 import React, { useContext } from "react";
 import { Switch } from "react-native-switch";
 import SelectDropdown from "react-native-select-dropdown";
@@ -30,7 +30,7 @@ export default function ConfigurationScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       <View
         style={{
           justifyContent: "center",
@@ -253,6 +253,6 @@ export default function ConfigurationScreen() {
           />
         </View>
       </View>
-    </SafeAreaView>
+    </>
   );
 }

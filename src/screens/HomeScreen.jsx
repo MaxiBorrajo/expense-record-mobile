@@ -15,9 +15,9 @@ export default function HomeScreen() {
   const { colors } = useTheme();
   const { loading, loadConfiguration } = useContext(UserContext);
 
-  useEffect(()=>{
-    loadConfiguration()
-  }, [])
+  useEffect(() => {
+    loadConfiguration();
+  }, []);
 
   const screenOptions = {
     tabBarShowLabel: false,
@@ -29,62 +29,65 @@ export default function HomeScreen() {
       width: 200,
       borderRadius: 20,
       borderTopWidth: 0,
-      left: (Dimensions.get('window').width / 2) - 102,
-      bottom:20,
-      elevation:5
+      left: Dimensions.get("window").width / 2 - 102,
+      bottom: 20,
+      elevation: 5,
     },
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {loading ? <LoadingScreen /> : null}
-      <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
-        <Tab.Screen
-          name="Main"
-          component={MainScreen}
-          options={{
-            tabBarIcon: ({ focused }) => {
-              return (
-                <TabBarIcon
-                  focused={focused}
-                  icon="home"
-                  name={i18n.t("Home")}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name="CreateExpense"
-          component={CreateExpenseScreen}
-          options={{
-            tabBarIcon: ({ focused }) => {
-              return (
-                <TabBarIcon
-                  focused={focused}
-                  icon="plus"
-                  name={i18n.t("create")}
-                />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Statistics"
-          component={StatisticsScreen}
-          options={{
-            tabBarIcon: ({ focused }) => {
-              return (
-                <TabBarIcon
-                  focused={focused}
-                  icon="chart-pie"
-                  name={i18n.t("statistics")}
-                />
-              );
-            },
-          }}
-        />
-      </Tab.Navigator>
-    </SafeAreaView>
+    <>
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <Tab.Navigator screenOptions={screenOptions} initialRouteName="Main">
+          <Tab.Screen
+            name="Main"
+            component={MainScreen}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <TabBarIcon
+                    focused={focused}
+                    icon="home"
+                    name={i18n.t("Home")}
+                  />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="CreateExpense"
+            component={CreateExpenseScreen}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <TabBarIcon
+                    focused={focused}
+                    icon="plus"
+                    name={i18n.t("create")}
+                  />
+                );
+              },
+            }}
+          />
+          <Tab.Screen
+            name="Statistics"
+            component={StatisticsScreen}
+            options={{
+              tabBarIcon: ({ focused }) => {
+                return (
+                  <TabBarIcon
+                    focused={focused}
+                    icon="chart-pie"
+                    name={i18n.t("statistics")}
+                  />
+                );
+              },
+            }}
+          />
+        </Tab.Navigator>
+      )}
+    </>
   );
 }

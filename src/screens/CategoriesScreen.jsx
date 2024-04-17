@@ -2,7 +2,7 @@ import {
   Text,
   View,
   FlatList,
-  SafeAreaView,
+  ScrollView,
   Dimensions,
   ActivityIndicator,
   RefreshControl,
@@ -43,7 +43,7 @@ export default function CategoriesScreen({ navigation }) {
   }, [keyword]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <>
       <View
         style={{
           flex: 1,
@@ -168,6 +168,6 @@ export default function CategoriesScreen({ navigation }) {
           )}
         />
       </View>
-    </SafeAreaView>
+    </>
   );
 }

@@ -2,7 +2,6 @@ import {
   Text,
   View,
   FlatList,
-  SafeAreaView,
   Dimensions,
   ActivityIndicator,
   RefreshControl,
@@ -132,7 +131,6 @@ export default function ExpensesScreen() {
   }, [sort, order, category, keyword, year, month, day, type]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
@@ -659,6 +657,5 @@ export default function ExpensesScreen() {
           )}
         />
       </View>
-    </SafeAreaView>
   );
 }

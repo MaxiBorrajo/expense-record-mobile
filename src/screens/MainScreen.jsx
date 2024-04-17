@@ -1,4 +1,4 @@
-import { View, SafeAreaView, Dimensions } from "react-native";
+import { View } from "react-native";
 import React, { useState, useContext, useRef, useEffect } from "react";
 import InfoComponent from "../components/InfoComponent";
 import ExpensesComponent from "../components/ExpensesComponent";
@@ -64,7 +64,7 @@ export default function MainScreen({ route, navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ maxHeight: Dimensions.get("window").height }}>
+    <>
       <View
         style={{
           backgroundColor: colors.background,
@@ -98,6 +98,6 @@ export default function MainScreen({ route, navigation }) {
           action: () => deleteAccount(),
         }}
       />
-    </SafeAreaView>
+    </>
   );
 }
