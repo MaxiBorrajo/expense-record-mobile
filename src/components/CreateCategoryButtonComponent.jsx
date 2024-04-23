@@ -2,6 +2,12 @@ import { TouchableOpacity } from "react-native";
 import React from "react";
 import { Icon } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize,
+  responsiveWidth
+} from "react-native-responsive-dimensions";
 
 const CreateCategoryButtonComponent = ({ action }) => {
   const { colors } = useTheme();
@@ -11,11 +17,11 @@ const CreateCategoryButtonComponent = ({ action }) => {
       style={{
         borderRadius: 50,
         backgroundColor: colors.attention,
-        width: 55,
-        height: 55,
+        width: responsiveWidth(15),
+        height: responsiveWidth(15),
         position: "absolute",
-        bottom: 30,
-        right: 15,
+        bottom: responsiveScreenHeight(7),
+        right: responsiveScreenWidth(5),
         zIndex: 1,
         alignContent: "center",
         justifyContent: "center",
@@ -25,7 +31,7 @@ const CreateCategoryButtonComponent = ({ action }) => {
       <Icon
         name="plus"
         type="font-awesome-5"
-        iconStyle={{ fontSize: 25, color: colors.background}}
+        iconStyle={{ fontSize: responsiveScreenFontSize(3), color: colors.background}}
       ></Icon>
     </TouchableOpacity>
   );

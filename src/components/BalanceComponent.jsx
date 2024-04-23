@@ -5,6 +5,11 @@ import { Icon } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { CountUp } from "use-count-up";
 import { useTheme } from "@react-navigation/native";
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize
+} from "react-native-responsive-dimensions";
 export default function AnnualBalanceComponent({
   balance,
   income,
@@ -16,19 +21,17 @@ export default function AnnualBalanceComponent({
   return (
     <View
       style={{
-        paddingVertical: 40,
-        paddingHorizontal: 20,
-        width: "100%",
+        paddingVertical: responsiveScreenHeight(4),
+        paddingHorizontal: responsiveScreenWidth(2),
         backgroundColor: colors.card,
         borderRadius: 20,
         justifyContent: "space-between",
-        gap: 15,
+        gap: responsiveScreenWidth(2),
         elevation: 3,
       }}
     >
       <View
         style={{
-          width: "100%",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -36,7 +39,7 @@ export default function AnnualBalanceComponent({
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: 17,
+            fontSize: responsiveScreenFontSize(2),
             color: colors.text,
           }}
         >
@@ -45,7 +48,7 @@ export default function AnnualBalanceComponent({
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: 30,
+            fontSize: responsiveScreenFontSize(4),
             color: colors.text,
           }}
         >
@@ -96,7 +99,7 @@ export default function AnnualBalanceComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 11,
+              fontSize: responsiveScreenFontSize(1.3),
               color: colors.text,
             }}
           >
@@ -113,12 +116,12 @@ export default function AnnualBalanceComponent({
             <Icon
               name="arrow-up"
               type="font-awesome"
-              iconStyle={[styles.profit, { fontSize: 17 }]}
+              iconStyle={[styles.profit, { fontSize: responsiveScreenFontSize(1.7), }]}
             ></Icon>
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 15,
+                fontSize: responsiveScreenFontSize(1.7),
                 color: colors.text,
               }}
             >
@@ -148,7 +151,7 @@ export default function AnnualBalanceComponent({
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: 11,
+              fontSize: responsiveScreenFontSize(1.3),
               color: colors.text,
             }}
           >
@@ -165,12 +168,12 @@ export default function AnnualBalanceComponent({
             <Icon
               name="arrow-down"
               type="font-awesome"
-              iconStyle={[styles.loss, { fontSize: 17 }]}
+              iconStyle={[styles.loss, { fontSize: responsiveScreenFontSize(1.7), }]}
             ></Icon>
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: 15,
+                fontSize: responsiveScreenFontSize(1.7),
                 color: colors.text,
               }}
             >

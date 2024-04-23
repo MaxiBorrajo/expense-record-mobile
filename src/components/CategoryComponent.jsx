@@ -4,6 +4,13 @@ import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize,
+  responsiveWidth
+} from "react-native-responsive-dimensions";
+
 export default memo(function CategoryComponent({ item, setErrorMessage }) {
   const navigation = useNavigation();
   const { colors } = useTheme();
@@ -36,9 +43,9 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 10,
+        padding: responsiveWidth(1),
         alignItems: "center",
-        width: "100%",
+        width: responsiveScreenWidth(100),
         borderRadius: 5,
       }}
       onPress={handlePress}
@@ -47,8 +54,8 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          width: "100%",
-          columnGap: 20,
+          width: responsiveScreenWidth(100),
+          columnGap: responsiveScreenHeight(2),
           opacity: fadeAnim,
         }}
       >
@@ -59,20 +66,20 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            width: 60,
-            height: 60,
+            width: responsiveWidth(15),
+            height: responsiveWidth(15),
           }}
         >
           <Icon
             name={item?.icon_id?.icon}
             type="font-awesome-5"
-            iconStyle={{ fontSize: 20, color: colors.text }}
+            iconStyle={{ fontSize: responsiveScreenFontSize(2), color: colors.text }}
           ></Icon>
         </View>
         <Text
           style={{
             color: colors.text,
-            fontSize: 15,
+            fontSize: responsiveScreenFontSize(1.8),
             fontFamily: "Poppins_500Medium",
           }}
         >

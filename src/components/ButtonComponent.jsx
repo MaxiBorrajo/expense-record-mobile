@@ -1,6 +1,10 @@
 import { Button } from "@rneui/themed";
 import { useTheme } from "@react-navigation/native";
-
+import {
+  responsiveScreenHeight,
+  responsiveScreenWidth,
+  responsiveScreenFontSize
+} from "react-native-responsive-dimensions";
 export default function ButtonComponent({ action, label, loading, disabled }) {
   const { colors } = useTheme();
 
@@ -9,8 +13,8 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
       title={label}
       buttonStyle={{
         backgroundColor: colors.attention,
-        paddingVertical: 10,
-        paddingHorizontal: 30,
+        paddingVertical: responsiveScreenHeight(1),
+        paddingHorizontal: responsiveScreenWidth(3),
         borderRadius: 5,
         alignItems: "center",
         justifyContent: "center",
@@ -18,7 +22,7 @@ export default function ButtonComponent({ action, label, loading, disabled }) {
       }}
       titleStyle={{
         color: colors.text,
-        fontSize: 15,
+        fontSize: responsiveScreenFontSize(1.7),
         fontFamily: "Poppins_500Medium",
       }}
       onPress={action}
