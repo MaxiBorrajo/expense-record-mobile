@@ -6,13 +6,8 @@ import { UserContext } from "../context/UserContext";
 import { Icon, Badge } from "@rneui/themed";
 import i18n from "../utils/i18n";
 import { CountUp } from "use-count-up";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
 
-export default function InfoComponent({ route, navigation, openBottomSheet }) {
+export default function InfoComponent({ openBottomSheet }) {
   const {
     getBalance,
     balance,
@@ -49,29 +44,29 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
   return (
     <View
       style={{
-        width: responsiveScreenWidth(100),
+        width: '100%',
         backgroundColor: colors.card,
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
         elevation: 3,
-        height: responsiveScreenHeight(30),
+        height: 30,
         justifyContent: "center",
         alignItems: "center",
-        rowGap: responsiveScreenHeight(4),
+        rowGap: 40,
       }}
     >
       <View
         style={{
-          width: responsiveScreenWidth(100),
+          width: 100,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
-          paddingHorizontal: responsiveScreenWidth(10),
+          paddingHorizontal: 10,
         }}
       >
         <Text
           style={{
-            fontSize: responsiveScreenFontSize(1.6),
+            fontSize: 16,
             fontFamily: "Poppins_300Light",
             color: colors.text,
           }}
@@ -82,7 +77,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
           <Icon
             name="gear"
             type="font-awesome"
-            iconStyle={{ color: colors.text, fontSize: responsiveScreenFontSize(2), paddingBottom: responsiveScreenWidth(1) }}
+            iconStyle={{ color: colors.text, fontSize: 20, paddingBottom: 10 }}
             onPress={openBottomSheet}
           ></Icon>
           {unreadNotifications && unreadNotifications.length ? (
@@ -95,7 +90,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
       </View>
       <View
         style={{
-          width: responsiveScreenWidth(100),
+          width: '100%',
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -103,7 +98,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: responsiveScreenFontSize(1.9),
+            fontSize: 19,
             color: colors.text,
           }}
         >
@@ -112,7 +107,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: responsiveScreenFontSize(3),
+            fontSize: 30,
             color: colors.text,
           }}
         >
@@ -155,7 +150,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
       >
         <View
           style={{
-            width: responsiveScreenWidth(50),
+            width: 50,
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -163,7 +158,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: responsiveScreenFontSize(1.1),
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -173,19 +168,19 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              columnGap: responsiveScreenWidth(1),
+              columnGap: 10,
               flexDirection: "row",
             }}
           >
             <Icon
               name="arrow-up"
               type="font-awesome"
-              iconStyle={[styles.profit, { fontSize: responsiveScreenFontSize(1.9) }]}
+              iconStyle={[styles.profit, { fontSize: 19 }]}
             ></Icon>
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: responsiveScreenFontSize(1.7),
+                fontSize: 17,
                 color: colors.text,
               }}
             >
@@ -207,7 +202,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
         </View>
         <View
           style={{
-            width: responsiveScreenWidth(50),
+            width: 50,
             justifyContent: "center",
             alignItems: "center",
           }}
@@ -215,7 +210,7 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: responsiveScreenFontSize(1.1),
+              fontSize: 11,
               color: colors.text,
             }}
           >
@@ -225,19 +220,19 @@ export default function InfoComponent({ route, navigation, openBottomSheet }) {
             style={{
               justifyContent: "center",
               alignItems: "center",
-              columnGap: responsiveScreenWidth(1),
+              columnGap: 10,
               flexDirection: "row",
             }}
           >
             <Icon
               name="arrow-down"
               type="font-awesome"
-              iconStyle={[styles.loss, { fontSize: responsiveScreenFontSize(1.9) }]}
+              iconStyle={[styles.loss, { fontSize:19 }]}
             ></Icon>
             <Text
               style={{
                 fontFamily: "Poppins_400Regular",
-                fontSize: responsiveScreenFontSize(1.7),
+                fontSize: 17,
                 color: colors.text,
               }}
             >

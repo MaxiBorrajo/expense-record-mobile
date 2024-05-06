@@ -8,7 +8,7 @@ export default function IconCarouselComponent({ icon, next, prev }) {
     <View
       style={{
         flexDirection: "row",
-        columnGap: 50,
+        columnGap: 10,
         alignItems: "center",
         justifyContent: "center",
       }}
@@ -26,8 +26,8 @@ export default function IconCarouselComponent({ icon, next, prev }) {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          width: 60,
-          height: 60,
+          width: 14,
+          height: 7,
         }}
       >
         <Icon

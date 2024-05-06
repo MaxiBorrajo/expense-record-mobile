@@ -9,11 +9,7 @@ import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
+
 export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,11 +60,11 @@ export default function LoginScreen({ navigation }) {
     <KeyboardAvoidingView style={{ flex: 1 }}>
       <View
         style={{
-          height: responsiveScreenHeight(100),
-          width: responsiveScreenWidth(100),
+          height: '100%',
+          width: '100%',
           backgroundColor: colors.background,
           color: colors.text,
-          paddingHorizontal: responsiveScreenWidth(10),
+          paddingHorizontal: 10,
           position: "relative",
           justifyContent: "center",
         }}
@@ -77,9 +73,9 @@ export default function LoginScreen({ navigation }) {
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: responsiveScreenFontSize(4),
+            fontSize: 40,
             color: colors.text,
-            paddingBottom: responsiveScreenHeight(3),
+            paddingBottom: 30,
           }}
         >
           {i18n.t("signIn")}
@@ -99,19 +95,19 @@ export default function LoginScreen({ navigation }) {
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
-                      fontSize: responsiveScreenFontSize(1.5),
-                      width: responsiveScreenWidth(100),
+                      fontSize: 15,
+                      width: '100%',
                     }}
                     inputContainerStyle={{
                       alignItems: "center",
                       backgroundColor: colors.card,
-                      paddingVertical: responsiveScreenHeight(1),
-                      paddingHorizontal: responsiveScreenWidth(5),
+                      paddingVertical: 10,
+                      paddingHorizontal: 5,
                       borderRadius: 5,
                       elevation: 3,
                       borderBottomWidth: 0,
                       marginBottom: control.isValid
-                        ? responsiveScreenHeight(2)
+                        ? 2
                         : 0,
                     }}
                     onChangeText={(text) => control.onChange(text)}
@@ -125,7 +121,7 @@ export default function LoginScreen({ navigation }) {
                     }
                     errorStyle={{
                       color: "#ed2139",
-                      fontSize: responsiveScreenFontSize(1.5),
+                      fontSize: 15,
                       fontFamily: "Poppins_500Medium",
                     }}
                     renderErrorMessage={
@@ -155,26 +151,26 @@ export default function LoginScreen({ navigation }) {
                       />
                     }
                     rightIconContainerStyle={{
-                      marginRight: responsiveScreenWidth(5),
+                      marginRight: 5,
                     }}
                     secureTextEntry={!showPassword}
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
-                      fontSize: responsiveScreenFontSize(1.5),
-                      width: responsiveScreenWidth(100),
+                      fontSize: 15,
+                      width: 100,
                     }}
                     inputContainerStyle={{
                       alignItems: "center",
                       backgroundColor: colors.card,
-                      paddingVertical: responsiveScreenHeight(0.7),
-                      paddingLeft: responsiveScreenWidth(5),
-                      paddingRight: responsiveScreenWidth(0),
+                      paddingVertical: 7,
+                      paddingLeft: 5,
+                      paddingRight: 0,
                       borderRadius: 5,
                       elevation: 3,
                       borderBottomWidth: 0,
                       marginBottom: control.isValid
-                        ? responsiveScreenHeight(2)
+                        ? 2
                         : 0,
                     }}
                     onChangeText={(text) => control.onChange(text)}
@@ -188,7 +184,7 @@ export default function LoginScreen({ navigation }) {
                     }
                     errorStyle={{
                       color: "#ed2139",
-                      fontSize: responsiveScreenFontSize(1.5),
+                      fontSize: 15,
                       fontFamily: "Poppins_500Medium",
                     }}
                     renderErrorMessage={
@@ -198,11 +194,11 @@ export default function LoginScreen({ navigation }) {
                   />
                 )}
               </Foect.Control>
-              <View style={{ paddingBottom: responsiveScreenHeight(3) }}>
+              <View style={{ paddingBottom: 3 }}>
                 <Text
                   style={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: responsiveScreenFontSize(1.7),
+                    fontSize: 17,
                     color: colors.text,
                   }}
                   onPress={() => navigation.navigate("ForgotPassword")}
@@ -212,7 +208,7 @@ export default function LoginScreen({ navigation }) {
                 <Text
                   style={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: responsiveScreenFontSize(1.7),
+                    fontSize: 17,
                     color: colors.text,
                   }}
                   onPress={() => navigation.navigate("Register")}
@@ -220,7 +216,7 @@ export default function LoginScreen({ navigation }) {
                   {i18n.t("noAccount")}
                 </Text>
               </View>
-              <View style={{ rowGap: responsiveScreenHeight(2) }}>
+              <View style={{ rowGap: 20 }}>
                 <ButtonComponent
                   label={i18n.t("signIn")}
                   action={() => form.submit()}
@@ -230,7 +226,7 @@ export default function LoginScreen({ navigation }) {
                 <Text
                   style={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: responsiveScreenFontSize(1.7),
+                    fontSize: 17,
                     color: colors.text,
                     textAlign: "center",
                   }}
@@ -242,8 +238,8 @@ export default function LoginScreen({ navigation }) {
                   type="font-awesome-5"
                   iconStyle={{
                     color: colors.text,
-                    fontSize: responsiveScreenFontSize(2.5),
-                    padding: responsiveScreenWidth(2.5),
+                    fontSize: 25,
+                    padding: 25,
                     backgroundColor: colors.card,
                     borderRadius: 10,
                     alignSelf: "center",

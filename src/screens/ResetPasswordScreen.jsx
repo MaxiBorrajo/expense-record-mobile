@@ -9,11 +9,6 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
 export default function ResetPasswordScreen({ navigation }) {
   const { colors } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
@@ -44,17 +39,17 @@ export default function ResetPasswordScreen({ navigation }) {
           flex: 1,
           backgroundColor: colors.background,
           color: colors.text,
-          paddingHorizontal: responsiveScreenWidth(10),
+          paddingHorizontal:10,
           justifyContent: "center",
           position: "relative",
-          rowGap: responsiveScreenHeight(2),
+          rowGap: 20,
         }}
       >
         <GoBackButtonComponent />
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: responsiveScreenFontSize(3),
+            fontSize: 30,
             color: colors.text,
           }}
         >
@@ -63,7 +58,7 @@ export default function ResetPasswordScreen({ navigation }) {
         <Text
           style={{
             fontFamily: "Poppins_300Light",
-            fontSize: responsiveScreenFontSize(1.5),
+            fontSize: 15,
             color: colors.text,
           }}
         >
@@ -102,20 +97,20 @@ export default function ResetPasswordScreen({ navigation }) {
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
-                      fontSize: responsiveScreenFontSize(1.5),
-                      width: responsiveScreenWidth(100),
+                      fontSize: 15,
+                      width: '100%',
                     }}
                     inputContainerStyle={{
                       alignItems: "center",
                       backgroundColor: colors.card,
-                      paddingVertical: responsiveScreenHeight(0.7),
-                      paddingLeft: responsiveScreenWidth(5),
-                      paddingRight: responsiveScreenWidth(0),
+                      paddingVertical: 7,
+                      paddingLeft: 5,
+                      paddingRight: 0,
                       borderRadius: 5,
                       elevation: 3,
                       borderBottomWidth: 0,
                       marginBottom: control.isValid
-                        ? responsiveScreenHeight(2)
+                        ? 2
                         : 0,
                     }}
                     onChangeText={(text) => control.onChange(text)}
@@ -129,7 +124,7 @@ export default function ResetPasswordScreen({ navigation }) {
                     }
                     errorStyle={{
                       color: "#ed2139",
-                      fontSize: responsiveScreenFontSize(1.5),
+                      fontSize: 15,
                       fontFamily: "Poppins_500Medium",
                     }}
                     renderErrorMessage={
@@ -151,19 +146,19 @@ export default function ResetPasswordScreen({ navigation }) {
                     inputStyle={{
                       color: colors.text,
                       fontFamily: "Poppins_300Light",
-                      fontSize: responsiveScreenFontSize(1.5),
-                      width: responsiveScreenWidth(100),
+                      fontSize: 1.5,
+                      width: '100%',
                     }}
                     inputContainerStyle={{
                       alignItems: "center",
                       backgroundColor: colors.card,
-                      paddingVertical: responsiveScreenHeight(1),
-                      paddingHorizontal: responsiveScreenWidth(5),
+                      paddingVertical: 10,
+                      paddingHorizontal: 5,
                       borderRadius: 5,
                       elevation: 3,
                       borderBottomWidth: 0,
                       marginBottom: control.isValid
-                        ? responsiveScreenHeight(3)
+                        ? 3
                         : 0,
                     }}
                     onChangeText={(text) => control.onChange(text)}
@@ -177,7 +172,7 @@ export default function ResetPasswordScreen({ navigation }) {
                     }
                     errorStyle={{
                       color: "#ed2139",
-                      fontSize: responsiveScreenFontSize(1.5),
+                      fontSize: 15,
                       fontFamily: "Poppins_500Medium",
                     }}
                     renderErrorMessage={

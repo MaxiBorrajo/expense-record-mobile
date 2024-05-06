@@ -28,13 +28,6 @@ import {
   BannerAdSize,
   useInterstitialAd,
 } from "react-native-google-mobile-ads";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-  responsiveHeight,
-  responsiveWidth,
-} from "react-native-responsive-dimensions";
 
 Foect.Validators.add("greaterThanZero", (val, controlName, control) => {
   if (val > 0) {
@@ -206,13 +199,12 @@ export default function CreateExpenseScreen({ navigation }) {
       <ScrollView style={{ flex: 1 }}>
         <View
           style={{
-            height: responsiveScreenHeight(100),
-            width: responsiveScreenWidth(100),
             backgroundColor: colors.background,
             color: colors.text,
-            paddingHorizontal: responsiveScreenWidth(10),
-            rowGap: responsiveScreenHeight(2),
+            paddingHorizontal: 10,
+            rowGap: 20,
             position: "relative",
+            justifyContent:'center'
             
           }}
         >
@@ -224,7 +216,7 @@ export default function CreateExpenseScreen({ navigation }) {
           )}
           <Text
             style={{
-              fontSize: responsiveScreenFontSize(2),
+              fontSize: 20,
               fontFamily: "Poppins_500Medium",
               color: colors.text,
             }}
@@ -240,8 +232,8 @@ export default function CreateExpenseScreen({ navigation }) {
                 alignItems: "center",
                 justifyContent: "center",
                 textAlign: "center",
-                width: responsiveWidth(70),
-                height: responsiveHeight(70),
+                width: 70,
+                height: 70,
                 elevation: 3,
                 alignSelf: "center",
               }}

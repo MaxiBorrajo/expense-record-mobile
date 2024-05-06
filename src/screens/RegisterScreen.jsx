@@ -9,11 +9,7 @@ import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
+
 export default function RegisterScreen({ navigation }) {
   const { register, handleGoogleLogin, setAuth } = useContext(UserContext);
   const [showPassword, setShowPassword] = useState(false);
@@ -68,18 +64,18 @@ export default function RegisterScreen({ navigation }) {
             flex: 1,
             backgroundColor: colors.background,
             color: colors.text,
-            paddingHorizontal: responsiveScreenWidth(10),
+            paddingHorizontal: 10,
             justifyContent: "center",
-            paddingVertical: responsiveScreenHeight(15),
+            paddingVertical: 15,
           }}
         >
           <GoBackButtonComponent />
           <Text
             style={{
               fontFamily: "Poppins_500Medium",
-              fontSize: responsiveScreenFontSize(4),
+              fontSize: 4,
               color: colors.text,
-              paddingBottom: responsiveScreenHeight(3),
+              paddingBottom: 3,
             }}
           >
             {i18n.t("signUp")}
@@ -99,19 +95,19 @@ export default function RegisterScreen({ navigation }) {
                       inputStyle={{
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: responsiveScreenFontSize(1.5),
-                        width: responsiveScreenWidth(100),
+                        fontSize: 1.5,
+                        width:'100%',
                       }}
                       inputContainerStyle={{
                         alignItems: "center",
                         backgroundColor: colors.card,
-                        paddingVertical: responsiveScreenHeight(1),
-                        paddingHorizontal: responsiveScreenWidth(5),
+                        paddingVertical: 1,
+                        paddingHorizontal:5,
                         borderRadius: 5,
                         elevation: 3,
                         borderBottomWidth: 0,
                         marginBottom: control.isValid
-                          ? responsiveScreenHeight(2)
+                          ? 2
                           : 0,
                       }}
                       onBlur={control.markAsTouched}
@@ -124,7 +120,7 @@ export default function RegisterScreen({ navigation }) {
                       }
                       errorStyle={{
                         color: "#ed2139",
-                        fontSize: responsiveScreenFontSize(1.5),
+                        fontSize: 15,
                         fontFamily: "Poppins_500Medium",
                       }}
                       renderErrorMessage={
@@ -140,19 +136,19 @@ export default function RegisterScreen({ navigation }) {
                       inputStyle={{
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: responsiveScreenFontSize(1.5),
-                        width: responsiveScreenWidth(100),
+                        fontSize: 15,
+                        width: '100%',
                       }}
                       inputContainerStyle={{
                         alignItems: "center",
                         backgroundColor: colors.card,
-                        paddingVertical: responsiveScreenHeight(1),
-                        paddingHorizontal: responsiveScreenWidth(5),
+                        paddingVertical: 10,
+                        paddingHorizontal: 5,
                         borderRadius: 5,
                         elevation: 3,
                         borderBottomWidth: 0,
                         marginBottom: control.isValid
-                          ? responsiveScreenHeight(20)
+                          ? 20
                           : 0,
                       }}
                       onBlur={control.markAsTouched}
@@ -165,7 +161,7 @@ export default function RegisterScreen({ navigation }) {
                       }
                       errorStyle={{
                         color: "#ed2139",
-                        fontSize: responsiveScreenFontSize(1.5),
+                        fontSize: 15,
                         fontFamily: "Poppins_500Medium",
                       }}
                       renderErrorMessage={
@@ -182,20 +178,20 @@ export default function RegisterScreen({ navigation }) {
                         inputStyle={{
                           color: colors.text,
                           fontFamily: "Poppins_300Light",
-                          fontSize: responsiveScreenFontSize(1.5),
+                          fontSize: 15,
                           width: "100%",
                         }}
                         inputContainerStyle={{
                           width: "100%",
                           alignItems: "center",
                           backgroundColor: colors.card,
-                          paddingVertical: responsiveScreenHeight(1),
-                          paddingHorizontal: responsiveScreenWidth(5),
+                          paddingVertical: 10,
+                          paddingHorizontal: 5,
                           borderRadius: 5,
                           elevation: 3,
                           borderBottomWidth: 0,
                           marginBottom: control.isValid
-                            ? responsiveScreenHeight(2)
+                            ? 20
                             : 0,
                         }}
                         onBlur={control.markAsTouched}
@@ -210,7 +206,7 @@ export default function RegisterScreen({ navigation }) {
                         }
                         errorStyle={{
                           color: "#ed2139",
-                          fontSize: responsiveScreenFontSize(1.5),
+                          fontSize: 15,
                           fontFamily: "Poppins_500Medium",
                         }}
                         renderErrorMessage={
@@ -241,26 +237,26 @@ export default function RegisterScreen({ navigation }) {
                         />
                       }
                       rightIconContainerStyle={{
-                        marginRight: responsiveScreenWidth(5),
+                        marginRight: 5,
                       }}
                       secureTextEntry={!showPassword}
                       inputStyle={{
                         color: colors.text,
                         fontFamily: "Poppins_300Light",
-                        fontSize: responsiveScreenFontSize(1.5),
-                        width: responsiveScreenWidth(100),
+                        fontSize: 15,
+                        width: '100%',
                       }}
                       inputContainerStyle={{
                         alignItems: "center",
                         backgroundColor: colors.card,
-                        paddingVertical: responsiveScreenHeight(0.7),
-                        paddingLeft: responsiveScreenWidth(5),
-                        paddingRight: responsiveScreenWidth(0),
+                        paddingVertical: 7,
+                        paddingLeft: 5,
+                        paddingRight: 0,
                         borderRadius: 5,
                         elevation: 3,
                         borderBottomWidth: 0,
                         marginBottom: control.isValid
-                          ? responsiveScreenHeight(2)
+                          ? 2
                           : 0,
                       }}
                       onBlur={control.markAsTouched}
@@ -275,7 +271,7 @@ export default function RegisterScreen({ navigation }) {
                       }
                       errorStyle={{
                         color: "#ed2139",
-                        fontSize: responsiveScreenFontSize(1.5),
+                        fontSize: 15,
                         fontFamily: "Poppins_500Medium",
                       }}
                       renderErrorMessage={
@@ -288,15 +284,15 @@ export default function RegisterScreen({ navigation }) {
                 <Text
                   style={{
                     fontFamily: "Poppins_300Light",
-                    fontSize: responsiveScreenFontSize(1.7),
+                    fontSize: 17,
                     color: colors.text,
-                    paddingBottom: responsiveScreenHeight(3),
+                    paddingBottom: 30,
                   }}
                   onPress={() => navigation.navigate("Login")}
                 >
                   {i18n.t("haveAccount")}
                 </Text>
-                <View style={{ rowGap: responsiveScreenHeight(2) }}>
+                <View style={{ rowGap: 20 }}>
                   <ButtonComponent
                     label={i18n.t("signUp")}
                     action={() => form.submit()}
@@ -306,7 +302,7 @@ export default function RegisterScreen({ navigation }) {
                   <Text
                     style={{
                       fontFamily: "Poppins_300Light",
-                      fontSize: responsiveScreenFontSize(1.7),
+                      fontSize: 17,
                       color: colors.text,
                       textAlign: "center",
                     }}
@@ -318,8 +314,8 @@ export default function RegisterScreen({ navigation }) {
                     type="font-awesome-5"
                     iconStyle={{
                       color: colors.text,
-                      fontSize: responsiveScreenFontSize(2.5),
-                      padding: responsiveScreenWidth(2.5),
+                      fontSize: 25,
+                      padding: 25,
                       backgroundColor: colors.card,
                       borderRadius: 10,
                       alignSelf: "center",

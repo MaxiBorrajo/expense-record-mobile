@@ -5,11 +5,7 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 import { useTheme } from "@react-navigation/native";
 import ButtonComponent from "../components/ButtonComponent";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
+
 
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
@@ -34,14 +30,14 @@ export default function HeroScreen({ navigation }) {
         style={{
           flex: 1,
           color: colors.text,
-          padding: responsiveScreenWidth(6),
+          padding: 60,
           justifyContent: "space-between",
         }}
       >
         <Text
           style={{
             fontFamily: "Poppins_500Medium",
-            fontSize: responsiveScreenFontSize(1.5),
+            fontSize: 15,
             color: colors.text,
           }}
         >
@@ -51,9 +47,9 @@ export default function HeroScreen({ navigation }) {
           <Text
             style={{
               fontFamily: "Poppins_300Light",
-              fontSize: responsiveScreenFontSize(2.5),
+              fontSize: 25,
               color: colors.text,
-              paddingBottom: responsiveScreenHeight(2),
+              paddingBottom: 2,
             }}
           >
             {i18n.t("phrase")}

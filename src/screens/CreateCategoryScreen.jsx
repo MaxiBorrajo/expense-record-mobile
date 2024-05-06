@@ -59,91 +59,88 @@ export default function CreateCategoryScreen({ navigation }) {
   };
 
   return (
-    <>
-      <View
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+        color: colors.text,
+        paddingHorizontal: 10,
+        justifyContent: "center",
+        position: "relative",
+        rowGap: 50
+      }}
+    >
+      <GoBackButtonComponent />
+      <Text
         style={{
-          flex: 1,
-          backgroundColor: colors.background,
+          fontSize: 20,
+          fontFamily: "Poppins_500Medium",
           color: colors.text,
-          paddingHorizontal: 30,
-          justifyContent: "center",
-          position: "relative",
-          rowGap: 50,
-          minHeight: Dimensions.get("window").height,
         }}
       >
-        <GoBackButtonComponent />
-        <Text
-          style={{
-            fontSize: 20,
-            fontFamily: "Poppins_500Medium",
-            color: colors.text,
-          }}
-        >
-          {i18n.t("createCategory")}
-        </Text>
-        <Foect.Form
-          onValidSubmit={async (model) => {
-            model.icon_id = categoryForm.icon_id;
-            await submitCreateCategory(model);
-          }}
-        >
-          {(form) => (
-            <View style={{ rowGap: 20 }}>
-              {actualIcon && (
-                <IconCarouselComponent
-                  icon={actualIcon}
-                  next={next}
-                  prev={prev}
-                />
-              )}
-              <Foect.Control name="category_name" required>
-                {(control) => (
-                  <View style={{ rowGap: 10, marginTop: 10 }}>
-                    <TextInput
-                      style={{
-                        width: "100%",
-                        color: colors.text,
-                        fontFamily: "Poppins_300Light",
-                        fontSize: 12,
-                        padding: 10,
-                        backgroundColor: colors.card,
-                        borderRadius: 5,
-                        elevation: 3,
-                      }}
-                      onChangeText={(text) => control.onChange(text)}
-                      value={control.value}
-                      placeholder={i18n.t("writeCategoryTitle")}
-                      placeholderTextColor={colors.text}
-                    />
-                    {control.isInvalid && control.errors.required && (
-                      <Text
-                        style={{
-                          color: "#ed2139",
-                          fontSize: 12,
-                          fontFamily: "Poppins_500Medium",
-                        }}
-                      >
-                        {i18n.t("expenseCategoryError")}
-                      </Text>
-                    )}
-                  </View>
-                )}
-              </Foect.Control>
-
-              {errorMessage ? (
-                <ErrorComponent errorMessage={errorMessage} />
-              ) : null}
-              <ButtonComponent
-                label={i18n.t("create")}
-                action={() => form.submit()}
-                loading={loading}
-                disabled={form.isInvalid}
+        {i18n.t("createCategory")}
+      </Text>
+      <Foect.Form
+        onValidSubmit={async (model) => {
+          model.icon_id = categoryForm.icon_id;
+          await submitCreateCategory(model);
+        }}
+      >
+        {(form) => (
+          <View style={{ rowGap: 30 }}>
+            {actualIcon && (
+              <IconCarouselComponent
+                icon={actualIcon}
+                next={next}
+                prev={prev}
               />
-            </View>
-          )}
-        </Foect.Form>
-      </View>
-    </>
+            )}
+            <Foect.Control name="category_name" required>
+              {(control) => (
+                <View style={{ rowGap: 10, marginTop: 10 }}>
+                  <TextInput
+                    style={{
+                      color: colors.text,
+                      fontFamily: "Poppins_300Light",
+                      fontSize: 15,
+                      padding: 20,
+                      backgroundColor: colors.card,
+                      borderRadius: 5,
+                      elevation: 3,
+                    }}
+                    onChangeText={(text) => control.onChange(text)}
+                    value={control.value}
+                    placeholder={i18n.t("writeCategoryTitle")}
+                    placeholderTextColor={colors.text}
+                  />
+                  {control.isInvalid && control.errors.required && (
+                    <Text
+                      style={{
+                        color: "#ed2139",
+                        fontSize: 12,
+                        fontFamily: "Poppins_500Medium",
+                      }}
+                    >
+                      {i18n.t("expenseCategoryError")}
+                    </Text>
+                  )}
+                </View>
+              )}
+            </Foect.Control>
+
+            {errorMessage ? (
+              <ErrorComponent errorMessage={errorMessage} />
+            ) : null}
+
+            <ButtonComponent
+              label={i18n.t("create")}
+              action={() => form.submit()}
+              loading={loading}
+              disabled={form.isInvalid}
+            />
+          </View>
+        )}
+      </Foect.Form>
+    </View>
   );
 }

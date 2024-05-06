@@ -12,11 +12,6 @@ import i18n from "../utils/i18n";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { AppContext } from "../context/AppContext";
 import { UserContext } from "../context/UserContext";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize
-} from "react-native-responsive-dimensions";
 
 const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
   const snapPoints = useMemo(() => ["65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%"], []);
@@ -47,13 +42,13 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
         style={{
           flex: 1,
           padding: 20,
-          rowGap: responsiveScreenHeight(1),
+          rowGap: 10,
           backgroundColor: colors.softCard,
         }}
       >
         <Text
           style={{
-            fontSize: responsiveScreenFontSize(2.3),
+            fontSize: 23,
             fontFamily: "Poppins_400Regular",
             color: colors.text,
             paddingBottom: 3,
@@ -72,7 +67,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -85,7 +80,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
                 type="font-awesome-5"
                 iconStyle={{
                   color: colors.text,
-                  fontSize: responsiveScreenFontSize(1.8),
+                  fontSize: 18,
                   paddingBottom: 3,
                 }}
               ></Icon>
@@ -109,7 +104,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -121,7 +116,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               type="font-awesome-5"
               iconStyle={{
                 color: colors.text,
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 paddingBottom: 3,
               }}
             ></Icon>
@@ -138,7 +133,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -150,7 +145,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               type="font-awesome-5"
               iconStyle={{
                 color: colors.text,
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 paddingBottom: 3,
                 paddingRight: 2,
               }}
@@ -168,7 +163,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -180,7 +175,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               type="font-awesome-5"
               iconStyle={{
                 color: colors.text,
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 paddingBottom: 3,
               }}
             ></Icon>
@@ -197,7 +192,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -207,8 +202,8 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
             <Image
               source={icon}
               style={{
-                height: responsiveScreenHeight(2.5),
-                width: responsiveScreenWidth(2.5),
+                height: 25,
+                width: 25,
                 resizeMode: "center",
               }}
             />
@@ -225,7 +220,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: colors.text,
               }}
@@ -237,7 +232,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               type="font-awesome-5"
               iconStyle={{
                 color: colors.text,
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 paddingBottom: 3,
               }}
             ></Icon>
@@ -254,7 +249,7 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
           >
             <Text
               style={{
-                fontSize: responsiveScreenFontSize(1.8),
+                fontSize: 18,
                 fontFamily: "Poppins_300Light",
                 color: isDarkTheme ? "#f53333" : "#eb1717",
               }}
@@ -266,9 +261,9 @@ const BottomSheetMenuComponent = forwardRef(({ toggleDialog, logout }, ref) => {
               type="font-awesome-5"
               iconStyle={{
                 color: isDarkTheme ? "#f53333" : "#eb1717",
-                fontSize: responsiveScreenFontSize(1.8),
-                paddingBottom: responsiveScreenWidth(2),
-                paddingRight: responsiveScreenWidth(0.5),
+                fontSize: 18,
+                paddingBottom: 20,
+                paddingRight: 5,
               }}
             ></Icon>
           </View>

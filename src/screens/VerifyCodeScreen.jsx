@@ -9,12 +9,6 @@ import { useTheme } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 import Foect from "foect";
 import i18n from "../utils/i18n";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-  responsiveWidth,
-} from "react-native-responsive-dimensions";
 
 export default function VerifyCodeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -40,17 +34,17 @@ export default function VerifyCodeScreen({ navigation }) {
         flex: 1,
         backgroundColor: colors.background,
         color: colors.text,
-        paddingHorizontal: responsiveScreenWidth(10),
+        paddingHorizontal: 10,
         justifyContent: "center",
         position: "relative",
-        rowGap: responsiveScreenHeight(2),
+        rowGap: 20,
       }}
     >
       <GoBackButtonComponent />
       <Text
         style={{
           fontFamily: "Poppins_500Medium",
-          fontSize: responsiveScreenFontSize(3),
+          fontSize: 30,
           color: colors.text,
         }}
       >
@@ -59,7 +53,7 @@ export default function VerifyCodeScreen({ navigation }) {
       <Text
         style={{
           fontFamily: "Poppins_300Light",
-          fontSize: responsiveScreenFontSize(1.7),
+          fontSize: 17,
           color: colors.text,
         }}
       >
@@ -99,7 +93,7 @@ export default function VerifyCodeScreen({ navigation }) {
                       borderWidth: 1,
                       borderStyle: "solid",
                       borderBottomWidth: 1,
-                      width: responsiveWidth(10),
+                      width: 10,
                     }}
                   />
                   {control.isTouched &&
@@ -108,9 +102,9 @@ export default function VerifyCodeScreen({ navigation }) {
                       <Text
                         style={{
                           color: "#ed2139",
-                          fontSize: responsiveScreenFontSize(1.5),
+                          fontSize: 15,
                           fontFamily: "Poppins_500Medium",
-                          marginTop: responsiveScreenHeight(2),
+                          marginTop: 20,
                         }}
                       >
                         {i18n.t("codeError")}
@@ -122,9 +116,9 @@ export default function VerifyCodeScreen({ navigation }) {
                       <Text
                         style={{
                           color: "#ed2139",
-                          fontSize: responsiveScreenFontSize(1.5),
+                          fontSize: 15,
                           fontFamily: "Poppins_500Medium",
-                          marginTop: responsiveScreenHeight(2),
+                          marginTop: 20,
                         }}
                       >
                         {i18n.t("codeValidError")}
@@ -136,9 +130,9 @@ export default function VerifyCodeScreen({ navigation }) {
             <Text
               style={{
                 fontFamily: "Poppins_300Light",
-                fontSize: responsiveScreenFontSize(1.7),
+                fontSize: 17,
                 color: colors.text,
-                paddingVertical: responsiveScreenHeight(2),
+                paddingVertical: 20,
               }}
               onPress={() => navigation.navigate("ForgotPassword")}
             >

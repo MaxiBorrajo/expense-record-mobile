@@ -4,12 +4,6 @@ import { Icon } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-  responsiveWidth
-} from "react-native-responsive-dimensions";
 
 export default memo(function CategoryComponent({ item, setErrorMessage }) {
   const navigation = useNavigation();
@@ -43,9 +37,9 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: responsiveWidth(1),
+        padding: 10,
         alignItems: "center",
-        width: responsiveScreenWidth(100),
+        width: '100%',
         borderRadius: 5,
       }}
       onPress={handlePress}
@@ -54,8 +48,8 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          width: responsiveScreenWidth(100),
-          columnGap: responsiveScreenHeight(2),
+          width: '100%',
+          columnGap: 20,
           opacity: fadeAnim,
         }}
       >
@@ -66,20 +60,20 @@ export default memo(function CategoryComponent({ item, setErrorMessage }) {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            width: responsiveWidth(15),
-            height: responsiveWidth(15),
+            width: 15,
+            height: 15,
           }}
         >
           <Icon
             name={item?.icon_id?.icon}
             type="font-awesome-5"
-            iconStyle={{ fontSize: responsiveScreenFontSize(2), color: colors.text }}
+            iconStyle={{ fontSize: 20, color: colors.text }}
           ></Icon>
         </View>
         <Text
           style={{
             color: colors.text,
-            fontSize: responsiveScreenFontSize(1.8),
+            fontSize: 18,
             fontFamily: "Poppins_500Medium",
           }}
         >

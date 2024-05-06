@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Animated } from "react-native";
+import { Text, View, Animated } from "react-native";
 import React, { useState, useEffect, memo } from "react";
 import { Icon } from "@rneui/themed";
 import { formatDate } from "../utils/utils";
@@ -27,9 +27,8 @@ export default memo(function ExpenseComponent({ item }) {
         flexDirection: "row",
         justifyContent: "space-between",
         paddingVertical: 10,
-        paddingHorizontal: 5,
+        paddingHorizontal: 10,
         alignItems: "center",
-        width: "100%",
         borderRadius: 5,
       }}
       onPress={() =>
@@ -41,7 +40,7 @@ export default memo(function ExpenseComponent({ item }) {
     >
       <Animated.View
         style={{
-          columnGap: 15,
+          columnGap: 30,
           flexDirection: "row",
           alignItems: "center",
           opacity: fadeAnim,
@@ -54,8 +53,8 @@ export default memo(function ExpenseComponent({ item }) {
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            width: 60,
-            height: 60,
+            width: 12,
+            height: 6,
           }}
         >
           <Icon

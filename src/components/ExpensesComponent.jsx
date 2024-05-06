@@ -5,11 +5,6 @@ import ExpenseComponent from "./ExpenseComponent";
 import ExpensesHeaderComponent from "./ExpensesHeaderComponent";
 import { useTheme } from "@react-navigation/native";
 import i18n from "../utils/i18n";
-import {
-  responsiveScreenHeight,
-  responsiveScreenWidth,
-  responsiveScreenFontSize,
-} from "react-native-responsive-dimensions";
 export default function ExpensesComponent() {
   const { lastExpenses, getLastExpenses } = useContext(ExpenseContext);
   const { colors } = useTheme();
@@ -19,9 +14,15 @@ export default function ExpensesComponent() {
   }, []);
 
   return (
-    <View style={{ height: responsiveScreenHeight(70), paddingTop: 10, paddingHorizontal: 15 }}>
+    <View
+      style={{
+        height: 70,
+        paddingTop: 10,
+        paddingHorizontal: 15,
+      }}
+    >
       <FlatList
-      stickyHeaderIndices={[0]}
+        stickyHeaderIndices={[0]}
         contentContainerStyle={{ paddingBottom: 200 }}
         data={lastExpenses}
         keyExtractor={(item) => item._id}
@@ -60,7 +61,7 @@ export default function ExpensesComponent() {
           ) : null
         }
         ListHeaderComponent={() => <ExpensesHeaderComponent />}
-        ListHeaderComponentStyle={{backgroundColor:colors.background}}
+        ListHeaderComponentStyle={{ backgroundColor: colors.background }}
         ItemSeparatorComponent={() => (
           <View style={{ height: 10, width: "100%" }}></View>
         )}
