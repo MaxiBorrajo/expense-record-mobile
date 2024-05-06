@@ -49,7 +49,7 @@ export default function InfoComponent({ openBottomSheet }) {
         borderBottomStartRadius: 50,
         borderBottomEndRadius: 50,
         elevation: 3,
-        height: 30,
+        height: '30%',
         justifyContent: "center",
         alignItems: "center",
         rowGap: 40,

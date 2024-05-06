@@ -6,7 +6,6 @@ import { AppContext } from "../context/AppContext";
 import { useTheme } from "@react-navigation/native";
 import ButtonComponent from "../components/ButtonComponent";
 
-
 export default function HeroScreen({ navigation }) {
   const { loadConfiguration } = useContext(UserContext);
   const { isDarkTheme } = useContext(AppContext);
@@ -24,15 +23,11 @@ export default function HeroScreen({ navigation }) {
     <ImageBackground
       source={splashScreen}
       resizeMode="contain"
-      style={{ flex: 1 }}
+      className="flex-1"
     >
       <View
-        style={{
-          flex: 1,
-          color: colors.text,
-          padding: 60,
-          justifyContent: "space-between",
-        }}
+        className="flex-1 p-6 justify-between"
+        
       >
         <Text
           style={{

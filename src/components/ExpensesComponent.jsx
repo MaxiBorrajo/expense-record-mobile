@@ -16,7 +16,7 @@ export default function ExpensesComponent() {
   return (
     <View
       style={{
-        height: 70,
+        height: '70%',
         paddingTop: 10,
         paddingHorizontal: 15,
       }}
